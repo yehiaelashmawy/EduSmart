@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/features/splash/presentations/views/splash_view.dart';
 
 void main() {
@@ -11,6 +12,9 @@ class SchoolSystemApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SplashView());
+    return MaterialApp(
+      onGenerateRoute: onGenerateRoute,
+      initialRoute: SplashView.routeName,
+    );
   }
 }
