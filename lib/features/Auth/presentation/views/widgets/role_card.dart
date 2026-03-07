@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/Auth/presentation/views/login_view.dart';
 
 class RoleCard extends StatelessWidget {
   final String title;
@@ -70,7 +71,9 @@ class RoleCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: onContinue,
+                    onPressed: () {
+                      Navigator.pushNamed(context, LoginView.routeName);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xff0F52BD),
                       foregroundColor: Colors.white,
