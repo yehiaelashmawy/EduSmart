@@ -10,26 +10,43 @@ class OnBoardingPageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: Image.asset(pageModel.image, fit: BoxFit.contain),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: pageModel.hasImagePadding ? 24 : 0,
+            ),
+            child: Image.asset(
+              pageModel.image,
+              width: double.infinity,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
-        const SizedBox(height: 40),
-        Text(
-          pageModel.title,
-          textAlign: TextAlign.center,
-          style: AppTextStyle.bold30.copyWith(color: AppColors.darkBlue),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          pageModel.description,
-          textAlign: TextAlign.center,
-          style: AppTextStyle.regular18.copyWith(color: AppColors.grey),
-        ),
-      ],
+          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                Text(
+                  pageModel.title,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.bold30.copyWith(
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  pageModel.description,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.regular18.copyWith(color: AppColors.grey),
+                ),
+                const SizedBox(height: 24), // Added bottom padding for safety
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

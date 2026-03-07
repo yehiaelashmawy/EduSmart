@@ -23,18 +23,22 @@ class _OnBordingViewBodyState extends State<OnBordingViewBody> {
       description:
           'Organize your classes, schedules, and\nstudent activities in one place.',
       image: 'assets/images/onboarding_bage_1.png',
+      hasImagePadding: true,
     ),
     OnBoardingPageModel(
       title: 'Track attendance and\ngrades',
       description:
           'Monitor student performance with real-\ntime analytics and detailed progress\nreports at your fingertips.',
       image: 'assets/images/onboarding_bage_2.png',
+      hasImagePadding: true,
     ),
     OnBoardingPageModel(
       title: 'Learn smarter with\nSmartTutor AI',
       description:
           'Experience the power of personalized\nlearning guided by advanced artificial\nintelligence designed to adapt to your unique\npace.',
       image: 'assets/images/onboarding_bage_3.png',
+      headerTitle: 'SmartTutor AI',
+      hasImagePadding: false,
     ),
   ];
 
@@ -52,17 +56,17 @@ class _OnBordingViewBodyState extends State<OnBordingViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 16),
-            CustomSkipbutton(
+            HeaderBar(
               currentIndex: currentIndex,
               pageController: pageController,
+              headerTitle: pages[currentIndex].headerTitle,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Expanded(
               child: PageView.builder(
                 controller: pageController,
@@ -78,29 +82,37 @@ class _OnBordingViewBodyState extends State<OnBordingViewBody> {
               ),
             ),
             const SizedBox(height: 48),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                pages.length,
-                (index) => CustomDotIndicator(isActive: index == currentIndex),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      pages.length,
+                      (index) =>
+                          CustomDotIndicator(isActive: index == currentIndex),
+                    ),
+                  ),
+                  const SizedBox(height: 65),
+                  OnBoardingButton(
+                    onPressed: () {
+                      if (currentIndex < 2) {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      } else {
+                        // Navigate to Login/Home
+                      }
+                    },
+                    text: currentIndex == 2 ? 'Get started' : 'Next',
+                    showArrow: currentIndex != 2,
+                  ),
+                  const SizedBox(height: 55),
+                ],
               ),
             ),
-            const SizedBox(height: 75),
-            OnBoardingButton(
-              onPressed: () {
-                if (currentIndex < 2) {
-                  pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                } else {
-                  // Navigate to Login/Home
-                }
-              },
-              text: currentIndex == 2 ? 'Get started' : 'Next',
-              showArrow: currentIndex != 2,
-            ),
-            const SizedBox(height: 56),
           ],
         ),
       ),
@@ -108,34 +120,68 @@ class _OnBordingViewBodyState extends State<OnBordingViewBody> {
   }
 }
 
-class CustomSkipbutton extends StatelessWidget {
-  const CustomSkipbutton({
+class HeaderBar extends StatelessWidget {
+  const HeaderBar({
     super.key,
     required this.currentIndex,
     required this.pageController,
+    this.headerTitle,
   });
 
   final int currentIndex;
   final PageController pageController;
+  final String? headerTitle;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Visibility(
-        visible: currentIndex != 2,
-        maintainSize: true,
-        maintainAnimation: true,
-        maintainState: true,
-        child: TextButton(
-          onPressed: () {
-            pageController.jumpToPage(2);
-          },
-          child: Text(
-            'Skip',
-            style: AppTextStyle.bold16.copyWith(color: AppColors.primaryColor),
-          ),
-        ),
+    return SizedBox(
+      height: 56,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (currentIndex == 2)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {
+                    pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+                ),
+              ),
+            ),
+          if (headerTitle != null)
+            Text(
+              headerTitle!,
+              style: AppTextStyle.bold20.copyWith(color: AppColors.darkBlue),
+            ),
+          if (currentIndex < 2)
+            Positioned(
+              right: 8,
+              child: TextButton(
+                onPressed: () {
+                  pageController.animateToPage(
+                    2,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Text(
+                  'Skip',
+                  style: AppTextStyle.bold16.copyWith(
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
