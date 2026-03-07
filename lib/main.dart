@@ -15,6 +15,7 @@ class SchoolSystemApp extends StatelessWidget {
     return MaterialApp(
       onGenerateRoute: onGenerateRoute,
       initialRoute: SplashView.routeName,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
