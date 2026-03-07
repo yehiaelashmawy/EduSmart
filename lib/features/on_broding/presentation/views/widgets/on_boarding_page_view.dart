@@ -16,15 +16,13 @@ class OnBoardingPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: PageView.builder(
-        controller: pageController,
-        itemCount: pages.length,
-        onPageChanged: onPageChanged,
-        itemBuilder: (context, index) {
-          return OnBoardingPageItem(pageModel: pages[index]);
-        },
-      ),
+    return PageView.builder(
+      controller: pageController,
+      itemCount: pages.length,
+      onPageChanged: onPageChanged,
+      itemBuilder: (context, index) {
+        return OnBoardingPageItem(pageModel: pages[index]);
+      },
     );
   }
 }

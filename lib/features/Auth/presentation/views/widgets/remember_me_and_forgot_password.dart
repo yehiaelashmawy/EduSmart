@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/Auth/presentation/views/forgot_password_view.dart';
 
 class RememberMeAndForgotPassword extends StatefulWidget {
   const RememberMeAndForgotPassword({super.key});
@@ -57,10 +58,15 @@ class _RememberMeAndForgotPasswordState
             ],
           ),
         ),
-        Text(
-          'Forgot Password?',
-          style: AppTextStyle.semiBold14.copyWith(
-            color: const Color(0xFF0F52BD),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, ForgotPasswordView.routeName);
+          },
+          child: Text(
+            'Forgot Password?',
+            style: AppTextStyle.semiBold14.copyWith(
+              color: const Color(0xFF0F52BD),
+            ),
           ),
         ),
       ],
