@@ -23,7 +23,7 @@ class OnBoardingPageItem extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 32),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
@@ -31,7 +31,7 @@ class OnBoardingPageItem extends StatelessWidget {
                 Text(
                   pageModel.title,
                   textAlign: TextAlign.center,
-                  style: AppTextStyle.bold30.copyWith(
+                  style: AppTextStyle.bold32.copyWith(
                     color: AppColors.darkBlue,
                   ),
                 ),
