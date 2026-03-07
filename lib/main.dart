@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/helper/on_generate_route.dart';
-import 'package:school_system/features/splash/presentations/views/splash_view.dart';
+import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 
 void main() {
   runApp(const SchoolSystemApp());
