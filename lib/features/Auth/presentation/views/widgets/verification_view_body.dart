@@ -4,6 +4,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/widgets/custom_app_bar.dart';
 import 'package:school_system/core/widgets/custom_button.dart';
+import 'package:school_system/features/Auth/presentation/views/resret_password_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/otp_input_row.dart';
 import 'package:svg_flutter/svg.dart';
 
@@ -86,7 +87,15 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                     const SizedBox(height: 32),
                     const OtpInputRow(),
                     const SizedBox(height: 40),
-                    const CustomButton(text: 'Verify & Continue'),
+                    CustomButton(
+                      text: 'Verify & Continue',
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          ResetPasswordView.routeName,
+                        );
+                      },
+                    ),
                     const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
