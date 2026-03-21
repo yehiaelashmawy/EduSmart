@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_images.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/Auth/presentation/views/login_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/role_card.dart';
 
 class AuthViewBody extends StatelessWidget {
@@ -40,7 +41,9 @@ class AuthViewBody extends StatelessWidget {
                       'Manage your classes, track student progress, and share learning resources effortlessly with your students.',
                   imagePath: Assets.imagesTeatherAuth,
                   icon: Icons.school,
-                  onContinue: () {},
+                  onContinue: () {
+                    Navigator.pushNamed(context, LoginView.routeName, arguments: 'teacher');
+                  },
                 ),
                 RoleCard(
                   title: 'Student',
@@ -48,7 +51,9 @@ class AuthViewBody extends StatelessWidget {
                       'Access your assignments, join interactive live classes, and visualize your personal learning journey.',
                   imagePath: Assets.imagesStudentAuth,
                   icon: Icons.laptop_chromebook,
-                  onContinue: () {},
+                  onContinue: () {
+                    Navigator.pushNamed(context, LoginView.routeName, arguments: 'student');
+                  },
                 ),
                 RoleCard(
                   title: 'Parent',
@@ -56,7 +61,9 @@ class AuthViewBody extends StatelessWidget {
                       'Stay updated with your child\'s academic performance, daily attendance, and school-wide announcements.',
                   imagePath: Assets.imagesParentAuth,
                   icon: Icons.people,
-                  onContinue: () {},
+                  onContinue: () {
+                    Navigator.pushNamed(context, LoginView.routeName, arguments: 'parent');
+                  },
                 ),
                 const SizedBox(height: 24),
                 Row(

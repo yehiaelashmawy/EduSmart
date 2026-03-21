@@ -6,6 +6,9 @@ import 'package:school_system/core/widgets/custom_button.dart';
 import 'package:school_system/core/widgets/custom_text_field.dart';
 import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/remember_me_and_forgot_password.dart';
+import 'package:school_system/features/teacher/presentation/views/teacher_home_view.dart';
+import 'package:school_system/features/student/presentation/views/student_home_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -122,7 +125,16 @@ class LoginForm extends StatelessWidget {
                 spreadRadius: -3,
               ),
             ],
-            onPressed: () {},
+            onPressed: () {
+              final role = ModalRoute.of(context)?.settings.arguments as String?;
+              if (role == 'student') {
+                Navigator.pushNamed(context, StudentHomeView.routeName);
+              } else if (role == 'parent') {
+                Navigator.pushNamed(context, ParentHomeView.routeName);
+              } else {
+                Navigator.pushNamed(context, TeacherHomeView.routeName);
+              }
+            },
           ),
           const SizedBox(height: 16),
           const Divider(color: Color(0xFFE2E8F0)),
