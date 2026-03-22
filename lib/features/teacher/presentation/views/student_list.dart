@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/features/teacher/presentation/views/widgets/lessons_list_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/students_list_body.dart';
 
 class StudentList extends StatelessWidget {
@@ -71,7 +72,7 @@ class StudentList extends StatelessWidget {
         body: const TabBarView(
           children: [
             StudentsListBody(),
-            Center(child: Text('Lessons')),
+            LessonsListBody(),
             Center(child: Text('Homework')),
             Center(child: Text('Exams')),
             Center(child: Text('Attendance')),
