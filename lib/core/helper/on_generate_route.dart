@@ -9,6 +9,7 @@ import 'package:school_system/features/on_broding/presentation/views/on_bording_
 import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
+import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_classes_view.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_home_view.dart';
 
@@ -40,6 +41,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ParentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentHomeView());
 
+    case StudentList.routeName:
+      return MaterialPageRoute(builder: (context) => const StudentList());
     case TeacherClassesView.routeName:
       return MaterialPageRoute(
         builder: (context) => const TeacherClassesView(),

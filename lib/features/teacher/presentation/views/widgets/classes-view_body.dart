@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_class_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_classes_app_bar.dart';
 
@@ -68,7 +69,9 @@ class _ActiveClassesTab extends StatelessWidget {
           numStudents: '32',
           schedule: 'Mon, Wed, Fri',
           extraStudentsCount: 29,
-          onViewClass: () {},
+          onViewClass: () {
+            Navigator.pushNamed(context, StudentList.routeName);
+          },
         ),
         TeacherClassCard(
           image: 'assets/images/class_image.png',
@@ -78,7 +81,9 @@ class _ActiveClassesTab extends StatelessWidget {
           numStudents: '28',
           schedule: 'Tue, Thu',
           extraStudentsCount: 25,
-          onViewClass: () {},
+          onViewClass: () {
+            Navigator.pushNamed(context, StudentList.routeName);
+          },
         ),
         TeacherClassCard(
           image: 'assets/images/class_image.png',
@@ -88,7 +93,9 @@ class _ActiveClassesTab extends StatelessWidget {
           numStudents: '24',
           schedule: 'Monday to Friday',
           extraStudentsCount: 21,
-          onViewClass: () {},
+          onViewClass: () {
+            Navigator.pushNamed(context, StudentList.routeName);
+          },
         ),
       ],
     );
