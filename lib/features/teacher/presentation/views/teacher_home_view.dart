@@ -6,6 +6,7 @@ import 'package:school_system/features/teacher/presentation/views/student_list.d
 import 'package:school_system/features/teacher/presentation/views/widgets/classes-view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_home_view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_profile_view_body.dart';
+import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 
 class TeacherHomeView extends StatefulWidget {
   const TeacherHomeView({super.key});
@@ -20,6 +21,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   final GlobalKey<NavigatorState> _homeNavigatorKey =
       GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _classesNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _profileNavigatorKey =
       GlobalKey<NavigatorState>();
 
   late final List<Widget> _views = [
@@ -51,7 +54,18 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     ),
     const Center(child: Text('Messages View')),
     const Center(child: Text('Alerts View')),
-    const TeacherProfileViewBody(),
+    Navigator(
+      key: _profileNavigatorKey,
+      onGenerateRoute: (settings) {
+        Widget page;
+        if (settings.name == PersonalInformationView.routeName) {
+          page = const PersonalInformationView();
+        } else {
+          page = const TeacherProfileViewBody();
+        }
+        return MaterialPageRoute(builder: (_) => page, settings: settings);
+      },
+    ),
   ];
 
   @override
@@ -69,6 +83,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         } else if (_currentIndex == 1 &&
             _classesNavigatorKey.currentState?.canPop() == true) {
           _classesNavigatorKey.currentState?.pop();
+        } else if (_currentIndex == 4 &&
+            _profileNavigatorKey.currentState?.canPop() == true) {
+          _profileNavigatorKey.currentState?.pop();
         } else {
           setState(() {
             _currentIndex = 0;
@@ -97,6 +114,10 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
                 );
               } else if (index == _currentIndex && index == 1) {
                 _classesNavigatorKey.currentState?.popUntil(
+                  (route) => route.isFirst,
+                );
+              } else if (index == _currentIndex && index == 4) {
+                _profileNavigatorKey.currentState?.popUntil(
                   (route) => route.isFirst,
                 );
               }

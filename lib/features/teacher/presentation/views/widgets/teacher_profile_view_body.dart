@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 
 class TeacherProfileViewBody extends StatelessWidget {
   const TeacherProfileViewBody({super.key});
@@ -46,17 +47,25 @@ class TeacherProfileViewBody extends StatelessWidget {
                       Positioned(
                         bottom: 0,
                         right: 4,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3),
-                          ),
-                          child: const Icon(
-                            Icons.edit_outlined,
-                            color: Colors.white,
-                            size: 20,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              PersonalInformationView.routeName,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                            ),
+                            child: const Icon(
+                              Icons.edit_outlined,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -87,7 +96,12 @@ class TeacherProfileViewBody extends StatelessWidget {
                   _buildMenuTile(
                     title: 'Personal Information',
                     icon: Icons.person_outline,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        PersonalInformationView.routeName,
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   _buildMenuTile(

@@ -7,14 +7,22 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     this.maxLines = 1,
+    this.suffixIcon,
+    this.initialValue,
+    this.controller,
   });
 
   final String hintText;
   final int maxLines;
+  final Widget? suffixIcon;
+  final String? initialValue;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: controller,
+      initialValue: initialValue,
       maxLines: maxLines,
       style: AppTextStyle.regular14.copyWith(color: AppColors.darkBlue),
       decoration: InputDecoration(
@@ -22,6 +30,7 @@ class CustomTextField extends StatelessWidget {
         hintStyle: AppTextStyle.regular14.copyWith(
           color: AppColors.grey.withOpacity(0.7),
         ),
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(

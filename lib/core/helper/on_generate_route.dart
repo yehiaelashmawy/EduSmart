@@ -15,6 +15,7 @@ import 'package:school_system/features/teacher/presentation/views/student_list.d
 import 'package:school_system/features/teacher/presentation/views/teacher_classes_view.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_home_view.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_profile_view.dart';
+import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -60,6 +61,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case TeacherProfileView.routeName:
       return MaterialPageRoute(
         builder: (context) => const TeacherProfileView(),
+      );
+
+    case PersonalInformationView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const PersonalInformationView(),
       );
     default:
       return MaterialPageRoute(builder: (context) => const SplashView());
