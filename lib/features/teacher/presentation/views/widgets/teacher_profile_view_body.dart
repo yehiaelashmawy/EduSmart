@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
@@ -66,10 +67,7 @@ class TeacherProfileViewBody extends StatelessWidget {
                     title: 'Settings',
                     icon: Icons.settings_outlined,
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        SettingsView.routeName,
-                      );
+                      Navigator.pushNamed(context, SettingsView.routeName);
                     },
                   ),
                   const SizedBox(height: 16),
@@ -86,7 +84,15 @@ class TeacherProfileViewBody extends StatelessWidget {
 
                   const SizedBox(height: 40),
 
-                  ProfileLogoutButton(onTap: () {}),
+                  ProfileLogoutButton(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamedAndRemoveUntil(
+                        AuthView.routeName,
+                        (route) => false,
+                      );
+                    },
+                  ),
 
                   const SizedBox(height: 24),
                 ],
