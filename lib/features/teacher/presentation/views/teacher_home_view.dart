@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/features/teacher/presentation/views/lesson_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/classes-view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_home_view_body.dart';
@@ -24,6 +25,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         Widget page;
         if (settings.name == StudentList.routeName) {
           page = const StudentList();
+        } else if (settings.name == LessonDetailsView.routeName) {
+          page = const LessonDetailsView();
         } else {
           page = const ClassesViewBody();
         }

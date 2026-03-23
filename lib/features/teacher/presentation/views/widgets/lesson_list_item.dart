@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/features/teacher/presentation/views/lesson_details_view.dart';
 
 class LessonListItem extends StatelessWidget {
   const LessonListItem({
@@ -72,7 +73,9 @@ class LessonListItem extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, LessonDetailsView.routeName);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff0F52BD),
                 foregroundColor: Colors.white,
