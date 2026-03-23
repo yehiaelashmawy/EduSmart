@@ -3,6 +3,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
+import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/profile_logout_button.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/profile_menu_tile.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_profile_avatar.dart';
@@ -64,7 +65,12 @@ class TeacherProfileViewBody extends StatelessWidget {
                   ProfileMenuTile(
                     title: 'Settings',
                     icon: Icons.settings_outlined,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        SettingsView.routeName,
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   ProfileMenuTile(

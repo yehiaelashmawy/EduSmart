@@ -8,6 +8,7 @@ import 'package:school_system/features/teacher/presentation/views/widgets/teache
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_profile_view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
+import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
 
 class TeacherHomeView extends StatefulWidget {
   const TeacherHomeView({super.key});
@@ -63,6 +64,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
           page = const PersonalInformationView();
         } else if (settings.name == ChangePasswordView.routeName) {
           page = const ChangePasswordView();
+        } else if (settings.name == SettingsView.routeName) {
+          page = const SettingsView();
         } else {
           page = const TeacherProfileViewBody();
         }
