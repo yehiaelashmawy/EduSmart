@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/presentation/views/grade_submission_view.dart';
 
 enum SubmissionStatus { graded, submitted, notTurnedIn }
 
@@ -105,13 +106,13 @@ class SubmissionItemCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          _buildTrailingWidget(),
+          _buildTrailingWidget(context),
         ],
       ),
     );
   }
 
-  Widget _buildTrailingWidget() {
+  Widget _buildTrailingWidget(BuildContext context) {
     switch (status) {
       case SubmissionStatus.graded:
         return Row(
@@ -132,7 +133,14 @@ class SubmissionItemCard extends StatelessWidget {
         );
       case SubmissionStatus.submitted:
         return ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const GradeSubmissionView(),
+              ),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.secondaryColor,
             elevation: 0,

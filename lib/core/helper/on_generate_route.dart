@@ -19,6 +19,7 @@ import 'package:school_system/features/teacher/presentation/views/teacher_profil
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
+import 'package:school_system/features/teacher/presentation/views/grade_submission_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -80,6 +81,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const SettingsView(),
       );
+    case GradeSubmissionView.routeName:
+      return MaterialPageRoute(builder: (context) => const GradeSubmissionView());
     default:
       return MaterialPageRoute(builder: (context) => const SplashView());
   }

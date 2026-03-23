@@ -22,7 +22,11 @@ class SubmissionsHeaderCards extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.bar_chart, size: 16, color: AppColors.primaryColor),
+                    Icon(
+                      Icons.bar_chart,
+                      size: 16,
+                      color: AppColors.primaryColor,
+                    ),
                     const SizedBox(width: 6),
                     Text(
                       'AVG SCORE',
@@ -41,13 +45,17 @@ class SubmissionsHeaderCards extends StatelessWidget {
                   children: [
                     Text(
                       '88',
-                      style: AppTextStyle.bold24.copyWith(color: AppColors.black),
+                      style: AppTextStyle.bold24.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, left: 2),
                       child: Text(
                         '/100',
-                        style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                        style: AppTextStyle.regular14.copyWith(
+                          color: AppColors.grey,
+                        ),
                       ),
                     ),
                   ],
@@ -70,7 +78,11 @@ class SubmissionsHeaderCards extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.inventory_2_outlined, size: 16, color: Color(0xFFF97316)), // Orange
+                    const Icon(
+                      Icons.inventory_2_outlined,
+                      size: 16,
+                      color: Color(0xFFF97316),
+                    ), // Orange
                     const SizedBox(width: 6),
                     const Text(
                       'TO GRADE',
@@ -89,13 +101,17 @@ class SubmissionsHeaderCards extends StatelessWidget {
                   children: [
                     Text(
                       '5',
-                      style: AppTextStyle.bold24.copyWith(color: AppColors.black),
+                      style: AppTextStyle.bold24.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, left: 4),
                       child: Text(
                         'students',
-                        style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                        style: AppTextStyle.regular14.copyWith(
+                          color: AppColors.grey,
+                        ),
                       ),
                     ),
                   ],
