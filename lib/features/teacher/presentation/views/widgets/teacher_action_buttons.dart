@@ -28,6 +28,9 @@ class TeacherActionButtons extends StatelessWidget {
                 backgroundColor: Colors.white,
                 textColor: Colors.black,
                 iconColor: AppColors.primaryColor,
+                onTap: () {
+                  Navigator.pushNamed(context, '/add_new_lesson');
+                },
               ),
             ),
           ],
@@ -68,43 +71,48 @@ class TeacherActionButtons extends StatelessWidget {
     required Color textColor,
     required Color iconColor,
     bool isDashed = false,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
-        border: isDashed
-            ? Border.all(
-                color: AppColors.primaryColor.withOpacity(0.5),
-                style: BorderStyle.solid,
-              )
-            : null,
-        boxShadow: isDashed
-            ? []
-            : [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: iconColor, size: 28),
-          const SizedBox(height: 12),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              title,
-              style: AppTextStyle.semiBold14.copyWith(color: textColor),
-              textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16),
+          border: isDashed
+              ? Border.all(
+                  color: AppColors.primaryColor.withOpacity(0.5),
+                  style: BorderStyle.solid,
+                )
+              : null,
+          boxShadow: isDashed
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: iconColor, size: 28),
+            const SizedBox(height: 12),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: AppTextStyle.semiBold14.copyWith(color: textColor),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
