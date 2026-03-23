@@ -10,7 +10,7 @@ class SchoolAnnouncementsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFDCE8F5), // Light grey background
+        color: AppColors.primaryColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

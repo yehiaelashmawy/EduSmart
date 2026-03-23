@@ -83,6 +83,8 @@ class SubmissionItemCard extends StatelessWidget {
                   style: AppTextStyle.bold16.copyWith(
                     color: isNotTurnedIn ? AppColors.grey : AppColors.black,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Row(
@@ -90,14 +92,22 @@ class SubmissionItemCard extends StatelessWidget {
                     if (isNotTurnedIn) ...[
                       Icon(Icons.access_time, size: 14, color: AppColors.grey.withOpacity(0.8)),
                       const SizedBox(width: 4),
-                      Text(
-                        'Pending Submission',
-                        style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                      Expanded(
+                        child: Text(
+                          'Pending Submission',
+                          style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ] else ...[
-                      Text(
-                        status == SubmissionStatus.graded ? 'Graded • $dateString' : 'Submitted • $dateString',
-                        style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                      Expanded(
+                        child: Text(
+                          status == SubmissionStatus.graded ? 'Graded • $dateString' : 'Submitted • $dateString',
+                          style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ],

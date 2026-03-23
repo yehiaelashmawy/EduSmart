@@ -56,8 +56,8 @@ class TeacherCustomAppBar extends StatelessWidget {
   Widget _buildIconButton(IconData icon, {bool hasBadge = false}) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF4F6F9),
+      decoration: BoxDecoration(
+        color: AppColors.lightGrey.withOpacity(0.3),
         shape: BoxShape.circle,
       ),
       child: hasBadge
