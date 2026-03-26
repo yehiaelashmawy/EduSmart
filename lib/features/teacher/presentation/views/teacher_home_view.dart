@@ -11,6 +11,7 @@ import 'package:school_system/features/teacher/presentation/views/personal_infor
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
+import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_bottom_nav_bar.dart';
 
 class TeacherHomeView extends StatefulWidget {
@@ -26,6 +27,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   final GlobalKey<NavigatorState> _homeNavigatorKey =
       GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _classesNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _messagesNavigatorKey =
       GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _profileNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -61,7 +64,13 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         return MaterialPageRoute(builder: (_) => page, settings: settings);
       },
     ),
-    const Center(child: Text('Messages View')),
+    Navigator(
+      key: _messagesNavigatorKey,
+      onGenerateRoute: (settings) => MaterialPageRoute(
+        builder: (_) => const MessagesView(),
+        settings: settings,
+      ),
+    ),
     Navigator(
       key: _alertsNavigatorKey,
       onGenerateRoute: (settings) => MaterialPageRoute(
@@ -92,6 +101,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       final keys = {
         0: _homeNavigatorKey,
         1: _classesNavigatorKey,
+        2: _messagesNavigatorKey,
         3: _alertsNavigatorKey,
         4: _profileNavigatorKey,
       };
@@ -111,6 +121,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         final navigatorKeys = {
           0: _homeNavigatorKey,
           1: _classesNavigatorKey,
+          2: _messagesNavigatorKey,
           3: _alertsNavigatorKey,
           4: _profileNavigatorKey,
         };
