@@ -4,8 +4,31 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/utils/size_config.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 
-class ChatInputField extends StatelessWidget {
-  const ChatInputField({super.key});
+class ChatInputField extends StatefulWidget {
+  final Function(String) onSendMessage;
+
+  const ChatInputField({super.key, required this.onSendMessage});
+
+  @override
+  State<ChatInputField> createState() => _ChatInputFieldState();
+}
+
+class _ChatInputFieldState extends State<ChatInputField> {
+  final TextEditingController _controller = TextEditingController();
+
+  void _handleSend() {
+    final text = _controller.text.trim();
+    if (text.isNotEmpty) {
+      widget.onSendMessage(text);
+      _controller.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +61,8 @@ class ChatInputField extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _controller,
+                        onSubmitted: (_) => _handleSend(),
                         decoration: InputDecoration(
                           hintText: 'Type a message...',
                           hintStyle: AppTextStyle.regular14.copyWith(
@@ -57,13 +82,16 @@ class ChatInputField extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: Color(0xff1A56DB),
-                shape: BoxShape.circle,
+            GestureDetector(
+              onTap: _handleSend,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Color(0xff1A56DB),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.send, color: Colors.white, size: 18),
               ),
-              child: const Icon(Icons.send, color: Colors.white, size: 18),
             ),
           ],
         ),

@@ -5,7 +5,17 @@ import 'widgets/chat_bubble.dart';
 import 'widgets/chat_input_field.dart';
 import 'widgets/date_separator.dart';
 
-const List<ChatMessageModel> chatMessages = [
+class ChatViewBody extends StatefulWidget {
+  const ChatViewBody({super.key});
+
+  @override
+  State<ChatViewBody> createState() => _ChatViewBodyState();
+}
+
+class _ChatViewBodyState extends State<ChatViewBody> {
+  final ScrollController _scrollController = ScrollController();
+
+  final List<ChatMessageModel> _messages = [
   ChatMessageModel(
     text: "Hi Mr. Henderson, I'm working on the Calculus assignment. I'm a bit confused about the second problem on page 42 regarding the chain rule application.",
     time: "09:15 AM",
@@ -32,10 +42,36 @@ const List<ChatMessageModel> chatMessages = [
     time: "09:22 AM",
     isSender: true,
   ),
-];
+  ];
 
-class ChatViewBody extends StatelessWidget {
-  const ChatViewBody({super.key});
+  void _sendMessage(String text) {
+    setState(() {
+      _messages.add(
+        ChatMessageModel(
+          text: text,
+          time: TimeOfDay.now().format(context),
+          isSender: true,
+        ),
+      );
+    });
+
+    // Animate to bottom after the list rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +81,17 @@ class ChatViewBody extends StatelessWidget {
           child: Container(
             color: ThemeManager.isDarkMode ? const Color(0xff0F172A) : const Color(0xffF8FAFC),
             child: ListView(
+              controller: _scrollController,
               padding: const EdgeInsets.symmetric(vertical: 24),
               children: [
                 const DateSeparator(dateText: 'TODAY'),
                 const SizedBox(height: 24),
-                ...chatMessages.map((msg) => ChatBubble(message: msg)),
+                ..._messages.map((msg) => ChatBubble(message: msg)),
               ],
             ),
           ),
         ),
-        const ChatInputField(),
+        ChatInputField(onSendMessage: _sendMessage),
       ],
     );
   }

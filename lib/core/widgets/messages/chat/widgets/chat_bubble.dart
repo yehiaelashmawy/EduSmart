@@ -33,9 +33,9 @@ class ChatBubble extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: Color(0xff1A56DB), // Exact blue based on layout convention
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor, // Replaced hardcoded blue with theme primaryColor
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
                     bottomLeft: Radius.circular(16),
@@ -102,7 +102,7 @@ class ChatBubble extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: ThemeManager.isDarkMode ? AppColors.darkBlue : Colors.white,
+                    color: ThemeManager.isDarkMode ? AppColors.white : Colors.white,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
