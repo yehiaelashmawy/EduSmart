@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/messages/chat/chat_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
+import 'package:school_system/core/widgets/smart_tutor/smart_tutor_view.dart';
 import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:school_system/features/Auth/presentation/views/forgot_password_view.dart';
 import 'package:school_system/features/Auth/presentation/views/login_view.dart';
@@ -92,6 +93,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const GradeSubmissionView(),
       );
+    case SmartTutorView.routeName:
+      return MaterialPageRoute(builder: (context) => const SmartTutorView());
     default:
       return MaterialPageRoute(builder: (context) => const SplashView());
   }

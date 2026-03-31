@@ -16,32 +16,36 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   final ScrollController _scrollController = ScrollController();
 
   final List<ChatMessageModel> _messages = [
-  ChatMessageModel(
-    text: "Hi Mr. Henderson, I'm working on the Calculus assignment. I'm a bit confused about the second problem on page 42 regarding the chain rule application.",
-    time: "09:15 AM",
-    isSender: false,
-  ),
-  ChatMessageModel(
-    text: "Good morning Alex! Happy to help. Are you struggling with identifying the inner function or the actual differentiation step?",
-    time: "09:18 AM",
-    isSender: true,
-  ),
-  ChatMessageModel(
-    text: "I think it's the inner function. It's a nested trigonometric function and it's getting a bit messy. I've attached a photo of my current work.",
-    time: "09:19 AM",
-    isSender: false,
-  ),
-  ChatMessageModel(
-    text: "", // Image only
-    imageUrl: "placeholder",
-    time: "09:20 AM",
-    isSender: false,
-  ),
-  ChatMessageModel(
-    text: "I see it. You're actually very close! Try letting u = sin(x²) first. Then differentiate the outer cos(u) part. Give that a try and show me what you get.",
-    time: "09:22 AM",
-    isSender: true,
-  ),
+    ChatMessageModel(
+      text:
+          "Hi Mr. Henderson, I'm working on the Calculus assignment. I'm a bit confused about the second problem on page 42 regarding the chain rule application.",
+      time: "09:15 AM",
+      isSender: false,
+    ),
+    ChatMessageModel(
+      text:
+          "Good morning Alex! Happy to help. Are you struggling with identifying the inner function or the actual differentiation step?",
+      time: "09:18 AM",
+      isSender: true,
+    ),
+    ChatMessageModel(
+      text:
+          "I think it's the inner function. It's a nested trigonometric function and it's getting a bit messy. I've attached a photo of my current work.",
+      time: "09:19 AM",
+      isSender: false,
+    ),
+    ChatMessageModel(
+      text: "", // Image only
+      imageUrl: "placeholder",
+      time: "09:20 AM",
+      isSender: false,
+    ),
+    ChatMessageModel(
+      text:
+          "I see it. You're actually very close! Try letting u = sin(x²) first. Then differentiate the outer cos(u) part. Give that a try and show me what you get.",
+      time: "09:22 AM",
+      isSender: true,
+    ),
   ];
 
   void _sendMessage(String text) {
@@ -79,7 +83,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       children: [
         Expanded(
           child: Container(
-            color: ThemeManager.isDarkMode ? const Color(0xff0F172A) : const Color(0xffF8FAFC),
+            color: ThemeManager.isDarkMode
+                ? const Color(0xff0F172A)
+                : const Color(0xffF8FAFC),
             child: ListView(
               controller: _scrollController,
               padding: const EdgeInsets.symmetric(vertical: 24),

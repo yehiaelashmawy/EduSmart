@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+lib/core/widgets/messages/chat/widgets/chat_input_field.dart
+
+.env
+lib/core/utils/app_constants.dart

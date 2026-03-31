@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
+import 'package:school_system/core/widgets/smart_tutor/smart_tutor_view.dart';
+import 'package:school_system/core/utils/theme_manager.dart';
 
 class TeacherActionButtons extends StatelessWidget {
   const TeacherActionButtons({super.key});
@@ -57,9 +59,13 @@ class TeacherActionButtons extends StatelessWidget {
               child: _buildActionButton(
                 title: 'SmartTutor AI',
                 icon: Icons.psychology,
-                backgroundColor: AppColors.darkBlue,
+                backgroundColor: ThemeManager.isDarkMode ? AppColors.primaryColor : AppColors.darkBlue,
                 textColor: AppColors.white,
                 iconColor: AppColors.white,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamed(SmartTutorView.routeName);
+                },
               ),
             ),
           ],
