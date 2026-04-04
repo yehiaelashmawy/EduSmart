@@ -57,7 +57,9 @@ class AttendanceMethodCard extends StatelessWidget {
             Text(
               subtitle,
               style: AppTextStyle.medium14.copyWith(
-                color: isPrimary ? Colors.white.withOpacity(0.8) : AppColors.grey,
+                color: isPrimary
+                    ? Colors.white.withOpacity(0.8)
+                    : AppColors.grey,
                 height: 1.5,
               ),
             ),

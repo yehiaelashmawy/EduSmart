@@ -50,7 +50,9 @@ class AttendanceMethodViewBody extends StatelessWidget {
           title: 'Manual Attendance',
           subtitle: 'Personally mark students present or absent from the class roster.',
           actionText: 'SELECT METHOD',
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/manual_attendance_view');
+          },
         ),
         AttendanceMethodCard(
           icon: Container(

@@ -79,4 +79,8 @@ abstract class AppTextStyle {
     fontSize: 12,
     fontWeight: FontWeight.w600,
   );
+  static const TextStyle medium12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
 }
