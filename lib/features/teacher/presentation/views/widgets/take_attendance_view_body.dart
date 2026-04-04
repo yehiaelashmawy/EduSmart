@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/take_attendance_card.dart';
-
+import 'package:school_system/features/teacher/presentation/views/attendance_report_view.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
 
 class TakeAttendanceViewBody extends StatelessWidget {
@@ -38,7 +38,10 @@ class TakeAttendanceViewBody extends StatelessWidget {
           grade: 'Grade 10-A',
           subject: 'Mathematics',
           studentsCount: 24,
-          onViewReports: () {},
+          onViewReports: () {
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(AttendanceReportView.routeName);
+          },
           onTakeAttendance: () {
             Navigator.of(context, rootNavigator: true)
                 .pushNamed(AttendanceMethodView.routeName);
@@ -51,7 +54,10 @@ class TakeAttendanceViewBody extends StatelessWidget {
           grade: 'Grade 11-B',
           subject: 'Advanced Calculus',
           studentsCount: 18,
-          onViewReports: () {},
+          onViewReports: () {
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(AttendanceReportView.routeName);
+          },
           onTakeAttendance: () {
             Navigator.of(context, rootNavigator: true)
                 .pushNamed(AttendanceMethodView.routeName);
@@ -64,7 +70,10 @@ class TakeAttendanceViewBody extends StatelessWidget {
           grade: 'Grade 9-C',
           subject: 'Algebra Basics',
           studentsCount: 30,
-          onViewReports: () {},
+          onViewReports: () {
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(AttendanceReportView.routeName);
+          },
           onTakeAttendance: () {
             Navigator.of(context, rootNavigator: true)
                 .pushNamed(AttendanceMethodView.routeName);
