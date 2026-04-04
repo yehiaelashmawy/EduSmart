@@ -52,8 +52,13 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   void _sendMessage(String text, {PlatformFile? attachedFile}) {
     bool isImage = false;
     if (attachedFile != null) {
-      isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp']
-          .contains(attachedFile.extension?.toLowerCase());
+      isImage = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'webp',
+      ].contains(attachedFile.extension?.toLowerCase());
     }
 
     setState(() {

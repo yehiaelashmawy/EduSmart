@@ -68,7 +68,9 @@ class AttendanceMethodViewBody extends StatelessWidget {
           actionText: 'QUICK LAUNCH',
           actionIcon: Icons.bolt,
           isPrimary: true,
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/generate_qr_code_view');
+          },
         ),
         AttendanceMethodCard(
           icon: Container(
