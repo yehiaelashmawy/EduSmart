@@ -3,6 +3,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_lesson_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
 import 'package:school_system/features/teacher/presentation/views/lesson_details_view.dart';
+import 'package:school_system/features/teacher/presentation/views/take_attendance_view.dart';
 import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/classes-view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_home_view_body.dart';
@@ -44,6 +45,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
           page = const AddNewLessonView();
         } else if (settings.name == AddHomeworkView.routeName) {
           page = const AddHomeworkView();
+        } else if (settings.name == TakeAttendanceView.routeName) {
+          page = const TakeAttendanceView();
         } else {
           page = const TeacherHomeViewBody();
         }

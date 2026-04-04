@@ -63,4 +63,20 @@ abstract class AppTextStyle {
     fontSize: 18,
     fontWeight: FontWeight.w500,
   );
+  static const TextStyle medium16 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle medium14 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle bold12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle semiBold12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
 }
