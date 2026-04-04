@@ -84,7 +84,9 @@ class AttendanceMethodViewBody extends StatelessWidget {
           title: 'Generate Code',
           subtitle: 'Create a unique 6-digit numeric key for students to enter manually.',
           actionText: 'SELECT METHOD',
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/entry_code_view');
+          },
         ),
       ],
     );

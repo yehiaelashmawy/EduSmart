@@ -28,6 +28,7 @@ import 'package:school_system/features/teacher/presentation/views/take_attendanc
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
 import 'package:school_system/features/teacher/presentation/views/manual_attendance_view.dart';
 import 'package:school_system/features/teacher/presentation/views/generate_qr_code_view.dart';
+import 'package:school_system/features/teacher/presentation/views/entry_code_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -86,6 +87,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case GenerateQrCodeView.routeName:
       return MaterialPageRoute(
         builder: (context) => const GenerateQrCodeView(),
+      );
+
+    case EntryCodeView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const EntryCodeView(),
       );
 
     case TeacherProfileView.routeName:
