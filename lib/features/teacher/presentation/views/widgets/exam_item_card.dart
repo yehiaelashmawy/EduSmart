@@ -121,7 +121,12 @@ class ExamItemCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed('/exam_details');
+                        },
                         icon: Icon(
                           isDraft ? Icons.edit_outlined : Icons.info_outline,
                           size: 18,

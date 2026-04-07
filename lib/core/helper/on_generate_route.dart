@@ -14,6 +14,7 @@ import 'package:school_system/features/parent/presentation/views/parent_home_vie
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_lesson_view.dart';
@@ -70,6 +71,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const AddNewExamView());
     case ExamResultsView.routeName:
       return MaterialPageRoute(builder: (context) => const ExamResultsView());
+    case ExamDetailsView.routeName:
+      return MaterialPageRoute(builder: (context) => const ExamDetailsView());
     case TeacherClassesView.routeName:
       return MaterialPageRoute(
         builder: (context) => const TeacherClassesView(),
