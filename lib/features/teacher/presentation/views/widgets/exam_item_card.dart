@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
 
 class ExamItemCard extends StatelessWidget {
   const ExamItemCard({
@@ -30,9 +31,7 @@ class ExamItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.lightGrey.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,8 +52,10 @@ class ExamItemCard extends StatelessWidget {
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statusColor,
                       borderRadius: BorderRadius.circular(20),
@@ -91,7 +92,9 @@ class ExamItemCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       '$date • $time',
-                      style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
+                      style: AppTextStyle.medium14.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -106,7 +109,9 @@ class ExamItemCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       '$subject - $grade',
-                      style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
+                      style: AppTextStyle.medium14.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -142,7 +147,12 @@ class ExamItemCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(ExamResultsView.routeName);
+                        },
                         icon: const Icon(
                           Icons.feed_outlined,
                           size: 18,
