@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/utils/pdf_generator.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/exam_results_view_body.dart';
+import 'package:open_filex/open_filex.dart';
 
 class ExamResultsView extends StatelessWidget {
   const ExamResultsView({super.key});
@@ -36,7 +38,10 @@ class ExamResultsView extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.download_outlined, color: AppColors.primaryColor),
-            onPressed: () {},
+            onPressed: () async {
+              final path = await PdfGenerator.generateExamResultsPdf();
+              await OpenFilex.open(path);
+            },
           ),
         ],
       ),
