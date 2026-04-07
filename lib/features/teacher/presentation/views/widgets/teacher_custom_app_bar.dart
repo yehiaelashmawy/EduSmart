@@ -46,8 +46,6 @@ class TeacherCustomAppBar extends StatelessWidget {
             ),
           ),
           _buildIconButton(Icons.search),
-          const SizedBox(width: 12),
-          _buildIconButton(Icons.notifications_none, hasBadge: true),
         ],
       ),
     );

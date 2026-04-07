@@ -4,7 +4,9 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:svg_flutter/svg.dart';
 
 class TeacherClassesAppBar extends StatelessWidget {
-  const TeacherClassesAppBar({super.key});
+  final VoidCallback? onFilterTap;
+
+  const TeacherClassesAppBar({super.key, this.onFilterTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +19,10 @@ class TeacherClassesAppBar extends StatelessWidget {
           const SizedBox(width: 12),
           const Text('My Classes', style: AppTextStyle.bold20),
           const Spacer(),
-          Icon(Icons.search, color: AppColors.darkBlue, size: 28),
-          const SizedBox(width: 16),
-          Icon(Icons.filter_list, color: AppColors.darkBlue, size: 28),
+          InkWell(
+            onTap: onFilterTap,
+            child: Icon(Icons.filter_list, color: AppColors.darkBlue, size: 28),
+          ),
         ],
       ),
     );
