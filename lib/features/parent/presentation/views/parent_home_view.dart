@@ -4,9 +4,8 @@ import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_bottom_nav_bar.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_home_view_body.dart';
-import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
-import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
-import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
+import 'package:school_system/core/helper/on_generate_route.dart';
+import 'package:school_system/core/widgets/profile/profile_view_body.dart';
 
 class ParentHomeView extends StatefulWidget {
   const ParentHomeView({super.key});
@@ -19,71 +18,76 @@ class ParentHomeView extends StatefulWidget {
 class _ParentHomeViewState extends State<ParentHomeView> {
   int _currentIndex = 0;
 
-  final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _childrenNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _messagesNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _alertsNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _profileNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _homeNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _childrenNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _messagesNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _alertsNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _profileNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   late final List<Widget> _views = [
     Navigator(
       key: _homeNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const ParentHomeViewBody(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const ParentHomeViewBody());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _childrenNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: Center(
-            child: Text(
-              'My Children Coming Soon',
-              style: TextStyle(color: AppColors.grey, fontSize: 18),
-            ),
-          ),
-        ),
-        settings: settings,
-      ),
-    ),
-    Navigator(
-      key: _messagesNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const MessagesView(),
-        settings: settings,
-      ),
-    ),
-    Navigator(
-      key: _alertsNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const NotificationsView(),
-        settings: settings,
-      ),
-    ),
-    Navigator(
-      key: _profileNavigatorKey,
       onGenerateRoute: (settings) {
-        Widget page;
-        if (settings.name == PersonalInformationView.routeName) {
-          page = const PersonalInformationView();
-        } else if (settings.name == ChangePasswordView.routeName) {
-          page = const ChangePasswordView();
-        } else if (settings.name == SettingsView.routeName) {
-          page = const SettingsView();
-        } else {
-          page = Scaffold(
-            backgroundColor: AppColors.backgroundColor,
-            body: Center(
-              child: Text(
-                'Parent Profile Coming Soon',
-                style: TextStyle(color: AppColors.grey, fontSize: 18),
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              backgroundColor: AppColors.backgroundColor,
+              body: Center(
+                child: Text(
+                  'My Children Coming Soon',
+                  style: TextStyle(color: AppColors.grey, fontSize: 18),
+                ),
               ),
             ),
           );
         }
-        return MaterialPageRoute(builder: (_) => page, settings: settings);
+        return onGenerateRoute(settings);
+      },
+    ),
+    Navigator(
+      key: _messagesNavigatorKey,
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const MessagesView());
+        }
+        return onGenerateRoute(settings);
+      },
+    ),
+    Navigator(
+      key: _alertsNavigatorKey,
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const NotificationsView());
+        }
+        return onGenerateRoute(settings);
+      },
+    ),
+    Navigator(
+      key: _profileNavigatorKey,
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(
+            builder: (_) => const ProfileViewBody(
+              name: 'Jane Doe',
+              roleTitle: 'Parent',
+            ),
+          );
+        }
+        return onGenerateRoute(settings);
       },
     ),
   ];
@@ -105,7 +109,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: _currentIndex == 0 && !(_homeNavigatorKey.currentState?.canPop() ?? false),
+      canPop:
+          _currentIndex == 0 &&
+          !(_homeNavigatorKey.currentState?.canPop() ?? false),
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
         final navigatorKeys = {
@@ -133,4 +139,3 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     );
   }
 }
-

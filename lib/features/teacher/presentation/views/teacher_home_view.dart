@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
-import 'package:school_system/features/teacher/presentation/views/add_new_lesson_view.dart';
-import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
-import 'package:school_system/features/teacher/presentation/views/lesson_details_view.dart';
-import 'package:school_system/features/teacher/presentation/views/take_attendance_view.dart';
-import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
-import 'package:school_system/features/teacher/presentation/views/student_list.dart';
+import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/classes-view_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_home_view_body.dart';
-import 'package:school_system/features/teacher/presentation/views/widgets/teacher_profile_view_body.dart';
-import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
-import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
-import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
+import 'package:school_system/core/widgets/profile/profile_view_body.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
 import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_bottom_nav_bar.dart';
@@ -41,63 +33,51 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     Navigator(
       key: _homeNavigatorKey,
       onGenerateRoute: (settings) {
-        Widget page;
-        if (settings.name == AddNewLessonView.routeName) {
-          page = const AddNewLessonView();
-        } else if (settings.name == AddHomeworkView.routeName) {
-          page = const AddHomeworkView();
-        } else if (settings.name == TakeAttendanceView.routeName) {
-          page = const TakeAttendanceView();
-        } else if (settings.name == AttendanceMethodView.routeName) {
-          page = const AttendanceMethodView();
-        } else {
-          page = const TeacherHomeViewBody();
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const TeacherHomeViewBody());
         }
-        return MaterialPageRoute(builder: (_) => page, settings: settings);
+        return onGenerateRoute(settings);
       },
     ),
     Navigator(
       key: _classesNavigatorKey,
       onGenerateRoute: (settings) {
-        Widget page;
-        if (settings.name == StudentList.routeName) {
-          page = const StudentList();
-        } else if (settings.name == LessonDetailsView.routeName) {
-          page = const LessonDetailsView();
-        } else {
-          page = const ClassesViewBody();
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const ClassesViewBody());
         }
-        return MaterialPageRoute(builder: (_) => page, settings: settings);
+        return onGenerateRoute(settings);
       },
     ),
     Navigator(
       key: _messagesNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const MessagesView(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const MessagesView());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _alertsNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const NotificationsView(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const NotificationsView());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _profileNavigatorKey,
       onGenerateRoute: (settings) {
-        Widget page;
-        if (settings.name == PersonalInformationView.routeName) {
-          page = const PersonalInformationView();
-        } else if (settings.name == ChangePasswordView.routeName) {
-          page = const ChangePasswordView();
-        } else if (settings.name == SettingsView.routeName) {
-          page = const SettingsView();
-        } else {
-          page = const TeacherProfileViewBody();
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(
+            builder: (_) => const ProfileViewBody(
+              name: 'Alex Johnson',
+              roleTitle: 'Senior Mathematics Educator',
+            ),
+          );
         }
-        return MaterialPageRoute(builder: (_) => page, settings: settings);
+        return onGenerateRoute(settings);
       },
     ),
   ];

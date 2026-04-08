@@ -5,12 +5,20 @@ import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
-import 'package:school_system/features/teacher/presentation/views/widgets/profile_logout_button.dart';
-import 'package:school_system/features/teacher/presentation/views/widgets/profile_menu_tile.dart';
-import 'package:school_system/features/teacher/presentation/views/widgets/teacher_profile_avatar.dart';
+import 'package:school_system/core/widgets/profile/profile_logout_button.dart';
+import 'package:school_system/core/widgets/profile/profile_menu_tile.dart';
+import 'package:school_system/core/widgets/profile/profile_avatar.dart';
+import 'package:school_system/core/helper/shared_prefs_helper.dart';
 
-class StudentProfileViewBody extends StatelessWidget {
-  const StudentProfileViewBody({super.key});
+class ProfileViewBody extends StatelessWidget {
+  const ProfileViewBody({
+    super.key,
+    required this.name,
+    required this.roleTitle,
+  });
+
+  final String name;
+  final String roleTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +47,9 @@ class StudentProfileViewBody extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  TeacherProfileAvatar(
-                    name: 'Alex Johnson',
-                    title: 'Current Student',
+                  ProfileAvatar(
+                    name: name,
+                    title: roleTitle,
                     onEditTap: () {
                       Navigator.pushNamed(
                         context,
@@ -85,11 +93,11 @@ class StudentProfileViewBody extends StatelessWidget {
                   const SizedBox(height: 40),
 
                   ProfileLogoutButton(
-                    onTap: () {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).pushNamedAndRemoveUntil(
+                    onTap: () async {
+                      await SharedPrefsHelper.clearAuth();
+                      if (!context.mounted) return;
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamedAndRemoveUntil(
                         AuthView.routeName,
                         (route) => false,
                       );

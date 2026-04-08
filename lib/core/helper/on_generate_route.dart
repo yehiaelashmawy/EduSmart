@@ -23,7 +23,6 @@ import 'package:school_system/features/teacher/presentation/views/lesson_details
 import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_classes_view.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_home_view.dart';
-import 'package:school_system/features/teacher/presentation/views/teacher_profile_view.dart';
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
@@ -61,7 +60,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case StudentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const StudentHomeView());
     case WeeklyScheduleView.routeName:
-      return MaterialPageRoute(builder: (context) => const WeeklyScheduleView());
+      return MaterialPageRoute(
+        builder: (context) => const WeeklyScheduleView(),
+      );
     case ParentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentHomeView());
     case StudentList.routeName:
@@ -103,18 +104,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
 
     case EntryCodeView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const EntryCodeView(),
-      );
+      return MaterialPageRoute(builder: (context) => const EntryCodeView());
 
     case AttendanceReportView.routeName:
       return MaterialPageRoute(
         builder: (context) => const AttendanceReportView(),
-      );
-
-    case TeacherProfileView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const TeacherProfileView(),
       );
 
     case PersonalInformationView.routeName:

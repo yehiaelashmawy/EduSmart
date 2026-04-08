@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_bottom_nav_bar.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_home_view_body.dart';
-import 'package:school_system/features/student/presentation/views/widgets/student_profile_view_body.dart';
-import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
-import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
-import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_subjects_view_body.dart';
+import 'package:school_system/core/widgets/profile/profile_view_body.dart';
 
 class StudentHomeView extends StatefulWidget {
   const StudentHomeView({super.key});
@@ -35,49 +33,57 @@ class _StudentHomeViewState extends State<StudentHomeView> {
   late final List<Widget> _views = [
     Navigator(
       key: _homeNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const StudentHomeViewBody(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const StudentHomeViewBody());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _classesNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: const StudentSubjectsViewBody(),
-        ),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              backgroundColor: AppColors.backgroundColor,
+              body: const StudentSubjectsViewBody(),
+            ),
+          );
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _messagesNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const MessagesView(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const MessagesView());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _alertsNavigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (_) => const NotificationsView(),
-        settings: settings,
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(builder: (_) => const NotificationsView());
+        }
+        return onGenerateRoute(settings);
+      },
     ),
     Navigator(
       key: _profileNavigatorKey,
       onGenerateRoute: (settings) {
-        Widget page;
-        if (settings.name == PersonalInformationView.routeName) {
-          page = const PersonalInformationView();
-        } else if (settings.name == ChangePasswordView.routeName) {
-          page = const ChangePasswordView();
-        } else if (settings.name == SettingsView.routeName) {
-          page = const SettingsView();
-        } else {
-          page = const StudentProfileViewBody();
+        if (settings.name == '/' || settings.name == null) {
+          return MaterialPageRoute(
+            builder: (_) => const ProfileViewBody(
+              name: 'Omar Ahmad',
+              roleTitle: 'Current Student',
+            ),
+          );
         }
-        return MaterialPageRoute(builder: (_) => page, settings: settings);
+        return onGenerateRoute(settings);
       },
     ),
   ];

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
-class TeacherProfileAvatar extends StatelessWidget {
-  const TeacherProfileAvatar({
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
     super.key,
     required this.name,
     required this.title,
