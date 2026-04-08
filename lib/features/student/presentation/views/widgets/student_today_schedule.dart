@@ -37,7 +37,10 @@ class StudentTodaySchedule extends StatelessWidget {
               ],
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamed('weekly_schedule_view');
+              },
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppColors.primaryColor.withValues(alpha: 0.3)),
                 shape: RoundedRectangleBorder(
