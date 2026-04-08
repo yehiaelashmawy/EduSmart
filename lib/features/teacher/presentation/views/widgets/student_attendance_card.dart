@@ -52,65 +52,89 @@ class StudentAttendanceCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              imagePath,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  style: AppTextStyle.bold16.copyWith(color: AppColors.black),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 320;
+
+          final studentInfo = Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
-                ),
-                if (hasHonorRoll) ...[
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: AppTextStyle.bold16.copyWith(color: AppColors.black),
                     ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffDDE4FF),
-                      borderRadius: BorderRadius.circular(6),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
                     ),
-                    child: Text(
-                      'HONOR ROLL',
-                      style: AppTextStyle.bold12.copyWith(
-                        color: const Color(0xff065AD8),
-                        fontSize: 10,
-                        letterSpacing: 0.5,
+                    if (hasHonorRoll) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffDDE4FF),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'HONOR ROLL',
+                          style: AppTextStyle.bold12.copyWith(
+                            color: const Color(0xff065AD8),
+                            fontSize: 10,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          );
+
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                studentInfo,
+                const SizedBox(height: 16),
+                _buildToggle(expanded: true),
               ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          _buildToggle(),
-        ],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: studentInfo),
+              const SizedBox(width: 12),
+              _buildToggle(expanded: false),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildToggle() {
+  Widget _buildToggle({required bool expanded}) {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -120,23 +144,33 @@ class StudentAttendanceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
         children: [
-          _ToggleOption(
-            text: 'Present',
-            isSelected: status == AttendanceStatus.present,
-            selectedColor: const Color(0xff065AD8),
-            onTap: () => _handleStatusTap(AttendanceStatus.present),
+          _wrapOption(
+            expanded: expanded,
+            child: _ToggleOption(
+              text: 'Present',
+              isSelected: status == AttendanceStatus.present,
+              selectedColor: const Color(0xff065AD8),
+              onTap: () => _handleStatusTap(AttendanceStatus.present),
+            ),
           ),
-          _ToggleOption(
-            text: 'Absent',
-            isSelected: status == AttendanceStatus.absent,
-            selectedColor: const Color(0xffBD2828),
-            onTap: () => _handleStatusTap(AttendanceStatus.absent),
+          _wrapOption(
+            expanded: expanded,
+            child: _ToggleOption(
+              text: 'Absent',
+              isSelected: status == AttendanceStatus.absent,
+              selectedColor: const Color(0xffBD2828),
+              onTap: () => _handleStatusTap(AttendanceStatus.absent),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _wrapOption({required bool expanded, required Widget child}) {
+    return expanded ? Expanded(child: child) : child;
   }
 }
 
