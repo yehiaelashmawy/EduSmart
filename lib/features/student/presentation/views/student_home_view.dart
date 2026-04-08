@@ -8,6 +8,7 @@ import 'package:school_system/features/student/presentation/views/widgets/studen
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
+import 'package:school_system/features/student/presentation/views/widgets/student_subjects_view_body.dart';
 
 class StudentHomeView extends StatefulWidget {
   const StudentHomeView({super.key});
@@ -44,12 +45,7 @@ class _StudentHomeViewState extends State<StudentHomeView> {
       onGenerateRoute: (settings) => MaterialPageRoute(
         builder: (_) => Scaffold(
           backgroundColor: AppColors.backgroundColor,
-          body: Center(
-            child: Text(
-              'Student Classes Coming Soon',
-              style: TextStyle(color: AppColors.grey, fontSize: 18),
-            ),
-          ),
+          body: const StudentSubjectsViewBody(),
         ),
         settings: settings,
       ),
