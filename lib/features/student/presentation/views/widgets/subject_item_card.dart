@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
+import 'package:school_system/features/student/presentation/views/student_subject_details_view.dart';
 
 class SubjectItemCard extends StatelessWidget {
   final StudentSubjectModel subject;
@@ -220,7 +221,12 @@ class SubjectItemCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pushNamed(
+                  StudentSubjectDetailsView.routeName,
+                  arguments: subject,
+                );
+              },
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.primaryColor.withValues(alpha: 0.05),
                 padding: const EdgeInsets.symmetric(vertical: 16),
