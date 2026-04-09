@@ -15,7 +15,9 @@ class SubmissionsHeaderCards extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+              border: Border.all(
+                color: AppColors.lightGrey.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +73,9 @@ class SubmissionsHeaderCards extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+              border: Border.all(
+                color: AppColors.lightGrey.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

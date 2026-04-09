@@ -26,12 +26,20 @@ class AttendanceMethodViewBody extends StatelessWidget {
         const SizedBox(height: 12),
         RichText(
           text: TextSpan(
-            style: AppTextStyle.medium14.copyWith(color: AppColors.grey, height: 1.5),
+            style: AppTextStyle.medium14.copyWith(
+              color: AppColors.grey,
+              height: 1.5,
+            ),
             children: [
-              const TextSpan(text: 'Select a preferred method to verify student presence for '),
+              const TextSpan(
+                text:
+                    'Select a preferred method to verify student presence for ',
+              ),
               TextSpan(
                 text: 'Advanced Calculus - Section 4B',
-                style: AppTextStyle.medium14.copyWith(color: AppColors.secondaryColor),
+                style: AppTextStyle.medium14.copyWith(
+                  color: AppColors.secondaryColor,
+                ),
               ),
               const TextSpan(text: '.'),
             ],
@@ -48,7 +56,8 @@ class AttendanceMethodViewBody extends StatelessWidget {
             child: const Icon(Icons.edit_calendar, color: Color(0xff065AD8)),
           ),
           title: 'Manual Attendance',
-          subtitle: 'Personally mark students present or absent from the class roster.',
+          subtitle:
+              'Personally mark students present or absent from the class roster.',
           actionText: 'SELECT METHOD',
           onTap: () {
             Navigator.pushNamed(context, '/manual_attendance_view');
@@ -58,13 +67,14 @@ class AttendanceMethodViewBody extends StatelessWidget {
           icon: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.qr_code, color: Colors.white),
           ),
           title: 'Generate QR Code',
-          subtitle: 'Display a dynamic code on the screen for students to scan with their devices.',
+          subtitle:
+              'Display a dynamic code on the screen for students to scan with their devices.',
           actionText: 'QUICK LAUNCH',
           actionIcon: Icons.bolt,
           isPrimary: true,
@@ -82,7 +92,8 @@ class AttendanceMethodViewBody extends StatelessWidget {
             child: const Icon(Icons.pin, color: Color(0xff78350F)),
           ),
           title: 'Generate Code',
-          subtitle: 'Create a unique 6-digit numeric key for students to enter manually.',
+          subtitle:
+              'Create a unique 6-digit numeric key for students to enter manually.',
           actionText: 'SELECT METHOD',
           onTap: () {
             Navigator.pushNamed(context, '/entry_code_view');

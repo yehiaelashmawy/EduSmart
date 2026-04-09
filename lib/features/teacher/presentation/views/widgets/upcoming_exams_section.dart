@@ -46,20 +46,31 @@ class UpcomingExamsSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.lightGrey.withOpacity(0.4)),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.1),
+              color: AppColors.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               children: [
-                Text(month, style: AppTextStyle.semiBold14.copyWith(color: AppColors.primaryColor, fontSize: 12)),
-                Text(day, style: AppTextStyle.bold20.copyWith(color: AppColors.primaryColor)),
+                Text(
+                  month,
+                  style: AppTextStyle.semiBold14.copyWith(
+                    color: AppColors.primaryColor,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  day,
+                  style: AppTextStyle.bold20.copyWith(
+                    color: AppColors.primaryColor,
+                  ),
+                ),
               ],
             ),
           ),
@@ -70,11 +81,20 @@ class UpcomingExamsSection extends StatelessWidget {
               children: [
                 Text(title, style: AppTextStyle.bold16),
                 const SizedBox(height: 4),
-                Text(subtitle, style: AppTextStyle.regular14.copyWith(color: AppColors.grey, fontSize: 13)),
+                Text(
+                  subtitle,
+                  style: AppTextStyle.regular14.copyWith(
+                    color: AppColors.grey,
+                    fontSize: 13,
+                  ),
+                ),
               ],
             ),
           ),
-          Text(statusText, style: AppTextStyle.bold14.copyWith(color: statusColor)),
+          Text(
+            statusText,
+            style: AppTextStyle.bold14.copyWith(color: statusColor),
+          ),
         ],
       ),
     );

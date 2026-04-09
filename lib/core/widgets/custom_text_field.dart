@@ -52,7 +52,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: AppTextStyle.regular16.copyWith(
-          color: AppColors.grey.withOpacity(0.7),
+          color: AppColors.grey.withValues(alpha: 0.7),
         ),
         prefixIcon: widget.prefixIcon != null
             ? Padding(

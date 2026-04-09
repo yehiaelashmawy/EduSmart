@@ -35,7 +35,7 @@ class AttendanceMethodCard extends StatelessWidget {
           boxShadow: [
             if (!isPrimary)
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -58,7 +58,7 @@ class AttendanceMethodCard extends StatelessWidget {
               subtitle,
               style: AppTextStyle.medium14.copyWith(
                 color: isPrimary
-                    ? Colors.white.withOpacity(0.8)
+                    ? Colors.white.withValues(alpha: 0.8)
                     : AppColors.grey,
                 height: 1.5,
               ),

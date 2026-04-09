@@ -114,13 +114,13 @@ class LoginForm extends StatelessWidget {
             text: 'Login',
             shadows: [
               BoxShadow(
-                color: AppColors.secondaryColor.withOpacity(0.2),
+                color: AppColors.secondaryColor.withValues(alpha: 0.2),
                 blurRadius: 6,
                 offset: Offset(0, 4),
                 spreadRadius: -4,
               ),
               BoxShadow(
-                color: AppColors.secondaryColor.withOpacity(0.2),
+                color: AppColors.secondaryColor.withValues(alpha: 0.2),
                 blurRadius: 15,
                 offset: Offset(0, 10),
                 spreadRadius: -3,

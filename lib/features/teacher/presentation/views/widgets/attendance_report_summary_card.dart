@@ -25,7 +25,7 @@ class AttendanceReportSummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
@@ -43,7 +43,7 @@ class AttendanceReportSummaryCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: totalPercentage / 100,
                   strokeWidth: 12,
-                  backgroundColor: AppColors.lightGrey.withOpacity(0.3),
+                  backgroundColor: AppColors.lightGrey.withValues(alpha: 0.3),
                   color: AppColors.primaryColor,
                   strokeCap: StrokeCap.round,
                 ),
@@ -77,13 +77,13 @@ class AttendanceReportSummaryCard extends StatelessWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: AppColors.lightGrey.withOpacity(0.5),
+                color: AppColors.lightGrey.withValues(alpha: 0.5),
               ),
               _buildStatItem('Absent', absentDays, const Color(0xffDC2626)),
               Container(
                 width: 1,
                 height: 40,
-                color: AppColors.lightGrey.withOpacity(0.5),
+                color: AppColors.lightGrey.withValues(alpha: 0.5),
               ),
               _buildStatItem('Late', lateDays, const Color(0xffD97706)),
             ],

@@ -15,6 +15,7 @@ import 'package:school_system/features/splash/presentation/views/splash_view.dar
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
 import 'package:school_system/features/student/presentation/views/weekly_schedule_view.dart';
 import 'package:school_system/features/student/presentation/views/student_subject_details_view.dart';
+import 'package:school_system/features/student/presentation/views/student_lesson_details_view.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
@@ -69,6 +70,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       final subject = settings.arguments as StudentSubjectModel;
       return MaterialPageRoute(
         builder: (context) => StudentSubjectDetailsView(subject: subject),
+      );
+    case StudentLessonDetailsView.routeName:
+      final title = settings.arguments as String;
+      return MaterialPageRoute(
+        builder: (context) => StudentLessonDetailsView(lessonTitle: title),
       );
     case ParentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentHomeView());

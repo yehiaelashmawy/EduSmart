@@ -11,9 +11,13 @@ class SmartTutorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeManager.isDarkMode ? AppColors.backgroundColor : AppColors.white,
+      backgroundColor: ThemeManager.isDarkMode
+          ? AppColors.backgroundColor
+          : AppColors.white,
       appBar: AppBar(
-        backgroundColor: ThemeManager.isDarkMode ? AppColors.backgroundColor : AppColors.white,
+        backgroundColor: ThemeManager.isDarkMode
+            ? AppColors.backgroundColor
+            : AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -27,12 +31,14 @@ class SmartTutorView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.1),
+                color: AppColors.primaryColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.psychology,
-                color: Color(0xff004182), // Use hardcoded color to be safe if AppColors.primaryColor isn't const
+                color: Color(
+                  0xff004182,
+                ), // Use hardcoded color to be safe if AppColors.primaryColor isn't const
               ),
             ),
             const SizedBox(width: 12),
@@ -42,7 +48,9 @@ class SmartTutorView extends StatelessWidget {
                 Text(
                   'SmartTutor AI',
                   style: AppTextStyle.medium18.copyWith(
-                    color: ThemeManager.isDarkMode ? Colors.white : AppColors.darkBlue,
+                    color: ThemeManager.isDarkMode
+                        ? Colors.white
+                        : AppColors.darkBlue,
                   ),
                 ),
                 Text(
@@ -59,15 +67,13 @@ class SmartTutorView extends StatelessWidget {
           preferredSize: const Size.fromHeight(1.0),
           child: Container(
             color: ThemeManager.isDarkMode
-                ? AppColors.lightGrey.withOpacity(0.3)
+                ? AppColors.lightGrey.withValues(alpha: 0.3)
                 : const Color(0xffE2E8F0),
             height: 1.0,
           ),
         ),
       ),
-      body: const SafeArea(
-        child: SmartTutorViewBody(),
-      ),
+      body: const SafeArea(child: SmartTutorViewBody()),
     );
   }
 }

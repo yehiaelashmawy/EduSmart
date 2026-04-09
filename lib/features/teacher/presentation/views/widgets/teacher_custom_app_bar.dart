@@ -55,7 +55,7 @@ class TeacherCustomAppBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.lightGrey.withOpacity(0.3),
+        color: AppColors.lightGrey.withValues(alpha: 0.3),
         shape: BoxShape.circle,
       ),
       child: hasBadge

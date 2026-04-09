@@ -48,7 +48,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
                   hintText: 'e.g. 95/100',
                   suffixIcon: Icon(
                     Icons.star_border,
-                    color: AppColors.grey.withOpacity(0.7),
+                    color: AppColors.grey.withValues(alpha: 0.7),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -81,7 +81,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
                         ),
                         activeColor: AppColors.primaryColor,
                         side: BorderSide(
-                          color: AppColors.grey.withOpacity(0.5),
+                          color: AppColors.grey.withValues(alpha: 0.5),
                           width: 1.5,
                         ),
                       ),
@@ -90,7 +90,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
                     Text(
                       'Notify student immediately',
                       style: AppTextStyle.regular14.copyWith(
-                        color: AppColors.grey.withOpacity(0.8),
+                        color: AppColors.grey.withValues(alpha: 0.8),
                       ),
                     ),
                   ],

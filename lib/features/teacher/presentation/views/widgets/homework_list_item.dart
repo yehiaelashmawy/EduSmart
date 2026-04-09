@@ -51,7 +51,10 @@ class HomeworkItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: badgeColor,
                   borderRadius: BorderRadius.circular(12),
@@ -70,7 +73,7 @@ class HomeworkItemCard extends StatelessWidget {
                 Text(
                   updatedTime!,
                   style: TextStyle(
-                    color: AppColors.grey.withOpacity(0.8),
+                    color: AppColors.grey.withValues(alpha: 0.8),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -80,16 +83,12 @@ class HomeworkItemCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: AppTextStyle.bold18.copyWith(
-              color: AppColors.black,
-            ),
+            style: AppTextStyle.bold18.copyWith(color: AppColors.black),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: AppTextStyle.regular14.copyWith(
-              color: AppColors.grey,
-            ),
+            style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
           ),
           const SizedBox(height: 16),
           Row(
@@ -111,7 +110,7 @@ class HomeworkItemCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.grey.withOpacity(0.8),
+                            color: AppColors.grey.withValues(alpha: 0.8),
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -143,7 +142,7 @@ class HomeworkItemCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.grey.withOpacity(0.8),
+                            color: AppColors.grey.withValues(alpha: 0.8),
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -167,7 +166,7 @@ class HomeworkItemCard extends StatelessWidget {
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: AppColors.lightGrey.withOpacity(0.5),
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -201,9 +200,7 @@ class HomeworkItemCard extends StatelessWidget {
               ),
               child: Text(
                 buttonText,
-                style: AppTextStyle.semiBold14.copyWith(
-                  color: buttonTextColor,
-                ),
+                style: AppTextStyle.semiBold14.copyWith(color: buttonTextColor),
               ),
             ),
           ),

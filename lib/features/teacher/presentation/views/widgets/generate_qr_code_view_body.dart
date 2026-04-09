@@ -146,7 +146,7 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                     borderRadius: BorderRadius.circular(32),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 16,
                         offset: const Offset(0, 8),
                       ),
@@ -156,7 +156,7 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: ThemeManager.isDarkMode
-                          ? AppColors.lightGrey.withOpacity(0.2)
+                          ? AppColors.lightGrey.withValues(alpha: 0.2)
                           : const Color(0xffF4F7FB),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -206,10 +206,14 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xff065AD8).withOpacity(0.08),
+                            color: const Color(
+                              0xff065AD8,
+                            ).withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: const Color(0xff065AD8).withOpacity(0.25),
+                              color: const Color(
+                                0xff065AD8,
+                              ).withValues(alpha: 0.25),
                             ),
                           ),
                           child: Row(
@@ -292,8 +296,8 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: scanned
-                              ? const Color(0xff065AD8).withOpacity(0.3)
-                              : AppColors.lightGrey.withOpacity(0.4),
+                              ? const Color(0xff065AD8).withValues(alpha: 0.3)
+                              : AppColors.lightGrey.withValues(alpha: 0.4),
                         ),
                       ),
                       child: Row(
@@ -363,7 +367,7 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
         color: ThemeManager.isDarkMode
-            ? AppColors.lightGrey.withOpacity(0.2)
+            ? AppColors.lightGrey.withValues(alpha: 0.2)
             : const Color(0xffF4F7FB),
         borderRadius: BorderRadius.circular(16),
       ),

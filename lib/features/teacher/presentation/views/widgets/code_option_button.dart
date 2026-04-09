@@ -28,13 +28,13 @@ class CodeOptionButton extends StatelessWidget {
           color: isActive
               ? const Color(0xff065AD8)
               : ThemeManager.isDarkMode
-                  ? AppColors.lightGrey.withOpacity(0.2)
-                  : const Color(0xffEEF1F8),
+              ? AppColors.lightGrey.withValues(alpha: 0.2)
+              : const Color(0xffEEF1F8),
           borderRadius: BorderRadius.circular(16),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: const Color(0xff065AD8).withOpacity(0.3),
+                    color: const Color(0xff065AD8).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -56,7 +56,7 @@ class CodeOptionButton extends StatelessWidget {
               Text(
                 'ACTIVE',
                 style: AppTextStyle.bold12.copyWith(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 9,
                   letterSpacing: 1.2,
                 ),

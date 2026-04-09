@@ -53,14 +53,19 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: ThemeManager.isDarkMode ? AppColors.lightGrey.withOpacity(0.2) : const Color(0xffF4F7FB),
+        color: ThemeManager.isDarkMode
+            ? AppColors.lightGrey.withValues(alpha: 0.2)
+            : const Color(0xffF4F7FB),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Text(
             value,
-            style: AppTextStyle.bold24.copyWith(color: valueColor, fontSize: 28),
+            style: AppTextStyle.bold24.copyWith(
+              color: valueColor,
+              fontSize: 28,
+            ),
           ),
           const SizedBox(height: 8),
           Text(

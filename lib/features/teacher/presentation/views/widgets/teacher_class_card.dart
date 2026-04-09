@@ -58,10 +58,10 @@ class TeacherClassCard extends StatelessWidget {
     return BoxDecoration(
       color: AppColors.white,
       borderRadius: BorderRadius.circular(24),
-      border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+      border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       boxShadow: [
         BoxShadow(
-          color: AppColors.black.withOpacity(0.04),
+          color: AppColors.black.withValues(alpha: 0.04),
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),
@@ -261,7 +261,7 @@ class _ClassActionRow extends StatelessWidget {
       child: Icon(
         Icons.person,
         size: 20,
-        color: AppColors.black.withOpacity(0.54),
+        color: AppColors.black.withValues(alpha: 0.54),
       ),
     );
   }

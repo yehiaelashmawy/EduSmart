@@ -50,14 +50,14 @@ class ReceiverChatBubble extends StatelessWidget {
                     ),
                     border: ThemeManager.isDarkMode
                         ? Border.all(
-                            color: AppColors.lightGrey.withOpacity(0.3),
+                            color: AppColors.lightGrey.withValues(alpha: 0.3),
                           )
                         : Border.all(color: const Color(0xffE2E8F0)),
                     boxShadow: ThemeManager.isDarkMode
                         ? []
                         : [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.03),
+                              color: Colors.black.withValues(alpha: 0.03),
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
@@ -81,7 +81,7 @@ class ReceiverChatBubble extends StatelessWidget {
               Text(
                 message.time,
                 style: AppTextStyle.regular12.copyWith(
-                  color: AppColors.grey.withOpacity(0.6),
+                  color: AppColors.grey.withValues(alpha: 0.6),
                   fontSize: SizeConfig.getResponsiveFontSize(
                     context,
                     fontSize: 10,

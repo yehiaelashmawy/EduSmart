@@ -19,7 +19,7 @@ class SubjectDetailsHeroCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondaryColor.withOpacity(0.3),
+            color: AppColors.secondaryColor.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -34,7 +34,7 @@ class SubjectDetailsHeroCard extends StatelessWidget {
             child: Icon(
               Icons.functions_outlined,
               size: 140,
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
             ),
           ),
           Column(
@@ -46,7 +46,7 @@ class SubjectDetailsHeroCard extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -70,7 +70,7 @@ class SubjectDetailsHeroCard extends StatelessWidget {
               Text(
                 '${subject.professorName} • Room 402',
                 style: AppTextStyle.medium14.copyWith(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
               ),
             ],

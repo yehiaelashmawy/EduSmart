@@ -36,16 +36,14 @@ class ChatFileAttachment extends StatelessWidget {
             color: isSender
                 ? AppColors.primaryColor.withValues(alpha: 0.9)
                 : ThemeManager.isDarkMode
-                    ? AppColors.white
-                    : Colors.white,
+                ? AppColors.white
+                : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: isSender
                 ? null
                 : ThemeManager.isDarkMode
-                    ? Border.all(
-                        color: AppColors.lightGrey.withOpacity(0.3),
-                      )
-                    : Border.all(color: const Color(0xffE2E8F0)),
+                ? Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3))
+                : Border.all(color: const Color(0xffE2E8F0)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -65,8 +63,8 @@ class ChatFileAttachment extends StatelessWidget {
                     color: isSender
                         ? Colors.white
                         : ThemeManager.isDarkMode
-                            ? Colors.white
-                            : const Color(0xff334155),
+                        ? Colors.white
+                        : const Color(0xff334155),
                   ),
                 ),
               ),

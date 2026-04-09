@@ -33,7 +33,7 @@ class HomeworkDetailsReferences extends StatelessWidget {
         LessonFileCard(
           fileName: 'MLA_Style_Guide.docx',
           fileInfo: '1.1 MB',
-          iconColor: AppColors.primaryColor.withOpacity(0.1),
+          iconColor: AppColors.primaryColor.withValues(alpha: 0.1),
           iconData: Icons.description_outlined,
           iconWidgetColor: AppColors.primaryColor,
         ),

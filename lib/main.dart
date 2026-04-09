@@ -18,7 +18,7 @@ class SchoolSystemApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeManager.themeNotifier,
-      builder: (_, themeMode, __) {
+      builder: (_, themeMode, _) {
         return MaterialApp(
           key: ValueKey(themeMode),
           themeMode: themeMode,

@@ -3,6 +3,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_hero_card.dart';
+import 'package:school_system/features/student/presentation/views/student_lesson_details_view.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_tabs.dart';
 import 'package:school_system/features/student/presentation/views/widgets/course_material_item_card.dart';
 
@@ -57,7 +58,12 @@ class _StudentSubjectDetailsViewBodyState
           CourseMaterialItemCard(
             title: 'Complex Numbers & Vectors',
             subtitle: 'Uploaded 2 days ago • 4.2 MB',
-            onViewPressed: () {},
+            onViewPressed: () {
+              Navigator.of(context, rootNavigator: true).pushNamed(
+                StudentLessonDetailsView.routeName,
+                arguments: 'Complex Numbers & Vectors',
+              );
+            },
             onDownloadPressed: () {},
           ),
           CourseMaterialItemCard(

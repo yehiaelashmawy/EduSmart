@@ -78,7 +78,9 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
               const SizedBox(height: 16),
               ListTile(
                 title: const Text('All Classes'),
-                trailing: _selectedFilter == null ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                trailing: _selectedFilter == null
+                    ? Icon(Icons.check, color: AppColors.primaryColor)
+                    : null,
                 onTap: () {
                   setState(() => _selectedFilter = null);
                   Navigator.pop(context);
@@ -86,7 +88,9 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
               ),
               ListTile(
                 title: const Text('Grade 10 Only'),
-                trailing: _selectedFilter == 'Grade 10' ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                trailing: _selectedFilter == 'Grade 10'
+                    ? Icon(Icons.check, color: AppColors.primaryColor)
+                    : null,
                 onTap: () {
                   setState(() => _selectedFilter = 'Grade 10');
                   Navigator.pop(context);
@@ -94,7 +98,9 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
               ),
               ListTile(
                 title: const Text('Grade 11 Only'),
-                trailing: _selectedFilter == 'Grade 11' ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                trailing: _selectedFilter == 'Grade 11'
+                    ? Icon(Icons.check, color: AppColors.primaryColor)
+                    : null,
                 onTap: () {
                   setState(() => _selectedFilter = 'Grade 11');
                   Navigator.pop(context);
@@ -102,7 +108,9 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
               ),
               ListTile(
                 title: const Text('Grade 12 Only'),
-                trailing: _selectedFilter == 'Grade 12' ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                trailing: _selectedFilter == 'Grade 12'
+                    ? Icon(Icons.check, color: AppColors.primaryColor)
+                    : null,
                 onTap: () {
                   setState(() => _selectedFilter = 'Grade 12');
                   Navigator.pop(context);
@@ -187,7 +195,7 @@ class _ActiveClassesTab extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       itemCount: classes.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      separatorBuilder: (_, _) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final c = classes[index];
         return TeacherClassCard(

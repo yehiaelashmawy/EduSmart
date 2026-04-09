@@ -27,9 +27,17 @@ class ExamDetailsViewBody extends StatelessWidget {
             title: 'Reference Materials',
           ),
           const SizedBox(height: 16),
-          _buildReferenceCard('Formula Sheet - Algebra.pdf', '2.4 MB • PDF Document', true),
+          _buildReferenceCard(
+            'Formula Sheet - Algebra.pdf',
+            '2.4 MB • PDF Document',
+            true,
+          ),
           const SizedBox(height: 12),
-          _buildReferenceCard('Sample Question Paper 2023.docx', '1.1 MB • Word Document', false),
+          _buildReferenceCard(
+            'Sample Question Paper 2023.docx',
+            '1.1 MB • Word Document',
+            false,
+          ),
           const SizedBox(height: 32),
         ],
       ),
@@ -42,7 +50,7 @@ class ExamDetailsViewBody extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +64,10 @@ class ExamDetailsViewBody extends StatelessWidget {
                   color: const Color(0xffEFF6FF), // very light blue
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.edit_document, color: Color(0xff2563EB)),
+                child: const Icon(
+                  Icons.edit_document,
+                  color: Color(0xff2563EB),
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -65,12 +76,16 @@ class ExamDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       'Final Term Examination',
-                      style: AppTextStyle.bold18.copyWith(color: AppColors.black),
+                      style: AppTextStyle.bold18.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Mathematics Grade 10 • Section B',
-                      style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                      style: AppTextStyle.regular14.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -81,7 +96,11 @@ class ExamDetailsViewBody extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _buildInfoBox(Icons.calendar_today_outlined, 'DATE', 'Oct 24, 2023'),
+                child: _buildInfoBox(
+                  Icons.calendar_today_outlined,
+                  'DATE',
+                  'Oct 24, 2023',
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -93,11 +112,19 @@ class ExamDetailsViewBody extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _buildInfoBox(Icons.hourglass_empty, 'DURATION', '120 Minutes'),
+                child: _buildInfoBox(
+                  Icons.hourglass_empty,
+                  'DURATION',
+                  '120 Minutes',
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _buildInfoBox(Icons.location_on_outlined, 'LOCATION', 'Hall A, Floor 2'),
+                child: _buildInfoBox(
+                  Icons.location_on_outlined,
+                  'LOCATION',
+                  'Hall A, Floor 2',
+                ),
               ),
             ],
           ),
@@ -154,7 +181,7 @@ class ExamDetailsViewBody extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: instructions.map((text) {
@@ -178,7 +205,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                 Expanded(
                   child: Text(
                     text,
-                    style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                 ),
               ],
@@ -195,7 +224,7 @@ class ExamDetailsViewBody extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -218,7 +247,9 @@ class ExamDetailsViewBody extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyle.semiBold14.copyWith(color: AppColors.black),
+                  style: AppTextStyle.semiBold14.copyWith(
+                    color: AppColors.black,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -229,7 +260,10 @@ class ExamDetailsViewBody extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.file_download_outlined, color: AppColors.secondaryColor),
+            icon: Icon(
+              Icons.file_download_outlined,
+              color: AppColors.secondaryColor,
+            ),
             onPressed: () {},
           ),
         ],

@@ -100,7 +100,7 @@ class TeacherActionButtons extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: isDashed
               ? Border.all(
-                  color: AppColors.primaryColor.withOpacity(0.5),
+                  color: AppColors.primaryColor.withValues(alpha: 0.5),
                   style: BorderStyle.solid,
                 )
               : null,
@@ -108,7 +108,7 @@ class TeacherActionButtons extends StatelessWidget {
               ? []
               : [
                   BoxShadow(
-                    color: AppColors.black.withOpacity(0.04),
+                    color: AppColors.black.withValues(alpha: 0.04),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),

@@ -27,8 +27,8 @@ class LessonDetailsHeader extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.black.withOpacity(0.0),
-                  AppColors.black.withOpacity(0.8),
+                  AppColors.black.withValues(alpha: 0.0),
+                  AppColors.black.withValues(alpha: 0.8),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

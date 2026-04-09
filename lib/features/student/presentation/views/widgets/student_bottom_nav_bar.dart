@@ -75,7 +75,7 @@ class StudentBottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -87,7 +87,7 @@ class StudentBottomNavBar extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         backgroundColor: AppColors.white,
         selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: AppColors.grey.withOpacity(0.6),
+        unselectedItemColor: AppColors.grey.withValues(alpha: 0.6),
         selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 11,

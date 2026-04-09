@@ -11,13 +11,17 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeManager.isDarkMode ? AppColors.backgroundColor : AppColors.white,
+      backgroundColor: ThemeManager.isDarkMode
+          ? AppColors.backgroundColor
+          : AppColors.white,
       appBar: AppBar(
-        backgroundColor: ThemeManager.isDarkMode ? AppColors.backgroundColor : AppColors.white,
+        backgroundColor: ThemeManager.isDarkMode
+            ? AppColors.backgroundColor
+            : AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back, 
+            Icons.arrow_back,
             color: ThemeManager.isDarkMode ? Colors.white : AppColors.darkBlue,
           ),
           onPressed: () => Navigator.pop(context),
@@ -27,16 +31,20 @@ class ChatView extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.videocam_outlined, 
-              color: ThemeManager.isDarkMode ? Colors.white : AppColors.darkBlue, 
+              Icons.videocam_outlined,
+              color: ThemeManager.isDarkMode
+                  ? Colors.white
+                  : AppColors.darkBlue,
               size: 28,
             ),
             onPressed: () {},
           ),
           IconButton(
             icon: Icon(
-              Icons.info_outline, 
-              color: ThemeManager.isDarkMode ? Colors.white : AppColors.darkBlue, 
+              Icons.info_outline,
+              color: ThemeManager.isDarkMode
+                  ? Colors.white
+                  : AppColors.darkBlue,
               size: 26,
             ),
             onPressed: () {},
@@ -46,16 +54,14 @@ class ChatView extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Container(
-            color: ThemeManager.isDarkMode 
-                ? AppColors.lightGrey.withOpacity(0.3) 
+            color: ThemeManager.isDarkMode
+                ? AppColors.lightGrey.withValues(alpha: 0.3)
                 : const Color(0xffE2E8F0),
             height: 1.0,
           ),
         ),
       ),
-      body: const SafeArea(
-        child: ChatViewBody(),
-      ),
+      body: const SafeArea(child: ChatViewBody()),
     );
   }
 }

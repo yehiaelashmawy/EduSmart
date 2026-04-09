@@ -78,10 +78,7 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
                 const SizedBox(height: 20),
                 const _SectionDivider(),
                 const SizedBox(height: 20),
-                JoinedStudentsCard(
-                  joined: _joinedCount,
-                  total: _totalStudents,
-                ),
+                JoinedStudentsCard(joined: _joinedCount, total: _totalStudents),
               ],
             ),
           ),
@@ -111,7 +108,8 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
             ),
             children: [
               const TextSpan(
-                text: 'Please select the correct code for students to match in their ',
+                text:
+                    'Please select the correct code for students to match in their ',
               ),
               TextSpan(
                 text: 'Academic Curator',
@@ -141,7 +139,7 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -177,7 +175,7 @@ class _SectionDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      color: AppColors.lightGrey.withOpacity(0.4),
+      color: AppColors.lightGrey.withValues(alpha: 0.4),
       thickness: 1,
       height: 1,
     );

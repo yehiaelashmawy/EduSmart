@@ -20,7 +20,10 @@ class HomeworkDetailsHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFD1FAE5),
                   borderRadius: BorderRadius.circular(12),
@@ -37,7 +40,11 @@ class HomeworkDetailsHeader extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(Icons.people_alt_outlined, size: 16, color: AppColors.primaryColor),
+                  Icon(
+                    Icons.people_alt_outlined,
+                    size: 16,
+                    color: AppColors.primaryColor,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '24/32 Submitted',
@@ -54,13 +61,16 @@ class HomeworkDetailsHeader extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Ancient Civilizations\nResearch Project',
-            style: AppTextStyle.bold20.copyWith(color: AppColors.black, height: 1.3),
+            style: AppTextStyle.bold20.copyWith(
+              color: AppColors.black,
+              height: 1.3,
+            ),
           ),
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.lightGrey.withOpacity(0.2),
+              color: AppColors.lightGrey.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -68,10 +78,14 @@ class HomeworkDetailsHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.primaryColor),
+                  child: Icon(
+                    Icons.calendar_today_outlined,
+                    size: 16,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -80,7 +94,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
                     Text(
                       'DUE DATE',
                       style: TextStyle(
-                        color: AppColors.grey.withOpacity(0.8),
+                        color: AppColors.grey.withValues(alpha: 0.8),
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
@@ -88,7 +102,9 @@ class HomeworkDetailsHeader extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       'Oct 25, 2023',
-                      style: AppTextStyle.semiBold14.copyWith(color: AppColors.black),
+                      style: AppTextStyle.semiBold14.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                   ],
                 ),
@@ -99,7 +115,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.lightGrey.withOpacity(0.2),
+              color: AppColors.lightGrey.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -107,10 +123,14 @@ class HomeworkDetailsHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.access_time_outlined, size: 16, color: AppColors.primaryColor),
+                  child: Icon(
+                    Icons.access_time_outlined,
+                    size: 16,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -119,7 +139,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
                     Text(
                       'TIME',
                       style: TextStyle(
-                        color: AppColors.grey.withOpacity(0.8),
+                        color: AppColors.grey.withValues(alpha: 0.8),
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
@@ -127,7 +147,9 @@ class HomeworkDetailsHeader extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '11:59 PM',
-                      style: AppTextStyle.semiBold14.copyWith(color: AppColors.black),
+                      style: AppTextStyle.semiBold14.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                   ],
                 ),

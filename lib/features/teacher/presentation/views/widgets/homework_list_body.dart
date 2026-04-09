@@ -21,11 +21,11 @@ class HomeworkListBody extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Search homework tasks...',
                 hintStyle: AppTextStyle.regular14.copyWith(
-                  color: AppColors.grey.withOpacity(0.7),
+                  color: AppColors.grey.withValues(alpha: 0.7),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: AppColors.grey.withOpacity(0.7),
+                  color: AppColors.grey.withValues(alpha: 0.7),
                 ),
                 filled: true,
                 fillColor: AppColors.white,
@@ -36,13 +36,13 @@ class HomeworkListBody extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide(
-                    color: AppColors.lightGrey.withOpacity(0.5),
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide(
-                    color: AppColors.lightGrey.withOpacity(0.5),
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(

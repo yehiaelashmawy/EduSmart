@@ -46,7 +46,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyle.regular14.copyWith(
-          color: AppColors.grey.withOpacity(0.7),
+          color: AppColors.grey.withValues(alpha: 0.7),
         ),
         suffixIcon: suffixIcon,
         filled: true,

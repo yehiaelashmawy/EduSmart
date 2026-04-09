@@ -33,7 +33,9 @@ class SubmissionItemCard extends StatelessWidget {
         color: isNotTurnedIn ? Colors.transparent : AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isNotTurnedIn ? AppColors.lightGrey.withOpacity(0.5) : AppColors.lightGrey.withOpacity(0.3),
+          color: isNotTurnedIn
+              ? AppColors.lightGrey.withValues(alpha: 0.5)
+              : AppColors.lightGrey.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -44,14 +46,18 @@ class SubmissionItemCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isNotTurnedIn ? AppColors.lightGrey.withOpacity(0.3) : AppColors.primaryColor.withOpacity(0.1),
+                  color: isNotTurnedIn
+                      ? AppColors.lightGrey.withValues(alpha: 0.3)
+                      : AppColors.primaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   initials,
                   style: TextStyle(
-                    color: isNotTurnedIn ? AppColors.grey : AppColors.primaryColor,
+                    color: isNotTurnedIn
+                        ? AppColors.grey
+                        : AppColors.primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -90,12 +96,18 @@ class SubmissionItemCard extends StatelessWidget {
                 Row(
                   children: [
                     if (isNotTurnedIn) ...[
-                      Icon(Icons.access_time, size: 14, color: AppColors.grey.withOpacity(0.8)),
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: AppColors.grey.withValues(alpha: 0.8),
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           'Pending Submission',
-                          style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                          style: AppTextStyle.regular12.copyWith(
+                            color: AppColors.grey.withValues(alpha: 0.8),
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -103,8 +115,12 @@ class SubmissionItemCard extends StatelessWidget {
                     ] else ...[
                       Expanded(
                         child: Text(
-                          status == SubmissionStatus.graded ? 'Graded • $dateString' : 'Submitted • $dateString',
-                          style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.8)),
+                          status == SubmissionStatus.graded
+                              ? 'Graded • $dateString'
+                              : 'Submitted • $dateString',
+                          style: AppTextStyle.regular12.copyWith(
+                            color: AppColors.grey.withValues(alpha: 0.8),
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -130,7 +146,9 @@ class SubmissionItemCard extends StatelessWidget {
           children: [
             Text(
               '$score',
-              style: AppTextStyle.bold18.copyWith(color: AppColors.secondaryColor),
+              style: AppTextStyle.bold18.copyWith(
+                color: AppColors.secondaryColor,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 2),
@@ -159,12 +177,17 @@ class SubmissionItemCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          child: const Text('Grade', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: const Text(
+            'Grade',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         );
       case SubmissionStatus.notTurnedIn:
         return Text(
           'Not Turned In',
-          style: AppTextStyle.regular12.copyWith(color: AppColors.grey.withOpacity(0.5)),
+          style: AppTextStyle.regular12.copyWith(
+            color: AppColors.grey.withValues(alpha: 0.5),
+          ),
         );
     }
   }

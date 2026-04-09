@@ -64,13 +64,15 @@ class MessagesViewBody extends StatelessWidget {
                   : Colors.white,
               borderRadius: BorderRadius.circular(24),
               border: ThemeManager.isDarkMode
-                  ? Border.all(color: AppColors.lightGrey.withOpacity(0.5))
+                  ? Border.all(
+                      color: AppColors.lightGrey.withValues(alpha: 0.5),
+                    )
                   : Border.all(color: const Color(0xffE2E8F0)),
               boxShadow: ThemeManager.isDarkMode
                   ? []
                   : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.02),
+                        color: Colors.black.withValues(alpha: 0.02),
                         blurRadius: 10,
                         offset: const Offset(0, 2),
                       ),

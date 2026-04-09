@@ -33,7 +33,7 @@ class StudentListItem extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.person,
-                  color: AppColors.black.withOpacity(0.54),
+                  color: AppColors.black.withValues(alpha: 0.54),
                   size: 28,
                 ),
               ),

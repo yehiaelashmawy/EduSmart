@@ -41,12 +41,12 @@ class StudentAttendanceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: ThemeManager.isDarkMode
-              ? AppColors.lightGrey.withOpacity(0.2)
-              : AppColors.lightGrey.withOpacity(0.5),
+              ? AppColors.lightGrey.withValues(alpha: 0.2)
+              : AppColors.lightGrey.withValues(alpha: 0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -76,12 +76,16 @@ class StudentAttendanceCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: AppTextStyle.bold16.copyWith(color: AppColors.black),
+                      style: AppTextStyle.bold16.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
+                      style: AppTextStyle.medium12.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
                     if (hasHonorRoll) ...[
                       const SizedBox(height: 8),
@@ -139,7 +143,7 @@ class StudentAttendanceCard extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: ThemeManager.isDarkMode
-            ? AppColors.lightGrey.withOpacity(0.3)
+            ? AppColors.lightGrey.withValues(alpha: 0.3)
             : const Color(0xffEBEef4),
         borderRadius: BorderRadius.circular(12),
       ),

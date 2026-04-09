@@ -25,13 +25,12 @@ class AttendanceReportMonthFilter extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.lightGrey.withOpacity(0.5)),
+              border: Border.all(
+                color: AppColors.lightGrey.withValues(alpha: 0.5),
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              Icons.chevron_left_rounded,
-              color: AppColors.black,
-            ),
+            child: Icon(Icons.chevron_left_rounded, color: AppColors.black),
           ),
         ),
         Text(
@@ -47,13 +46,12 @@ class AttendanceReportMonthFilter extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.lightGrey.withOpacity(0.5)),
+              border: Border.all(
+                color: AppColors.lightGrey.withValues(alpha: 0.5),
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              Icons.chevron_right_rounded,
-              color: AppColors.black,
-            ),
+            child: Icon(Icons.chevron_right_rounded, color: AppColors.black),
           ),
         ),
       ],

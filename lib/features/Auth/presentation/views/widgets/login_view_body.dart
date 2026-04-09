@@ -27,19 +27,19 @@ class LoginViewBody extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         width: 1,
-                        color: AppColors.secondaryColor.withOpacity(0.1),
+                        color: AppColors.secondaryColor.withValues(alpha: 0.1),
                       ),
                       borderRadius: BorderRadius.circular(24),
                     ),
                     shadows: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: Offset(0, 8),
                         spreadRadius: -6,
                       ),
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 25,
                         offset: Offset(0, 20),
                         spreadRadius: -5,

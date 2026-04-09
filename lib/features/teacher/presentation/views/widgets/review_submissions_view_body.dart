@@ -22,10 +22,16 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
               labelColor: AppColors.secondaryColor,
               unselectedLabelColor: AppColors.grey,
               indicatorColor: AppColors.secondaryColor,
-              labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              labelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               indicatorWeight: 2,
-              dividerColor: AppColors.lightGrey.withOpacity(0.3),
+              dividerColor: AppColors.lightGrey.withValues(alpha: 0.3),
               tabs: const [
                 Tab(text: 'All Students (24)'),
                 Tab(text: 'Submitted (19)'),
@@ -33,10 +39,7 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
             ),
             Expanded(
               child: TabBarView(
-                children: [
-                   _buildAllStudentsList(),
-                   _buildSubmittedList(),
-                ],
+                children: [_buildAllStudentsList(), _buildSubmittedList()],
               ),
             ),
           ],
@@ -99,6 +102,8 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
   }
 
   Widget _buildSubmittedList() {
-    return Center(child: Text('Submitted List', style: TextStyle(color: AppColors.grey)));
+    return Center(
+      child: Text('Submitted List', style: TextStyle(color: AppColors.grey)),
+    );
   }
 }

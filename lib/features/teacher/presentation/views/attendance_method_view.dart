@@ -31,8 +31,10 @@ class AttendanceMethodView extends StatelessWidget {
             padding: const EdgeInsets.only(right: 24.0),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: AppColors.primaryColor.withOpacity(0.2),
-              backgroundImage: const AssetImage('assets/images/profile_photo.png'),
+              backgroundColor: AppColors.primaryColor.withValues(alpha: 0.2),
+              backgroundImage: const AssetImage(
+                'assets/images/profile_photo.png',
+              ),
             ),
           ),
         ],

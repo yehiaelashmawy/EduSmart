@@ -25,7 +25,7 @@ class LessonFileCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightGrey.withOpacity(0.3)),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -62,7 +62,7 @@ class LessonFileCard extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: AppColors.lightGrey.withOpacity(0.3),
+              color: AppColors.lightGrey.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
             child: Icon(

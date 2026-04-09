@@ -14,10 +14,7 @@ class TodaysClassesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Today\'s Classes',
-              style: AppTextStyle.bold20,
-            ),
+            const Text('Today\'s Classes', style: AppTextStyle.bold20),
             TextButton(
               onPressed: () {},
               style: TextButton.styleFrom(
@@ -27,7 +24,9 @@ class TodaysClassesSection extends StatelessWidget {
               ),
               child: Text(
                 'View Schedule',
-                style: AppTextStyle.semiBold14.copyWith(color: AppColors.primaryColor),
+                style: AppTextStyle.semiBold14.copyWith(
+                  color: AppColors.primaryColor,
+                ),
               ),
             ),
           ],
@@ -73,10 +72,10 @@ class TodaysClassesSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
-          )
+          ),
         ],
       ),
       child: Column(
@@ -92,7 +91,9 @@ class TodaysClassesSection extends StatelessWidget {
                 ),
                 child: Text(
                   'Σ',
-                  style: AppTextStyle.bold20.copyWith(color: AppColors.primaryColor),
+                  style: AppTextStyle.bold20.copyWith(
+                    color: AppColors.primaryColor,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -101,9 +102,14 @@ class TodaysClassesSection extends StatelessWidget {
                 children: [
                   Text(subject, style: AppTextStyle.bold16),
                   const SizedBox(height: 2),
-                  Text(grade, style: AppTextStyle.regular14.copyWith(color: AppColors.grey)),
+                  Text(
+                    grade,
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.grey,
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -111,7 +117,10 @@ class TodaysClassesSection extends StatelessWidget {
             children: [
               Icon(Icons.access_time, size: 18, color: AppColors.grey),
               const SizedBox(width: 8),
-              Text(time, style: AppTextStyle.regular14.copyWith(color: AppColors.grey)),
+              Text(
+                time,
+                style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -119,7 +128,10 @@ class TodaysClassesSection extends StatelessWidget {
             children: [
               Icon(Icons.location_on_outlined, size: 18, color: AppColors.grey),
               const SizedBox(width: 8),
-              Text(location, style: AppTextStyle.regular14.copyWith(color: AppColors.grey)),
+              Text(
+                location,
+                style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+              ),
             ],
           ),
         ],

@@ -57,7 +57,7 @@ class SenderChatBubble extends StatelessWidget {
               Text(
                 message.time,
                 style: AppTextStyle.regular12.copyWith(
-                  color: AppColors.grey.withOpacity(0.6),
+                  color: AppColors.grey.withValues(alpha: 0.6),
                   fontSize: SizeConfig.getResponsiveFontSize(
                     context,
                     fontSize: 10,

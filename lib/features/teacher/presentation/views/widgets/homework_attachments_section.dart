@@ -20,7 +20,7 @@ class HomeworkAttachmentsSection extends StatelessWidget {
         ),
         child: CustomPaint(
           painter: _DashedBorderPainter(
-            color: AppColors.primaryColor.withOpacity(0.5),
+            color: AppColors.primaryColor.withValues(alpha: 0.5),
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 32),
@@ -29,7 +29,7 @@ class HomeworkAttachmentsSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Icons.upload_file, color: AppColors.primaryColor),

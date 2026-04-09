@@ -2,7 +2,10 @@ import 'dart:io';
 
 void main() {
   final directory = Directory('lib');
-  final files = directory.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.dart'));
+  final files = directory
+      .listSync(recursive: true)
+      .whereType<File>()
+      .where((f) => f.path.endsWith('.dart'));
 
   for (final file in files) {
     String content = file.readAsStringSync();
@@ -31,6 +34,7 @@ void main() {
 
     if (changed) {
       file.writeAsStringSync(content);
+      // ignore: avoid_print
       print('Updated ${file.path}');
     }
   }
