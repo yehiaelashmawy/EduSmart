@@ -18,6 +18,7 @@ import 'package:school_system/features/student/presentation/views/student_subjec
 import 'package:school_system/features/student/presentation/views/student_lesson_details_view.dart';
 import 'package:school_system/features/student/presentation/views/student_assignment_details_view.dart';
 import 'package:school_system/features/student/presentation/views/student_exam_details_view.dart';
+import 'package:school_system/features/student/presentation/views/student_homework_view.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
@@ -106,6 +107,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
           instructions: args.instructions,
         ),
       );
+    case StudentHomeworkView.routeName:
+      return MaterialPageRoute(builder: (context) => const StudentHomeworkView());
     case ParentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentHomeView());
     case StudentList.routeName:

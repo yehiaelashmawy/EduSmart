@@ -8,11 +8,16 @@ class StudentHomeActionCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
-          child: _ActionCard(
-            title: 'Homework',
-            subtitle: '4 Pending Tasks',
-            icon: Icons.assignment,
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, 'student_homework_view');
+            },
+            child: const _ActionCard(
+              title: 'Homework',
+              subtitle: '4 Pending Tasks',
+              icon: Icons.assignment,
+            ),
           ),
         ),
         const SizedBox(width: 16),
