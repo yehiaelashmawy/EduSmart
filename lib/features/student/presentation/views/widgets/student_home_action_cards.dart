@@ -21,11 +21,16 @@ class StudentHomeActionCards extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        const Expanded(
-          child: _ActionCard(
-            title: 'My Grades',
-            subtitle: 'GPA: 3.8 / 4.0',
-            icon: Icons.bar_chart,
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, 'student_grades_view');
+            },
+            child: const _ActionCard(
+              title: 'My Grades',
+              subtitle: 'GPA: 3.8 / 4.0',
+              icon: Icons.bar_chart,
+            ),
           ),
         ),
       ],
