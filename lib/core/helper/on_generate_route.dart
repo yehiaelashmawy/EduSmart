@@ -17,6 +17,7 @@ import 'package:school_system/features/student/presentation/views/weekly_schedul
 import 'package:school_system/features/student/presentation/views/student_subject_details_view.dart';
 import 'package:school_system/features/student/presentation/views/student_lesson_details_view.dart';
 import 'package:school_system/features/student/presentation/views/student_assignment_details_view.dart';
+import 'package:school_system/features/student/presentation/views/student_exam_details_view.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
@@ -90,6 +91,19 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
           description: args.description,
           teacherName: args.teacherName,
           teacherInstructions: args.teacherInstructions,
+        ),
+      );
+    case StudentExamDetailsView.routeName:
+      final args = settings.arguments as StudentExamDetailsArgs;
+      return MaterialPageRoute(
+        builder: (context) => StudentExamDetailsView(
+          status: args.status,
+          title: args.title,
+          date: args.date,
+          time: args.time,
+          duration: args.duration,
+          room: args.room,
+          instructions: args.instructions,
         ),
       );
     case ParentHomeView.routeName:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_exam_item_card.dart';
+import 'package:school_system/features/student/presentation/views/student_exam_details_view.dart';
 
 class StudentExamsTab extends StatelessWidget {
   const StudentExamsTab({super.key});
@@ -23,7 +24,24 @@ class StudentExamsTab extends StatelessWidget {
           bottomValue: '95/100',
           bottomValueColor: AppColors.secondaryColor,
           isPrimaryButton: false,
-          onViewDetails: () {},
+          onViewDetails: () {
+            Navigator.pushNamed(
+              context,
+              StudentExamDetailsView.routeName,
+              arguments: StudentExamDetailsArgs(
+                status: 'COMPLETED',
+                title: 'Calculus Midterm',
+                date: 'Sep 12, 2023',
+                time: '09:00 AM',
+                duration: '120 Mins',
+                room: 'Hall B',
+                instructions: const [
+                  'Calculators are permitted for this midterm.',
+                  'Ensure your student ID is placed clearly on your desk.',
+                ],
+              ),
+            );
+          },
         ),
         StudentExamItemCard(
           iconData: Icons.calendar_today_outlined,
@@ -38,7 +56,25 @@ class StudentExamsTab extends StatelessWidget {
           bottomValue: 'Scheduled',
           bottomValueColor: AppColors.darkBlue,
           isPrimaryButton: true,
-          onViewDetails: () {},
+          onViewDetails: () {
+            Navigator.pushNamed(
+              context,
+              StudentExamDetailsView.routeName,
+              arguments: StudentExamDetailsArgs(
+                status: 'Upcoming Assessment',
+                title: 'Linear Algebra Quiz',
+                date: 'Oct 24, 2023',
+                time: '09:00 AM',
+                duration: '90 Mins',
+                room: 'Lab 402',
+                instructions: const [
+                  'Bring your own scientific calculator (graphic calculators are prohibited).',
+                  'No mobile phones or smartwatches allowed in the examination hall.',
+                  'Arrive 15 minutes before the start time for identity verification.',
+                ],
+              ),
+            );
+          },
         ),
         StudentExamItemCard(
           iconData: Icons.history,
@@ -53,7 +89,24 @@ class StudentExamsTab extends StatelessWidget {
           bottomValue: '88/100',
           bottomValueColor: const Color(0xff7A271A),
           isPrimaryButton: false,
-          onViewDetails: () {},
+          onViewDetails: () {
+            Navigator.pushNamed(
+              context,
+              StudentExamDetailsView.routeName,
+              arguments: StudentExamDetailsArgs(
+                status: 'Evaluated',
+                title: 'Discrete Structures',
+                date: 'Oct 10, 2023',
+                time: '11:00 AM',
+                duration: '60 Mins',
+                room: 'Lab 405',
+                instructions: const [
+                  'Graph traversal algorithms are heavily emphasized.',
+                  'You may bring one page of handwritten notes.',
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
