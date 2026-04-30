@@ -5,7 +5,12 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
 class StudentAssignmentSubmissionBox extends StatefulWidget {
-  const StudentAssignmentSubmissionBox({super.key});
+  final String homeworkId;
+
+  const StudentAssignmentSubmissionBox({
+    super.key,
+    required this.homeworkId,
+  });
 
   @override
   State<StudentAssignmentSubmissionBox> createState() =>
@@ -30,11 +35,6 @@ class _StudentAssignmentSubmissionBoxState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Your Submission',
-          style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
-        ),
-        const SizedBox(height: 16),
         CustomPaint(
           painter: DashedRectPainter(
             color: AppColors.lightGrey,

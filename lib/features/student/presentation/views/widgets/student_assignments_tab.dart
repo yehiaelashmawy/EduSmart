@@ -60,26 +60,28 @@ class StudentAssignmentsTab extends StatelessWidget {
 
               if (hw.grade != null || hw.status?.toLowerCase() == 'graded') {
                 status = AssignmentStatus.graded;
-              } else if (hw.status?.toLowerCase() == 'pending') {
-                status = AssignmentStatus.notSubmitted;
+              } else if (hw.status?.toLowerCase() == 'submitted') {
+                status = AssignmentStatus.pendingReview;
               }
 
               DateTime? dueDate;
               String formattedDate = '';
-              String dateDay = '';
-              String dateMonth = '';
-              String dueTime = '';
 
               if (hw.dueDate != null) {
                 try {
                   dueDate = DateTime.parse(hw.dueDate!);
                   formattedDate = DateFormat('MMM dd, yyyy').format(dueDate);
-                  dateDay = DateFormat('dd').format(dueDate);
-                  dateMonth = DateFormat('MMM').format(dueDate).toUpperCase();
-                  dueTime = DateFormat('hh:mm a').format(dueDate);
                 } catch (e) {
                   // Ignore parsing error
                 }
+              }
+
+              void navigateToDetails() {
+                Navigator.pushNamed(
+                  context,
+                  StudentAssignmentDetailsView.routeName,
+                  arguments: StudentAssignmentDetailsArgs(homework: hw),
+                );
               }
 
               return StudentAssignmentItemCard(
@@ -87,47 +89,16 @@ class StudentAssignmentsTab extends StatelessWidget {
                 title: hw.title ?? 'No Title',
                 submittedDate: (hw.isOverdue == true)
                     ? 'Late (Due $formattedDate)'
-                    : 'Due $formattedDate',
+                    : (formattedDate.isNotEmpty
+                        ? 'Due $formattedDate'
+                        : 'No due date'),
                 isDueSoon: hw.isOverdue == true,
                 grade: hw.grade?.toString(),
                 totalGrade: hw.totalMarks?.toString(),
                 description: hw.description,
-                feedback: null, // Depending on API
-                onViewDetails: () {
-                  Navigator.pushNamed(
-                    context,
-                    StudentAssignmentDetailsView.routeName,
-                    arguments: StudentAssignmentDetailsArgs(
-                      subjectName: hw.subjectName?.toUpperCase() ?? 'SUBJECT',
-                      title: hw.title ?? 'No Title',
-                      dueTime: dueTime,
-                      points: hw.totalMarks?.toString() ?? '100',
-                      dateDay: dateDay,
-                      dateMonth: dateMonth,
-                      description: hw.description ?? '',
-                      teacherName: hw.teacherName ?? '',
-                      teacherInstructions: '',
-                    ),
-                  );
-                },
-
-                onSubmitWork: () {
-                  Navigator.pushNamed(
-                    context,
-                    StudentAssignmentDetailsView.routeName,
-                    arguments: StudentAssignmentDetailsArgs(
-                      subjectName: hw.subjectName?.toUpperCase() ?? 'SUBJECT',
-                      title: hw.title ?? 'No Title',
-                      dueTime: dueTime,
-                      points: hw.totalMarks?.toString() ?? '100',
-                      dateDay: dateDay,
-                      dateMonth: dateMonth,
-                      description: hw.description ?? '',
-                      teacherName: hw.teacherName ?? '',
-                      teacherInstructions: '',
-                    ),
-                  );
-                },
+                filename: hw.attachmentUrl?.split('/').last,
+                onViewDetails: navigateToDetails,
+                onSubmitWork: navigateToDetails,
               );
             }).toList(),
           );

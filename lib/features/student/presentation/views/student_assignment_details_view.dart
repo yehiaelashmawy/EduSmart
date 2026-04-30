@@ -1,57 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/student/data/models/student_homework_model.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_assignment_details_view_body.dart';
 
 class StudentAssignmentDetailsArgs {
-  final String subjectName;
-  final String title;
-  final String dueTime;
-  final String points;
-  final String dateDay;
-  final String dateMonth;
-  final String description;
-  final String teacherName;
-  final String teacherInstructions;
+  final StudentHomeworkItemModel homework;
 
   StudentAssignmentDetailsArgs({
-    required this.subjectName,
-    required this.title,
-    required this.dueTime,
-    required this.points,
-    required this.dateDay,
-    required this.dateMonth,
-    required this.description,
-    required this.teacherName,
-    required this.teacherInstructions,
+    required this.homework,
   });
 }
 
 class StudentAssignmentDetailsView extends StatelessWidget {
   static const String routeName = 'student_assignment_details_view';
 
-  // Dynamic parameters for the view
-  final String subjectName;
-  final String title;
-  final String dueTime;
-  final String points;
-  final String dateDay;
-  final String dateMonth;
-  final String description;
-  final String teacherName;
-  final String teacherInstructions;
+  final StudentHomeworkItemModel homework;
 
   const StudentAssignmentDetailsView({
     super.key,
-    required this.subjectName,
-    required this.title,
-    required this.dueTime,
-    required this.points,
-    required this.dateDay,
-    required this.dateMonth,
-    required this.description,
-    required this.teacherName,
-    required this.teacherInstructions,
+    required this.homework,
   });
 
   @override
@@ -76,15 +44,7 @@ class StudentAssignmentDetailsView extends StatelessWidget {
         ),
       ),
       body: StudentAssignmentDetailsViewBody(
-        subjectName: subjectName,
-        title: title,
-        dueTime: dueTime,
-        points: points,
-        dateDay: dateDay,
-        dateMonth: dateMonth,
-        description: description,
-        teacherName: teacherName,
-        teacherInstructions: teacherInstructions,
+        homework: homework,
       ),
     );
   }

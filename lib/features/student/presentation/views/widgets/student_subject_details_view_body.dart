@@ -5,8 +5,10 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/models/student_my_subjects_model.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/student/data/repos/student_my_subjects_repo.dart';
+import 'package:school_system/features/student/data/repos/student_homework_repo.dart';
 import 'package:school_system/features/student/presentation/manager/student_subject_detail_cubit/student_subject_detail_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_subject_detail_cubit/student_subject_detail_state.dart';
+import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_hero_card.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_tabs.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_lessons_tab.dart';
@@ -95,10 +97,13 @@ class _StudentSubjectDetailsViewBodyState
                   isLoading: isLoading,
                 )
               else if (_selectedTab == 1)
-                SubjectHomeworksTab(
-                  homeworks: detail?.homeworks ?? [],
-                  subjectName: widget.subject.subjectName,
-                  isLoading: isLoading,
+                BlocProvider(
+                  create: (context) => StudentHomeworkCubit(
+                    StudentHomeworkRepo(ApiService()),
+                  )..fetchHomeworks(),
+                  child: SubjectHomeworksTab(
+                    subjectName: widget.subject.subjectName,
+                  ),
                 )
               else if (_selectedTab == 2)
                 SubjectExamsTab(

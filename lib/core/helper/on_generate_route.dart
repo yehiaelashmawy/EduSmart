@@ -95,15 +95,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       final args = settings.arguments as StudentAssignmentDetailsArgs;
       return MaterialPageRoute(
         builder: (context) => StudentAssignmentDetailsView(
-          subjectName: args.subjectName,
-          title: args.title,
-          dueTime: args.dueTime,
-          points: args.points,
-          dateDay: args.dateDay,
-          dateMonth: args.dateMonth,
-          description: args.description,
-          teacherName: args.teacherName,
-          teacherInstructions: args.teacherInstructions,
+          homework: args.homework,
         ),
       );
     case StudentAttendanceMethodView.routeName:

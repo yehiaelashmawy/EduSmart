@@ -59,6 +59,8 @@ class StudentHomeworkItemModel {
   final num? grade;
   final num? totalMarks;
   final String? priority;
+  final String? attachmentUrl;
+  final List<StudentHomeworkMaterialModel>? materials;
 
   StudentHomeworkItemModel({
     this.homeworkId,
@@ -72,6 +74,8 @@ class StudentHomeworkItemModel {
     this.grade,
     this.totalMarks,
     this.priority,
+    this.attachmentUrl,
+    this.materials,
   });
 
   factory StudentHomeworkItemModel.fromJson(Map<String, dynamic> json) {
@@ -87,6 +91,38 @@ class StudentHomeworkItemModel {
       grade: json['grade'] as num?,
       totalMarks: json['totalMarks'] as num?,
       priority: json['priority'] as String?,
+      attachmentUrl: json['attachmentUrl'] as String?,
+      materials: json['materials'] != null
+          ? (json['materials'] as List)
+              .map((e) => StudentHomeworkMaterialModel.fromJson(e))
+              .toList()
+          : null,
+    );
+  }
+}
+
+class StudentHomeworkMaterialModel {
+  final String? fileName;
+  final String? fileUrl;
+  final String? fileType;
+  final num? fileSize;
+  final String? sizeText;
+
+  StudentHomeworkMaterialModel({
+    this.fileName,
+    this.fileUrl,
+    this.fileType,
+    this.fileSize,
+    this.sizeText,
+  });
+
+  factory StudentHomeworkMaterialModel.fromJson(Map<String, dynamic> json) {
+    return StudentHomeworkMaterialModel(
+      fileName: json['fileName'] as String?,
+      fileUrl: json['fileUrl'] as String?,
+      fileType: json['fileType'] as String?,
+      fileSize: json['fileSize'] as num?,
+      sizeText: json['sizeText'] as String?,
     );
   }
 }
