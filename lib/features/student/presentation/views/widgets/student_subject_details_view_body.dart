@@ -5,10 +5,8 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/models/student_my_subjects_model.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/student/data/repos/student_my_subjects_repo.dart';
-import 'package:school_system/features/student/data/repos/student_homework_repo.dart';
 import 'package:school_system/features/student/presentation/manager/student_subject_detail_cubit/student_subject_detail_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_subject_detail_cubit/student_subject_detail_state.dart';
-import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_hero_card.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_details_tabs.dart';
 import 'package:school_system/features/student/presentation/views/widgets/subject_lessons_tab.dart';
@@ -32,12 +30,13 @@ class _StudentSubjectDetailsViewBodyState
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => StudentSubjectDetailCubit(
-        StudentMySubjectsRepo(ApiService()),
-      )..fetchSubjectDetail(widget.subject.oid),
+      create: (_) =>
+          StudentSubjectDetailCubit(StudentMySubjectsRepo(ApiService()))
+            ..fetchSubjectDetail(widget.subject.oid),
       child: BlocBuilder<StudentSubjectDetailCubit, StudentSubjectDetailState>(
         builder: (context, state) {
-          final isLoading = state is StudentSubjectDetailLoading ||
+          final isLoading =
+              state is StudentSubjectDetailLoading ||
               state is StudentSubjectDetailInitial;
 
           StudentMySubjectDetail? detail;
@@ -52,8 +51,7 @@ class _StudentSubjectDetailsViewBodyState
               const SizedBox(height: 32),
               SubjectDetailsTabs(
                 selectedIndex: _selectedTab,
-                onTabSelected: (index) =>
-                    setState(() => _selectedTab = index),
+                onTabSelected: (index) => setState(() => _selectedTab = index),
               ),
               const SizedBox(height: 32),
 
@@ -69,14 +67,18 @@ class _StudentSubjectDetailsViewBodyState
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.error_outline,
-                            color: Colors.red, size: 18),
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 18,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             state.error.errorMessage,
-                            style: AppTextStyle.medium12
-                                .copyWith(color: Colors.red),
+                            style: AppTextStyle.medium12.copyWith(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                         TextButton(
@@ -97,14 +99,7 @@ class _StudentSubjectDetailsViewBodyState
                   isLoading: isLoading,
                 )
               else if (_selectedTab == 1)
-                BlocProvider(
-                  create: (context) => StudentHomeworkCubit(
-                    StudentHomeworkRepo(ApiService()),
-                  )..fetchHomeworks(),
-                  child: SubjectHomeworksTab(
-                    subjectName: widget.subject.subjectName,
-                  ),
-                )
+                SubjectHomeworksTab(subjectName: widget.subject.subjectName)
               else if (_selectedTab == 2)
                 SubjectExamsTab(
                   exams: detail?.exams ?? [],

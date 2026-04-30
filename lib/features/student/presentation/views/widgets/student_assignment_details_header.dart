@@ -22,106 +22,185 @@ class StudentAssignmentDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  subjectName.toUpperCase(),
-                  style: AppTextStyle.bold12.copyWith(
-                    color: AppColors.darkBlue,
-                    fontSize: 10,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: AppTextStyle.bold24.copyWith(
-                  color: AppColors.darkBlue,
-                  height: 1.2,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 16,
-                    color: AppColors.secondaryColor,
-                  ),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      'Due: $dueTime',
-                      style: AppTextStyle.medium12.copyWith(
-                        color: AppColors.grey,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.primaryColor.withValues(alpha: 0.05),
+            Colors.white,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.primaryColor.withValues(alpha: 0.1)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppColors.primaryColor.withValues(alpha: 0.8),
+                            AppColors.primaryColor,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryColor.withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        subjectName.toUpperCase(),
+                        style: AppTextStyle.bold12.copyWith(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Icon(
-                    Icons.stars,
-                    size: 16,
-                    color: AppColors.secondaryColor,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '$points Points',
-                    style: AppTextStyle.medium12.copyWith(
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 16),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                dateDay,
-                style: AppTextStyle.bold24.copyWith(
-                  color: const Color(0xffD92D20),
-                  height: 1.0,
+                  ],
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                dateMonth,
-                style: AppTextStyle.bold12.copyWith(color: AppColors.grey),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  title,
+                  style: AppTextStyle.bold24.copyWith(
+                    color: AppColors.darkBlue,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 12,
+                  children: [
+                    _InfoChip(
+                      icon: Icons.access_time_rounded,
+                      label: 'Due: $dueTime',
+                      color: AppColors.secondaryColor,
+                    ),
+                    _InfoChip(
+                      icon: Icons.stars_rounded,
+                      label: '$points Points',
+                      color: const Color(0xff12B76A),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          _CalendarCard(day: dateDay, month: dateMonth),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _InfoChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, size: 14, color: color),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: AppTextStyle.medium12.copyWith(
+            color: AppColors.grey,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CalendarCard extends StatelessWidget {
+  final String day;
+  final String month;
+
+  const _CalendarCard({required this.day, required this.month});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 64,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            decoration: const BoxDecoration(
+              color: Color(0xffD92D20),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Text(
+              month.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: AppTextStyle.bold12.copyWith(
+                color: Colors.white,
+                fontSize: 10,
+                letterSpacing: 1,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              day,
+              style: AppTextStyle.bold24.copyWith(
+                color: AppColors.darkBlue,
+                height: 1.0,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

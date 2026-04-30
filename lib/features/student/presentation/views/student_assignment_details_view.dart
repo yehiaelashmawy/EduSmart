@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/models/student_homework_model.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_assignment_details_view_body.dart';
 
+import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
+
 class StudentAssignmentDetailsArgs {
   final StudentHomeworkItemModel homework;
+  final StudentHomeworkCubit homeworkCubit;
 
   StudentAssignmentDetailsArgs({
     required this.homework,
+    required this.homeworkCubit,
   });
 }
 
@@ -16,10 +21,12 @@ class StudentAssignmentDetailsView extends StatelessWidget {
   static const String routeName = 'student_assignment_details_view';
 
   final StudentHomeworkItemModel homework;
+  final StudentHomeworkCubit homeworkCubit;
 
   const StudentAssignmentDetailsView({
     super.key,
     required this.homework,
+    required this.homeworkCubit,
   });
 
   @override
@@ -43,8 +50,9 @@ class StudentAssignmentDetailsView extends StatelessWidget {
           ),
         ),
       ),
-      body: StudentAssignmentDetailsViewBody(
-        homework: homework,
+      body: BlocProvider.value(
+        value: homeworkCubit,
+        child: StudentAssignmentDetailsViewBody(homework: homework),
       ),
     );
   }

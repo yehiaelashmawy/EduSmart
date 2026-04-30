@@ -24,7 +24,6 @@ import 'package:school_system/features/student/presentation/views/student_attend
 import 'package:school_system/features/student/presentation/views/student_scan_qr_view.dart';
 import 'package:school_system/features/student/presentation/views/student_select_code_view.dart';
 import 'package:school_system/features/student/presentation/views/student_attendance_success_view.dart';
-import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
@@ -82,9 +81,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => const TeacherWeeklyScheduleView(),
       );
     case StudentSubjectDetailsView.routeName:
-      final subject = settings.arguments as StudentSubjectModel;
+      final args = settings.arguments as StudentSubjectDetailsArgs;
       return MaterialPageRoute(
-        builder: (context) => StudentSubjectDetailsView(subject: subject),
+        builder: (context) => StudentSubjectDetailsView(
+          subject: args.subject,
+          homeworkCubit: args.homeworkCubit,
+        ),
       );
     case StudentLessonDetailsView.routeName:
       final id = settings.arguments as String;
@@ -96,6 +98,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => StudentAssignmentDetailsView(
           homework: args.homework,
+          homeworkCubit: args.homeworkCubit,
         ),
       );
     case StudentAttendanceMethodView.routeName:

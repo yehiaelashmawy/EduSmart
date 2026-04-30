@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/student/presentation/views/student_subject_details_view.dart';
+import '../../manager/student_homework_cubit/student_homework_cubit.dart';
 
 class SubjectItemCard extends StatelessWidget {
   final StudentSubjectModel subject;
@@ -51,7 +53,10 @@ class SubjectItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: trackColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -79,10 +84,7 @@ class SubjectItemCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       subject.professorName,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.grey,
-                      ),
+                      style: TextStyle(fontSize: 13, color: AppColors.grey),
                     ),
                   ],
                 ),
@@ -140,7 +142,10 @@ class SubjectItemCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -160,7 +165,11 @@ class SubjectItemCard extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.calendar_today_outlined, color: trackColor, size: 14),
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            color: trackColor,
+                            size: 14,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             '${subject.attendancePercentage}%',
@@ -179,7 +188,10 @@ class SubjectItemCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -199,7 +211,11 @@ class SubjectItemCard extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.assignment_outlined, color: trackColor, size: 14),
+                          Icon(
+                            Icons.assignment_outlined,
+                            color: trackColor,
+                            size: 14,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             '${subject.assignmentsPercentage}%',
@@ -224,7 +240,10 @@ class SubjectItemCard extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pushNamed(
                   StudentSubjectDetailsView.routeName,
-                  arguments: subject,
+                  arguments: StudentSubjectDetailsArgs(
+                    subject: subject,
+                    homeworkCubit: context.read<StudentHomeworkCubit>(),
+                  ),
                 );
               },
               style: TextButton.styleFrom(
@@ -246,7 +265,11 @@ class SubjectItemCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, size: 14, color: AppColors.secondaryColor),
+                  Icon(
+                    Icons.arrow_forward,
+                    size: 14,
+                    color: AppColors.secondaryColor,
+                  ),
                 ],
               ),
             ),

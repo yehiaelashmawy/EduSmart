@@ -80,7 +80,10 @@ class StudentAssignmentsTab extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   StudentAssignmentDetailsView.routeName,
-                  arguments: StudentAssignmentDetailsArgs(homework: hw),
+                  arguments: StudentAssignmentDetailsArgs(
+                    homework: hw,
+                    homeworkCubit: context.read<StudentHomeworkCubit>(),
+                  ),
                 );
               }
 

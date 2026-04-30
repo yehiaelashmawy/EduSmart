@@ -4,7 +4,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/repos/student_grades_repo.dart';
-import 'package:school_system/features/student/data/repos/student_homework_repo.dart';
 import 'package:school_system/features/student/presentation/manager/student_grades_cubit/student_grades_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_grades_cubit/student_grades_state.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
@@ -15,19 +14,10 @@ class StudentHomeActionCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => StudentHomeworkCubit(
-            StudentHomeworkRepo(ApiService()),
-          )..fetchHomeworks(),
-        ),
-        BlocProvider(
-          create: (context) => StudentGradesCubit(
-            StudentGradesRepo(ApiService()),
-          )..fetchGradesDashboard(),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => StudentGradesCubit(
+        StudentGradesRepo(ApiService()),
+      )..fetchGradesDashboard(),
       child: Row(
         children: [
           Expanded(
@@ -72,7 +62,7 @@ class StudentHomeActionCards extends StatelessWidget {
 
                   if (state is StudentGradesSuccess) {
                     final gpa = state.data.overallGPA?.gpa ?? 0.0;
-                    subtitle = 'GPA: $gpa / 4.0';
+                    subtitle = 'GPA: ${gpa.toStringAsFixed(1)} / 4.0';
                   } else if (state is StudentGradesFailure) {
                     subtitle = 'Failed to load';
                   }
