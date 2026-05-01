@@ -37,12 +37,15 @@ class StudentExamDetailsHeroCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text(
-              status.toUpperCase(),
-              style: AppTextStyle.bold12.copyWith(
-                color: Colors.white,
-                fontSize: 10,
-                letterSpacing: 0.5,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                status.toUpperCase(),
+                style: AppTextStyle.bold12.copyWith(
+                  color: Colors.white,
+                  fontSize: 10,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
@@ -53,6 +56,8 @@ class StudentExamDetailsHeroCard extends StatelessWidget {
               color: Colors.white,
               fontSize: 26,
             ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 24),
           Row(
@@ -114,25 +119,33 @@ class StudentExamDetailsHeroCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: Colors.white.withValues(alpha: 0.8), size: 16),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: AppTextStyle.bold12.copyWith(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontSize: 9,
-                    letterSpacing: 0.5,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    label,
+                    style: AppTextStyle.bold12.copyWith(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 9,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: AppTextStyle.bold14.copyWith(
-                    color: Colors.white,
-                    height: 1.2,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    value,
+                    style: AppTextStyle.bold14.copyWith(
+                      color: Colors.white,
+                      height: 1.2,
+                    ),
                   ),
                 ),
               ],

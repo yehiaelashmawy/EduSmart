@@ -107,6 +107,8 @@ class StudentAssignmentItemCard extends StatelessWidget {
                         style: AppTextStyle.bold16.copyWith(
                           color: AppColors.darkBlue,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -117,10 +119,14 @@ class StudentAssignmentItemCard extends StatelessWidget {
                             color: isDueSoon ? _statusColor : AppColors.grey,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            submittedDate,
-                            style: AppTextStyle.medium12.copyWith(
-                              color: isDueSoon ? _statusColor : AppColors.grey,
+                          Expanded(
+                            child: Text(
+                              submittedDate,
+                              style: AppTextStyle.medium12.copyWith(
+                                color: isDueSoon ? _statusColor : AppColors.grey,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -171,16 +177,41 @@ class StudentAssignmentItemCard extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Action Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (status == AssignmentStatus.notSubmitted) ...[
+            SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.end,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  if (status == AssignmentStatus.notSubmitted) ...[
+                    SizedBox(
+                      height: 40,
+                      child: ElevatedButton.icon(
+                        onPressed: onSubmitWork,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        icon: const Icon(Icons.file_upload_outlined, size: 18),
+                        label: const Text(
+                          'Submit Work',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ],
                   SizedBox(
                     height: 40,
                     child: ElevatedButton.icon(
-                      onPressed: onSubmitWork,
+                      onPressed: onViewDetails,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
+                        backgroundColor: const Color(0xff0F52BD), // Match lesson card blue
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -188,36 +219,15 @@ class StudentAssignmentItemCard extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      icon: const Icon(Icons.file_upload_outlined, size: 18),
+                      icon: const Icon(Icons.remove_red_eye_outlined, size: 18),
                       label: const Text(
-                        'Submit Work',
+                        'View Details',
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
                 ],
-                SizedBox(
-                  height: 40,
-                  child: ElevatedButton.icon(
-                    onPressed: onViewDetails,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff0F52BD), // Match lesson card blue
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    icon: const Icon(Icons.remove_red_eye_outlined, size: 18),
-                    label: const Text(
-                      'View Details',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),

@@ -96,6 +96,8 @@ class StudentExamItemCard extends StatelessWidget {
               color: AppColors.darkBlue,
               fontSize: 18,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
           Text(
@@ -113,27 +115,36 @@ class StudentExamItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    bottomLabel.toUpperCase(),
-                    style: AppTextStyle.bold12.copyWith(
-                      color: AppColors.grey,
-                      fontSize: 10,
-                      letterSpacing: 0.5,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      bottomLabel.toUpperCase(),
+                      style: AppTextStyle.bold12.copyWith(
+                        color: AppColors.grey,
+                        fontSize: 10,
+                        letterSpacing: 0.5,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    bottomValue,
-                    style: AppTextStyle.bold24.copyWith(
-                      color: bottomValueColor,
-                      fontSize: 22,
+                    const SizedBox(height: 4),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        bottomValue,
+                        style: AppTextStyle.bold24.copyWith(
+                          color: bottomValueColor,
+                          fontSize: 22,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               SizedBox(
                 height: 36,
                 child: isPrimaryButton
