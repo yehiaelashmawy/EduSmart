@@ -1,17 +1,7 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:school_system/core/api/api_errors.dart';
 import 'package:school_system/features/student/data/repos/student_submit_homework_repo.dart';
-
-abstract class StudentSubmitHomeworkState {}
-
-class StudentSubmitHomeworkInitial extends StudentSubmitHomeworkState {}
-class StudentSubmitHomeworkLoading extends StudentSubmitHomeworkState {}
-class StudentSubmitHomeworkSuccess extends StudentSubmitHomeworkState {}
-class StudentSubmitHomeworkFailure extends StudentSubmitHomeworkState {
-  final ApiErrors error;
-  StudentSubmitHomeworkFailure(this.error);
-}
+import 'student_submit_homework_state.dart';
 
 class StudentSubmitHomeworkCubit extends Cubit<StudentSubmitHomeworkState> {
   final StudentSubmitHomeworkRepo _repo;

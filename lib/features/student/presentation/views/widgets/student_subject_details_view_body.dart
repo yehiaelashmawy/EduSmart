@@ -102,8 +102,7 @@ class _StudentSubjectDetailsViewBodyState
                 SubjectHomeworksTab(subjectName: widget.subject.subjectName)
               else if (_selectedTab == 2)
                 SubjectExamsTab(
-                  exams: detail?.exams ?? [],
-                  isLoading: isLoading,
+                  subjectName: widget.subject.subjectName,
                 ),
 
               const SizedBox(height: 24),

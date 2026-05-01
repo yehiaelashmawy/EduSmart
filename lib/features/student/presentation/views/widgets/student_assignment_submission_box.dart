@@ -10,13 +10,12 @@ import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_submit_homework_cubit/student_submit_homework_cubit.dart';
 
+import '../../manager/student_submit_homework_cubit/student_submit_homework_state.dart';
+
 class StudentAssignmentSubmissionBox extends StatefulWidget {
   final String homeworkId;
 
-  const StudentAssignmentSubmissionBox({
-    super.key,
-    required this.homeworkId,
-  });
+  const StudentAssignmentSubmissionBox({super.key, required this.homeworkId});
 
   @override
   State<StudentAssignmentSubmissionBox> createState() =>
@@ -46,7 +45,12 @@ class _StudentAssignmentSubmissionBoxState
         _selectedFile = File(result.files.single.path!);
         _fileName = result.files.single.name;
         _fileSize = result.files.single.size;
-        _isImage = ['jpg', 'jpeg', 'png', 'gif'].contains(_fileName!.split('.').last.toLowerCase());
+        _isImage = [
+          'jpg',
+          'jpeg',
+          'png',
+          'gif',
+        ].contains(_fileName!.split('.').last.toLowerCase());
       });
     }
   }
@@ -135,10 +139,10 @@ class _StudentAssignmentSubmissionBoxState
     }
 
     context.read<StudentSubmitHomeworkCubit>().submit(
-          homeworkId: widget.homeworkId,
-          file: _selectedFile,
-          submissionText: _textController.text.trim(),
-        );
+      homeworkId: widget.homeworkId,
+      file: _selectedFile,
+      submissionText: _textController.text.trim(),
+    );
   }
 
   @override
@@ -146,7 +150,10 @@ class _StudentAssignmentSubmissionBoxState
     return BlocConsumer<StudentSubmitHomeworkCubit, StudentSubmitHomeworkState>(
       listener: (context, state) {
         if (state is StudentSubmitHomeworkSuccess) {
-          CustomSnackBar.showSuccess(context, 'Homework submitted successfully!');
+          CustomSnackBar.showSuccess(
+            context,
+            'Homework submitted successfully!',
+          );
           try {
             context.read<StudentHomeworkCubit>().fetchHomeworks();
           } catch (e) {
@@ -174,7 +181,10 @@ class _StudentAssignmentSubmissionBoxState
                   ),
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 40,
+                      horizontal: 24,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.02),
                       borderRadius: BorderRadius.circular(20),
@@ -184,7 +194,9 @@ class _StudentAssignmentSubmissionBoxState
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withValues(alpha: 0.08),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.08,
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -234,21 +246,30 @@ class _StudentAssignmentSubmissionBoxState
               enabled: !isLoading,
               decoration: InputDecoration(
                 hintText: 'Add a message for your teacher...',
-                hintStyle: AppTextStyle.medium12.copyWith(color: AppColors.grey.withValues(alpha: 0.6)),
+                hintStyle: AppTextStyle.medium12.copyWith(
+                  color: AppColors.grey.withValues(alpha: 0.6),
+                ),
                 filled: true,
                 fillColor: AppColors.white,
                 contentPadding: const EdgeInsets.all(16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppColors.lightGrey.withValues(alpha: 0.5)),
+                  borderSide: BorderSide(
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppColors.lightGrey.withValues(alpha: 0.5)),
+                  borderSide: BorderSide(
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppColors.primaryColor, width: 1.5),
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColor,
+                    width: 1.5,
+                  ),
                 ),
               ),
             ),
@@ -259,9 +280,9 @@ class _StudentAssignmentSubmissionBoxState
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 gradient: LinearGradient(
-                  colors: isLoading 
-                    ? [AppColors.grey, AppColors.grey.withValues(alpha: 0.7)]
-                    : [const Color(0xff0F52BD), AppColors.primaryColor],
+                  colors: isLoading
+                      ? [AppColors.grey, AppColors.grey.withValues(alpha: 0.7)]
+                      : [const Color(0xff0F52BD), AppColors.primaryColor],
                 ),
                 boxShadow: [
                   if (!isLoading)
@@ -292,7 +313,9 @@ class _StudentAssignmentSubmissionBoxState
                       )
                     : Text(
                         'Submit Assignment',
-                        style: AppTextStyle.bold16.copyWith(color: Colors.white),
+                        style: AppTextStyle.bold16.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
               ),
             ),
@@ -361,7 +384,9 @@ class _SelectedFileCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primaryColor.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: AppColors.primaryColor.withValues(alpha: 0.1),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -375,17 +400,15 @@ class _SelectedFileCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: isImage
-                ? Image.file(
-                    file,
-                    width: 56,
-                    height: 56,
-                    fit: BoxFit.cover,
-                  )
+                ? Image.file(file, width: 56, height: 56, fit: BoxFit.cover)
                 : Container(
                     width: 56,
                     height: 56,
                     color: AppColors.primaryColor.withValues(alpha: 0.1),
-                    child: Icon(Icons.insert_drive_file_rounded, color: AppColors.primaryColor),
+                    child: Icon(
+                      Icons.insert_drive_file_rounded,
+                      color: AppColors.primaryColor,
+                    ),
                   ),
           ),
           const SizedBox(width: 16),
@@ -395,7 +418,9 @@ class _SelectedFileCard extends StatelessWidget {
               children: [
                 Text(
                   fileName,
-                  style: AppTextStyle.bold14.copyWith(color: AppColors.darkBlue),
+                  style: AppTextStyle.bold14.copyWith(
+                    color: AppColors.darkBlue,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

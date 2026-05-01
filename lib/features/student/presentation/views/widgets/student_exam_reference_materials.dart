@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/student/data/models/student_exam_model.dart';
+import 'package:school_system/core/helper/file_helper.dart';
 
 class StudentExamReferenceMaterials extends StatelessWidget {
-  const StudentExamReferenceMaterials({super.key});
+  final List<ExamMaterialModel> materials;
+
+  const StudentExamReferenceMaterials({super.key, required this.materials});
 
   @override
   Widget build(BuildContext context) {
+    if (materials.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,26 +23,45 @@ class StudentExamReferenceMaterials extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        _buildMaterialItem(
-          icon: Icons.picture_as_pdf,
-          iconColor: AppColors.secondaryColor,
-          iconBackgroundColor: AppColors.primaryColor.withValues(alpha: 0.15),
-          title: 'Physics_Summary.pdf',
-          subtitle: '2.4 MB • Updated Oct 12',
-          trailingIcon: Icons.download_rounded,
-          onTap: () {},
-        ),
-        _buildMaterialItem(
-          icon: Icons.link,
-          iconColor: const Color(0xff4B48A1), // Purple from design
-          iconBackgroundColor: const Color(0xff4B48A1).withValues(alpha: 0.15),
-          title: 'Quantum Mechanics Basics',
-          subtitle: 'External Video Link',
-          trailingIcon: Icons.open_in_new_rounded,
-          onTap: () {},
-        ),
+        ...materials.map((m) => _buildMaterialItem(
+              icon: _getIconForType(m.fileType ?? ''),
+              iconColor: AppColors.secondaryColor,
+              iconBackgroundColor: AppColors.primaryColor.withValues(alpha: 0.15),
+              title: m.name ?? 'Unknown File',
+              subtitle: _formatSubtitle(m),
+              trailingIcon: Icons.download_rounded,
+              onTap: () {
+                if (m.fileUrl != null) {
+                  FileHelper.downloadAndOpenFile(
+                    url: m.fileUrl!,
+                    fileName: m.name ?? 'exam_material',
+                  );
+                }
+              },
+            )),
       ],
     );
+  }
+
+  IconData _getIconForType(String type) {
+    if (type.contains('pdf')) return Icons.picture_as_pdf;
+    if (type.contains('image')) return Icons.image;
+    if (type.contains('video')) return Icons.play_circle;
+    return Icons.insert_drive_file;
+  }
+
+  String _formatSubtitle(ExamMaterialModel m) {
+    String size = '';
+    if (m.fileSize != null) {
+      final mb = m.fileSize! / (1024 * 1024);
+      if (mb >= 1) {
+        size = '${mb.toStringAsFixed(1)} MB';
+      } else {
+        final kb = m.fileSize! / 1024;
+        size = '${kb.toStringAsFixed(0)} KB';
+      }
+    }
+    return size.isNotEmpty ? size : 'Reference File';
   }
 
   Widget _buildMaterialItem({
