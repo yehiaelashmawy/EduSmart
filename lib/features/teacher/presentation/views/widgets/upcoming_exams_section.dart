@@ -6,6 +6,8 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_exams_cubit/teacher_exams_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_exams_cubit/teacher_exams_state.dart';
 
+import '../exam_details_view.dart';
+
 class UpcomingExamsSection extends StatelessWidget {
   const UpcomingExamsSection({super.key});
 
@@ -111,14 +113,32 @@ class UpcomingExamsSection extends StatelessWidget {
                   return Column(
                     children: [
                       if (i > 0) const SizedBox(height: 16),
-                      _buildExamCard(
-                        month: month,
-                        day: day,
-                        title: exam.name,
-                        subtitle:
-                            '${exam.className} • ${exam.studentsCount} Students',
-                        statusText: _computeStatusText(exam.date),
-                        statusColor: _computeStatusColor(exam.date),
+                      InkWell(
+                        onTap: () async {
+                          final deleted =
+                              await Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).pushNamed(
+                                ExamDetailsView.routeName,
+                                arguments: exam.oid,
+                              );
+
+                          if (deleted == true && context.mounted) {
+                            context.read<TeacherExamsCubit>().removeExamLocal(exam.oid);
+                            context.read<TeacherExamsCubit>().fetchExams();
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: _buildExamCard(
+                          month: month,
+                          day: day,
+                          title: exam.name,
+                          subtitle:
+                              '${exam.className} • ${exam.studentsCount} Students',
+                          statusText: _computeStatusText(exam.date),
+                          statusColor: _computeStatusColor(exam.date),
+                        ),
                       ),
                     ],
                   );

@@ -15,4 +15,12 @@ class TeacherExamsCubit extends Cubit<TeacherExamsState> {
       (exams) => emit(TeacherExamsSuccess(exams)),
     );
   }
+
+  void removeExamLocal(String examId) {
+    if (state is TeacherExamsSuccess) {
+      final currentState = state as TeacherExamsSuccess;
+      final updatedExams = currentState.exams.where((e) => e.oid != examId).toList();
+      emit(TeacherExamsSuccess(updatedExams));
+    }
+  }
 }

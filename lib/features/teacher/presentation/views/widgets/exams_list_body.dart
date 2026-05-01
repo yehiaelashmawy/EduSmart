@@ -6,8 +6,9 @@ import 'package:school_system/features/teacher/presentation/views/widgets/exams_
 
 class ExamsListBody extends StatefulWidget {
   final List<TeacherExamModel> exams;
+  final void Function(String examId)? onExamDeleted;
 
-  const ExamsListBody({super.key, this.exams = const []});
+  const ExamsListBody({super.key, this.exams = const [], this.onExamDeleted});
 
   @override
   State<ExamsListBody> createState() => _ExamsListBodyState();
@@ -137,6 +138,9 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                             ? AppColors.secondaryColor
                             : AppColors.grey,
                         isDraft: isDraft,
+                        onDeleted: () {
+                          widget.onExamDeleted?.call(exam.oid);
+                        },
                       );
                     },
                   ),

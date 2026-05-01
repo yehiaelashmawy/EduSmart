@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
 
 class ExamItemCard extends StatelessWidget {
@@ -15,6 +16,7 @@ class ExamItemCard extends StatelessWidget {
     required this.statusColor,
     required this.isDraft,
     required this.examId,
+    this.onDeleted,
   });
 
   final String title;
@@ -26,6 +28,7 @@ class ExamItemCard extends StatelessWidget {
   final Color statusColor;
   final bool isDraft;
   final String examId;
+  final VoidCallback? onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -123,11 +126,18 @@ class ExamItemCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).pushNamed('/exam_details', arguments: examId);
+                        onPressed: () async {
+                          final deleted =
+                              await Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).pushNamed(
+                                ExamDetailsView.routeName,
+                                arguments: examId,
+                              );
+                          if (deleted == true && context.mounted) {
+                            onDeleted?.call();
+                          }
                         },
                         icon: Icon(
                           isDraft ? Icons.edit_outlined : Icons.info_outline,

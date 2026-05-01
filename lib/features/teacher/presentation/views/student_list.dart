@@ -210,6 +210,14 @@ class _StudentListState extends State<StudentList>
     });
   }
 
+  void _handleExamDeleted(String examId) {
+    if (examId.trim().isEmpty) return;
+    setState(() {
+      _hasDataChanges = true;
+    });
+    _refreshClassData();
+  }
+
   Future<void> _openAddExam() async {
     final created = await Navigator.of(
       context,
@@ -321,7 +329,10 @@ class _StudentListState extends State<StudentList>
             onLessonDeleted: _handleLessonDeleted,
           ),
           HomeworkListBody(homeworks: _classHomeworks),
-          ExamsListBody(exams: _classExams),
+          ExamsListBody(
+            exams: _classExams,
+            onExamDeleted: _handleExamDeleted,
+          ),
           AttendanceListBody(
             teacherClass: _currentClass,
             className: _currentClass?.name ?? widget.className,
