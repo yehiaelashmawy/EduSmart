@@ -4,6 +4,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/models/student_subject_model.dart';
 import 'package:school_system/features/student/presentation/views/student_subject_details_view.dart';
 import '../../manager/student_homework_cubit/student_homework_cubit.dart';
+import '../../manager/student_exams_cubit/student_exams_cubit.dart';
 
 class SubjectItemCard extends StatelessWidget {
   final StudentSubjectModel subject;
@@ -243,6 +244,7 @@ class SubjectItemCard extends StatelessWidget {
                   arguments: StudentSubjectDetailsArgs(
                     subject: subject,
                     homeworkCubit: context.read<StudentHomeworkCubit>(),
+                    examsCubit: context.read<StudentExamsCubit>(),
                   ),
                 );
               },

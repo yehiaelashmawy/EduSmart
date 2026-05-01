@@ -5,7 +5,9 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
+import 'package:school_system/features/student/data/repos/student_exams_repo.dart';
 import 'package:school_system/features/student/data/repos/student_homework_repo.dart';
+import 'package:school_system/features/student/presentation/manager/student_exams_cubit/student_exams_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_bottom_nav_bar.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_home_view_body.dart';
@@ -30,6 +32,7 @@ class _StudentHomeViewState extends State<StudentHomeView> {
   final GlobalKey<NavigatorState> _profileNavigatorKey = GlobalKey<NavigatorState>();
 
   late final StudentHomeworkCubit _homeworkCubit;
+  late final StudentExamsCubit _examsCubit;
 
   @override
   void initState() {
@@ -37,11 +40,15 @@ class _StudentHomeViewState extends State<StudentHomeView> {
     _homeworkCubit = StudentHomeworkCubit(
       StudentHomeworkRepo(ApiService()),
     )..fetchHomeworks();
+    _examsCubit = StudentExamsCubit(
+      StudentExamsRepo(ApiService()),
+    )..fetchExams();
   }
 
   @override
   void dispose() {
     _homeworkCubit.close();
+    _examsCubit.close();
     super.dispose();
   }
 
@@ -67,8 +74,11 @@ class _StudentHomeViewState extends State<StudentHomeView> {
       },
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
-        body: BlocProvider.value(
-          value: _homeworkCubit,
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: _homeworkCubit),
+            BlocProvider.value(value: _examsCubit),
+          ],
           child: IndexedStack(
             index: _currentIndex,
             children: [

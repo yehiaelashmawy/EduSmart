@@ -86,6 +86,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => StudentSubjectDetailsView(
           subject: args.subject,
           homeworkCubit: args.homeworkCubit,
+          examsCubit: args.examsCubit,
         ),
       );
     case StudentLessonDetailsView.routeName:
@@ -125,6 +126,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => StudentExamDetailsView(
           exam: args.exam,
+          examsCubit: args.examsCubit,
         ),
       );
     case StudentHomeworkView.routeName:

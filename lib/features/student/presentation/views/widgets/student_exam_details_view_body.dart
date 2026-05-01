@@ -52,7 +52,7 @@ class StudentExamDetailsViewBody extends StatelessWidget {
         if (hasSubmission)
           StudentExamMySubmission(submission: exam.mySubmission!)
         else ...[
-          const StudentExamSubmissionBox(),
+          StudentExamSubmissionBox(examId: exam.examId ?? ''),
           const SizedBox(height: 16),
         ],
       ],
