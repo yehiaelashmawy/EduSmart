@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
@@ -22,6 +21,22 @@ class ProfileAvatarSection extends StatelessWidget {
   final String? networkImageUrl;
   final VoidCallback onPickPhoto;
 
+  Widget _buildPlaceholder() {
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        Icons.person_rounded,
+        size: 80,
+        color: AppColors.primaryColor.withValues(alpha: 0.4),
+      ),
+    );
+  }
+
   Widget _buildAvatar() {
     final token = SharedPrefsHelper.token;
 
@@ -31,39 +46,36 @@ class ProfileAvatarSection extends StatelessWidget {
 
     final String url = UrlHelper.getFullImageUrl(networkImageUrl);
 
-    return ClipOval(
-      child: SizedBox(
-        width: 130,
-        height: 130,
-        child: pickedImagePath != null
-            ? Image.file(
-                File(pickedImagePath!),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/images/profile_photo.png',
-                    fit: BoxFit.cover,
-                  );
-                },
-              )
-            : (url.isNotEmpty
-                  ? Image.network(
-                      url,
-                      headers: headers,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/profile_photo.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    )
-                  : Image.asset(
-                      'assets/images/profile_photo.png',
-                      fit: BoxFit.cover,
-                    )),
-      ),
-    );
+    if (pickedImagePath != null) {
+      return ClipOval(
+        child: Image.file(
+          File(pickedImagePath!),
+          width: 130,
+          height: 130,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+        ),
+      );
+    }
+
+    if (url.isNotEmpty) {
+      return ClipOval(
+        child: Image.network(
+          url,
+          headers: headers,
+          width: 130,
+          height: 130,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return _buildPlaceholder();
+          },
+        ),
+      );
+    }
+
+    return _buildPlaceholder();
   }
 
   @override

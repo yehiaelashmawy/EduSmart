@@ -57,17 +57,20 @@ class StudentHomeHeader extends StatelessWidget {
                 children: [
                   Text(
                     _getGreeting(),
-                    style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                   BlocBuilder<ProfileCubit, ProfileState>(
                     builder: (context, state) {
                       final studentName = state is ProfileSuccess
                           ? (state.profile.fullName?.trim().isNotEmpty ?? false)
-                              ? state.profile.fullName!.trim()
-                              : 'Student'
-                          : (SharedPrefsHelper.fullName?.trim().isNotEmpty ?? false)
-                              ? SharedPrefsHelper.fullName!.trim()
-                              : 'Student';
+                                ? state.profile.fullName!.trim()
+                                : 'Student'
+                          : (SharedPrefsHelper.fullName?.trim().isNotEmpty ??
+                                false)
+                          ? SharedPrefsHelper.fullName!.trim()
+                          : 'Student';
 
                       return Text(
                         studentName,
@@ -81,27 +84,9 @@ class StudentHomeHeader extends StatelessWidget {
                 ],
               ),
             ),
-            _buildIconButton(Icons.search),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, {bool hasBadge = false}) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey.withValues(alpha: 0.3),
-        shape: BoxShape.circle,
-      ),
-      child: hasBadge
-          ? Badge(
-              smallSize: 8,
-              backgroundColor: const Color(0xFFEF4444),
-              child: Icon(icon, color: AppColors.darkBlue, size: 24),
-            )
-          : Icon(icon, color: AppColors.darkBlue, size: 24),
     );
   }
 }
