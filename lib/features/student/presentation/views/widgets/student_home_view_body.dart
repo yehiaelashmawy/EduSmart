@@ -15,31 +15,30 @@ class StudentHomeViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const StudentHomeHeader(),
-            const SizedBox(height: 24),
-            const StudentHomeActionCards(),
-            const SizedBox(height: 20),
-            const SmartTutorBanner(),
-            const SizedBox(height: 24),
-            const NextClassCard(),
-            const SizedBox(height: 32),
-            // Provide the weekly-schedule cubit scoped to today's section
-            BlocProvider(
-              create: (_) => StudentWeeklyScheduleCubit(
-                StudentWeeklyScheduleRepo(ApiService()),
-              )..fetchWeeklySchedule(),
-              child: const StudentTodaySchedule(),
-            ),
-            const SizedBox(height: 32),
-            const StudentAssignmentsExams(),
-            const SizedBox(height: 24),
-          ],
+    return BlocProvider(
+      create: (context) => StudentWeeklyScheduleCubit(
+        StudentWeeklyScheduleRepo(ApiService()),
+      )..fetchWeeklySchedule(),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const StudentHomeHeader(),
+              const SizedBox(height: 24),
+              const StudentHomeActionCards(),
+              const SizedBox(height: 20),
+              const SmartTutorBanner(),
+              const SizedBox(height: 24),
+              const NextClassCard(),
+              const SizedBox(height: 32),
+              const StudentTodaySchedule(),
+              const SizedBox(height: 32),
+              const StudentAssignmentsExams(),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
