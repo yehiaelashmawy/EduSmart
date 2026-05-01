@@ -29,6 +29,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _totalMarksController = TextEditingController();
   final TextEditingController _passingMarksController = TextEditingController();
+  final TextEditingController _roomController = TextEditingController();
 
   String? _selectedSubjectOid;
   String? _selectedClassOid;
@@ -44,6 +45,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
     _durationController.dispose();
     _totalMarksController.dispose();
     _passingMarksController.dispose();
+    _roomController.dispose();
     super.dispose();
   }
 
@@ -73,7 +75,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
         duration: _durationController.text,
         maxScore: int.tryParse(_totalMarksController.text) ?? 100,
         passingScore: int.tryParse(_passingMarksController.text) ?? 50,
-        room: "",
+        room: _roomController.text,
         instructions: _instructionsController.text,
         materials: [],
       );
@@ -122,6 +124,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
                 dateController: _dateController,
                 startTimeController: _startTimeController,
                 durationController: _durationController,
+                roomController: _roomController,
               ),
               const SizedBox(height: 24),
               const SectionHeader(

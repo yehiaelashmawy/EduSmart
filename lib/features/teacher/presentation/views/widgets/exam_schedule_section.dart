@@ -6,12 +6,14 @@ class ExamScheduleSection extends StatefulWidget {
   final TextEditingController dateController;
   final TextEditingController startTimeController;
   final TextEditingController durationController;
+  final TextEditingController roomController;
 
   const ExamScheduleSection({
     super.key,
     required this.dateController,
     required this.startTimeController,
     required this.durationController,
+    required this.roomController,
   });
 
   @override
@@ -100,6 +102,13 @@ class _ExamScheduleSectionState extends State<ExamScheduleSection> {
               ),
             ),
           ],
+        ),
+        const SizedBox(height: 16),
+        const FieldLabel(label: 'Exam Room / Location'),
+        const SizedBox(height: 8),
+        CustomTextField(
+          hintText: 'e.g., Room 102, Hall B, etc.',
+          controller: widget.roomController,
         ),
       ],
     );
