@@ -151,7 +151,9 @@ class _StudentExamSubmissionBoxState extends State<StudentExamSubmissionBox> {
           CustomSnackBar.showSuccess(context, 'Exam submitted successfully!');
           try {
             context.read<StudentExamsCubit>().fetchExams();
-          } catch (e) {}
+          } catch (e) {
+            debugPrint('Error fetching exams after submission: $e');
+          }
           Navigator.pop(context);
         } else if (state is StudentSubmitExamFailure) {
           CustomSnackBar.showError(context, state.error.errorMessage);

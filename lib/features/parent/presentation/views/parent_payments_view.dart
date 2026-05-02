@@ -225,7 +225,7 @@ class ParentPaymentsView extends StatelessWidget {
         _buildHistoryCard(
           icon: Icons.menu_book_outlined,
           iconColor: AppColors.secondaryColor,
-          iconBgColor: AppColors.primaryColor.withOpacity(0.1),
+          iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
           title: 'Textbook Bundle (Grade 4)',
           subtitle: 'Paid Nov 02, 2023 • Leo Smith',
           amount: '\$145.00',
@@ -234,7 +234,7 @@ class ParentPaymentsView extends StatelessWidget {
         _buildHistoryCard(
           icon: Icons.directions_bus_outlined,
           iconColor: AppColors.secondaryColor,
-          iconBgColor: AppColors.primaryColor.withOpacity(0.1),
+          iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
           title: 'Transport Fee - November',
           subtitle: 'Paid Oct 28, 2023 • Sarah Smith',
           amount: '\$85.00',
@@ -276,7 +276,7 @@ class ParentPaymentsView extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

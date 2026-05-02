@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:school_system/core/helper/url_helper.dart';
 
 class FileHelper {
@@ -35,7 +36,7 @@ class FileHelper {
           filePath,
           onReceiveProgress: (received, total) {
             if (total != -1) {
-              print("${(received / total * 100).toStringAsFixed(0)}%");
+              debugPrint("${(received / total * 100).toStringAsFixed(0)}%");
             }
           },
         );
@@ -43,7 +44,7 @@ class FileHelper {
 
       await OpenFilex.open(filePath);
     } catch (e) {
-      print("Error downloading or opening file: $e");
+      debugPrint("Error downloading or opening file: $e");
       rethrow;
     }
   }

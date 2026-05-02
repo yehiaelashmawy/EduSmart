@@ -50,6 +50,7 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
         final BarcodeCapture? capture = await _scannerController.analyzeImage(
           image.path,
         );
+        if (!mounted) return;
         if (capture != null && capture.barcodes.isNotEmpty) {
           // Success Feedback
           ScaffoldMessenger.of(context).showSnackBar(
@@ -69,6 +70,7 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
         }
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to read image: $e')));
