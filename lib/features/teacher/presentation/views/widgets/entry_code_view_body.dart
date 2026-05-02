@@ -10,7 +10,11 @@ class EntryCodeViewBody extends StatefulWidget {
   final AttendanceSessionModel session;
   final bool isLoading;
 
-  EntryCodeViewBody({super.key, required this.session, this.isLoading = false});
+  const EntryCodeViewBody({
+    super.key,
+    required this.session,
+    this.isLoading = false,
+  });
 
   @override
   State<EntryCodeViewBody> createState() => _EntryCodeViewBodyState();

@@ -24,7 +24,11 @@ class ManualAttendanceView extends StatefulWidget {
   final TeacherClassModel teacherClass;
   final AttendanceSessionModel? session;
 
-  ManualAttendanceView({super.key, required this.teacherClass, this.session});
+  const ManualAttendanceView({
+    super.key,
+    required this.teacherClass,
+    this.session,
+  });
 
   @override
   State<ManualAttendanceView> createState() => _ManualAttendanceViewState();

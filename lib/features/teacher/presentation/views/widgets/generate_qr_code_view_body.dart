@@ -10,7 +10,7 @@ class GenerateQrCodeViewBody extends StatefulWidget {
   final AttendanceSessionModel session;
   final bool isLoading;
 
-  GenerateQrCodeViewBody({
+  const GenerateQrCodeViewBody({
     super.key,
     required this.session,
     this.isLoading = false,

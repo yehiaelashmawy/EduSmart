@@ -48,7 +48,7 @@ class AttendanceLessonSelector extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: lessons.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
                 final lesson = lessons[index];
                 return AttendanceLessonCard(

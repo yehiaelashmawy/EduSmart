@@ -30,7 +30,7 @@ class ManualAttendanceViewBody extends StatefulWidget {
   final AttendanceSessionModel? session;
   final bool isLoading;
 
-  ManualAttendanceViewBody({
+  const ManualAttendanceViewBody({
     super.key,
     required this.teacherClass,
     this.session,

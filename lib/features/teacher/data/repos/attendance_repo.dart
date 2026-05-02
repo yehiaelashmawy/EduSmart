@@ -16,11 +16,7 @@ class AttendanceRepo {
     try {
       final response = await _apiService.post(
         '/api/Attendance/start-session',
-        data: {
-          'classOid': classOid,
-          'method': method,
-          if (lessonOid != null) 'lessonOid': lessonOid,
-        },
+        data: {'classOid': classOid, 'method': method, 'lessonOid': ?lessonOid},
       );
 
       final success = response['success'] as bool? ?? false;

@@ -13,6 +13,7 @@ import 'package:school_system/features/parent/presentation/views/widgets/parent_
 import 'package:school_system/features/parent/presentation/views/widgets/quick_action_card.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/recent_activity_item.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/upcoming_event_card.dart';
+import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
 
 class ParentHomeViewBody extends StatelessWidget {
   const ParentHomeViewBody({super.key});
@@ -41,7 +42,7 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
             } else if (state is ParentDashboardFailure) {
               return _buildErrorState(state.error.errorMessage);
             } else if (state is ParentDashboardSuccess) {
-              return _buildContent(state.data);
+              return _buildContent(context, state.data);
             }
             return const SizedBox.shrink();
           },
@@ -113,7 +114,7 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(ParentDashboardModel data) {
+  Widget _buildContent(BuildContext context, ParentDashboardModel data) {
     return RefreshIndicator(
       onRefresh: () async {},
       child: SingleChildScrollView(
@@ -155,7 +156,9 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
                     icon: Icons.payments_outlined,
                     backgroundColor: Colors.white,
                     contentColor: AppColors.darkBlue,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, ParentPaymentsView.routeName);
+                    },
                   ),
                   const SizedBox(height: 32),
                   _buildSectionTitle('Children'),

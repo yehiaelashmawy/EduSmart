@@ -8,7 +8,7 @@ class GenerateQrCodeView extends StatelessWidget {
   static const String routeName = '/generate_qr_code_view';
   final AttendanceSessionModel session;
 
-  GenerateQrCodeView({super.key, required this.session});
+  const GenerateQrCodeView({super.key, required this.session});
 
   @override
   Widget build(BuildContext context) {

@@ -70,7 +70,7 @@ class TodaysClassesSection extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     clipBehavior: Clip.none,
                     itemCount: skeletonClasses.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 16),
+                    separatorBuilder: (_, _) => const SizedBox(width: 16),
                     itemBuilder: (context, index) {
                       return _buildClassCard(skeletonClasses[index]);
                     },
@@ -115,7 +115,7 @@ class TodaysClassesSection extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
                   itemCount: state.classes.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 16),
+                  separatorBuilder: (_, _) => const SizedBox(width: 16),
                   itemBuilder: (context, index) {
                     final item = state.classes[index];
                     return _buildClassCard(item);
@@ -158,7 +158,7 @@ class TodaysClassesSection extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Text(
-                  '${classItem.subjectName[0]}',
+                  classItem.subjectName[0],
                   style: AppTextStyle.bold20.copyWith(
                     color: AppColors.primaryColor,
                   ),
