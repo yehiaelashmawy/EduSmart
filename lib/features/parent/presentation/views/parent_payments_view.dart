@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
 class ParentPaymentsView extends StatelessWidget {
   static const routeName = 'parent_payments_view';
@@ -22,7 +23,6 @@ class ParentPaymentsView extends StatelessWidget {
         iconTheme: IconThemeData(color: AppColors.primaryColor),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class ParentPaymentsView extends StatelessWidget {
             const SizedBox(height: 16),
             _buildOverviewGrid(),
             const SizedBox(height: 24),
-            _buildOverdueBanner(),
+            _buildOverdueBanner(context),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +56,7 @@ class ParentPaymentsView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _buildPaymentHistoryList(),
+            _buildPaymentHistoryList(context),
           ],
         ),
       ),
@@ -70,7 +70,7 @@ class ParentPaymentsView extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: 1.6,
+      childAspectRatio: 1.4,
       children: [
         _buildOverviewCard(
           icon: Icons.check_circle_outline,
@@ -127,25 +127,30 @@ class ParentPaymentsView extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(icon, color: iconColor, size: 20),
-          const Spacer(),
-          Text(
-            title,
-            style: AppTextStyle.bold12.copyWith(
-              color: titleColor ?? Colors.grey.shade600,
-              letterSpacing: 0.5,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: AppTextStyle.bold12.copyWith(
+                  color: titleColor ?? Colors.grey.shade600,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(amount, style: AppTextStyle.bold24.copyWith(color: amountColor)),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(amount, style: AppTextStyle.bold24.copyWith(color: amountColor)),
         ],
       ),
     );
   }
 
-  Widget _buildOverdueBanner() {
+  Widget _buildOverdueBanner(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -189,7 +194,9 @@ class ParentPaymentsView extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, ParentSecurePaymentView.routeName);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFC62828),
               foregroundColor: Colors.white,
@@ -210,7 +217,7 @@ class ParentPaymentsView extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentHistoryList() {
+  Widget _buildPaymentHistoryList(BuildContext context) {
     return Column(
       children: [
         _buildHistoryCard(
@@ -221,6 +228,9 @@ class ParentPaymentsView extends StatelessWidget {
           subtitle: 'Due Oct 15, 2023 • Leo Smith',
           amount: '\$320.00',
           isPayNow: true,
+          onPayPressed: () {
+            Navigator.pushNamed(context, ParentSecurePaymentView.routeName);
+          },
         ),
         _buildHistoryCard(
           icon: Icons.menu_book_outlined,
@@ -249,6 +259,9 @@ class ParentPaymentsView extends StatelessWidget {
           amount: '\$210.00',
           isPayNow: true,
           isHighlighted: true,
+          onPayPressed: () {
+            Navigator.pushNamed(context, ParentSecurePaymentView.routeName);
+          },
         ),
       ],
     );
@@ -263,6 +276,7 @@ class ParentPaymentsView extends StatelessWidget {
     required String amount,
     required bool isPayNow,
     bool isHighlighted = false,
+    VoidCallback? onPayPressed,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -327,7 +341,7 @@ class ParentPaymentsView extends StatelessWidget {
               SizedBox(
                 height: 28,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: isPayNow ? onPayPressed : () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isPayNow
                         ? AppColors.secondaryColor
