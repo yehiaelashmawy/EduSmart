@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
 class ParentPaymentsView extends StatelessWidget {
@@ -240,6 +241,9 @@ class ParentPaymentsView extends StatelessWidget {
           subtitle: 'Paid Nov 02, 2023 • Leo Smith',
           amount: '\$145.00',
           isPayNow: false,
+          onReceiptPressed: () {
+            Navigator.pushNamed(context, ParentReceiptView.routeName);
+          },
         ),
         _buildHistoryCard(
           icon: Icons.directions_bus_outlined,
@@ -249,6 +253,9 @@ class ParentPaymentsView extends StatelessWidget {
           subtitle: 'Paid Oct 28, 2023 • Sarah Smith',
           amount: '\$85.00',
           isPayNow: false,
+          onReceiptPressed: () {
+            Navigator.pushNamed(context, ParentReceiptView.routeName);
+          },
         ),
         _buildHistoryCard(
           icon: Icons.sports_soccer_outlined,
@@ -277,6 +284,7 @@ class ParentPaymentsView extends StatelessWidget {
     required bool isPayNow,
     bool isHighlighted = false,
     VoidCallback? onPayPressed,
+    VoidCallback? onReceiptPressed,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -341,7 +349,7 @@ class ParentPaymentsView extends StatelessWidget {
               SizedBox(
                 height: 28,
                 child: ElevatedButton(
-                  onPressed: isPayNow ? onPayPressed : () {},
+                  onPressed: isPayNow ? onPayPressed : onReceiptPressed,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isPayNow
                         ? AppColors.secondaryColor

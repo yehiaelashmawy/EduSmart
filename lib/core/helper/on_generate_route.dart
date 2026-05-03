@@ -13,6 +13,7 @@ import 'package:school_system/features/on_broding/presentation/views/on_bording_
 import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
 import 'package:school_system/features/student/presentation/views/weekly_schedule_view.dart';
@@ -143,6 +144,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const ParentPaymentsView());
     case ParentSecurePaymentView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentSecurePaymentView());
+    case ParentReceiptView.routeName:
+      return MaterialPageRoute(builder: (context) => const ParentReceiptView());
     case StudentList.routeName:
       final args = settings.arguments;
       if (args is TeacherClassModel) {
