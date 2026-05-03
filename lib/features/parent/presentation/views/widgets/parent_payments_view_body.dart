@@ -3,62 +3,47 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
-class ParentPaymentsView extends StatelessWidget {
-  static const routeName = 'parent_payments_view';
-  const ParentPaymentsView({super.key});
+class ParentPaymentsViewBody extends StatelessWidget {
+  const ParentPaymentsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        titleSpacing: 8,
-        title: Text(
-          'School Payments',
-          style: AppTextStyle.bold20.copyWith(color: AppColors.primaryColor),
-        ),
-        centerTitle: false,
-        backgroundColor: AppColors.backgroundColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.primaryColor),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Payment Overview',
-              style: AppTextStyle.bold18.copyWith(
-                color: AppColors.secondaryColor,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Payment Overview',
+            style: AppTextStyle.bold18.copyWith(
+              color: AppColors.secondaryColor,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildOverviewGrid(),
+          const SizedBox(height: 24),
+          _buildOverdueBanner(context),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Payment History',
+                style: AppTextStyle.bold18.copyWith(
+                  color: AppColors.secondaryColor,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            _buildOverviewGrid(),
-            const SizedBox(height: 24),
-            _buildOverdueBanner(context),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Payment History',
-                  style: AppTextStyle.bold18.copyWith(
-                    color: AppColors.secondaryColor,
-                  ),
+              Text(
+                'View All >',
+                style: AppTextStyle.semiBold14.copyWith(
+                  color: AppColors.secondaryColor,
                 ),
-                Text(
-                  'View All >',
-                  style: AppTextStyle.semiBold14.copyWith(
-                    color: AppColors.secondaryColor,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _buildPaymentHistoryList(context),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildPaymentHistoryList(context),
+        ],
       ),
     );
   }
@@ -92,7 +77,7 @@ class ParentPaymentsView extends StatelessWidget {
           icon: Icons.calendar_today_outlined,
           title: 'OVERDUE',
           amount: '\$320',
-          bgColor: const Color(0xFFFFF0F0), // Light red
+          bgColor: const Color(0xFFFFF0F0),
           iconColor: const Color(0xFFD32F2F),
           amountColor: const Color(0xFFD32F2F),
           titleColor: const Color(0xFFD32F2F),
@@ -101,7 +86,7 @@ class ParentPaymentsView extends StatelessWidget {
           icon: Icons.account_balance_wallet_outlined,
           title: 'TOTAL DUE',
           amount: '\$1,170',
-          bgColor: const Color(0xFFF0F4FF), // Light blue
+          bgColor: const Color(0xFFF0F4FF),
           iconColor: AppColors.secondaryColor,
           amountColor: AppColors.secondaryColor,
           titleColor: AppColors.secondaryColor,
@@ -157,7 +142,7 @@ class ParentPaymentsView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE5E5), // Lighter red for background
+        color: const Color(0xFFFFE5E5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -165,7 +150,7 @@ class ParentPaymentsView extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFFC62828), // Dark red for icon background
+              color: const Color(0xFFC62828),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
@@ -362,7 +347,8 @@ class ParentPaymentsView extends StatelessWidget {
                     isPayNow ? 'Pay Now' : 'Receipt',
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: isPayNow ? FontWeight.bold : FontWeight.w600,
+                      fontWeight:
+                          isPayNow ? FontWeight.bold : FontWeight.w600,
                     ),
                   ),
                 ),
