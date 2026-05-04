@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/data/models/submission_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/grade_submission_view_body.dart';
 
 class GradeSubmissionView extends StatelessWidget {
-  const GradeSubmissionView({super.key});
+  final SubmissionModel submission;
+  final String homeworkId;
+
+  const GradeSubmissionView({
+    super.key,
+    required this.submission,
+    required this.homeworkId,
+  });
 
   static const String routeName = '/grade_submission';
 
@@ -17,12 +25,12 @@ class GradeSubmissionView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Alex Johnson',
+              submission.studentName,
               style: AppTextStyle.bold18.copyWith(color: AppColors.black),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
-              'Assignment: World History Essay',
+              submission.studentEmail,
               style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
             ),
           ],
@@ -34,14 +42,11 @@ class GradeSubmissionView extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: AppColors.primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert, color: AppColors.grey),
-            onPressed: () {},
-          ),
-        ],
       ),
-      body: const GradeSubmissionViewBody(),
+      body: GradeSubmissionViewBody(
+        submission: submission,
+        homeworkId: homeworkId,
+      ),
     );
   }
 }

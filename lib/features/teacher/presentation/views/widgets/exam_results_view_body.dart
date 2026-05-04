@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/submission_item_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/submissions_header_cards.dart';
+import 'package:school_system/features/teacher/data/models/submission_model.dart';
 
 class ExamResultsViewBody extends StatelessWidget {
   const ExamResultsViewBody({super.key});
@@ -19,51 +20,87 @@ class ExamResultsViewBody extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: const [
+              children: [
                 SubmissionItemCard(
-                  initials: 'AJ',
-                  studentName: 'Alex Johnson',
-                  status: SubmissionStatus.graded,
-                  dateString: 'Oct 24, 10:30 AM',
-                  score: 92,
-                  isOnline: true,
+                  submission: SubmissionModel(
+                    id: '1',
+                    studentName: 'Alex Johnson',
+                    studentEmail: 'alex.j@school.com',
+                    content: '',
+                    submittedAt: '2026-10-24T10:30:00',
+                    grade: 92,
+                    status: 'Graded',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 16),
                 SubmissionItemCard(
-                  initials: 'MS',
-                  studentName: 'Maria Santos',
-                  status: SubmissionStatus.graded,
-                  dateString: 'Oct 24, 09:15 AM',
-                  score: 88,
+                  submission: SubmissionModel(
+                    id: '2',
+                    studentName: 'Maria Santos',
+                    studentEmail: 'maria.s@school.com',
+                    content: '',
+                    submittedAt: '2026-10-24T09:15:00',
+                    grade: 88,
+                    status: 'Graded',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 16),
                 SubmissionItemCard(
-                  initials: 'RK',
-                  studentName: 'Ryan Kim',
-                  status: SubmissionStatus.graded,
-                  dateString: 'Oct 24, 02:45 PM',
-                  score: 85,
+                  submission: SubmissionModel(
+                    id: '3',
+                    studentName: 'Ryan Kim',
+                    studentEmail: 'ryan.k@school.com',
+                    content: '',
+                    submittedAt: '2026-10-24T14:45:00',
+                    grade: 85,
+                    status: 'Graded',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 16),
                 SubmissionItemCard(
-                  initials: 'LW',
-                  studentName: 'Liam Wilson',
-                  status: SubmissionStatus.notTurnedIn,
+                  submission: SubmissionModel(
+                    id: '4',
+                    studentName: 'Liam Wilson',
+                    studentEmail: 'liam.w@school.com',
+                    content: '',
+                    submittedAt: '',
+                    status: 'NotSubmitted',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 16),
                 SubmissionItemCard(
-                  initials: 'CP',
-                  studentName: 'Chloe Park',
-                  status: SubmissionStatus.submitted,
-                  dateString: 'Oct 24, 11:20 AM',
+                  submission: SubmissionModel(
+                    id: '5',
+                    studentName: 'Chloe Park',
+                    studentEmail: 'chloe.p@school.com',
+                    content: '',
+                    submittedAt: '2026-10-24T11:20:00',
+                    status: 'Submitted',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 16),
                 SubmissionItemCard(
-                  initials: 'DB',
-                  studentName: 'David Brown',
-                  status: SubmissionStatus.graded,
-                  dateString: 'Oct 24, 04:00 PM',
-                  score: 78,
+                  submission: SubmissionModel(
+                    id: '6',
+                    studentName: 'David Brown',
+                    studentEmail: 'david.b@school.com',
+                    content: '',
+                    submittedAt: '2026-10-24T16:00:00',
+                    grade: 78,
+                    status: 'Graded',
+                    isLate: false,
+                  ),
+                  onGradeTap: () {},
                 ),
                 SizedBox(height: 32),
               ],

@@ -40,7 +40,9 @@ import 'package:school_system/features/teacher/presentation/views/teacher_home_v
 import 'package:school_system/features/teacher/presentation/views/personal_information_view.dart';
 import 'package:school_system/features/teacher/presentation/views/change_password_view.dart';
 import 'package:school_system/features/teacher/presentation/views/settings_view.dart';
+import 'package:school_system/features/teacher/data/models/submission_model.dart';
 import 'package:school_system/features/teacher/presentation/views/grade_submission_view.dart';
+import 'package:school_system/features/teacher/presentation/views/review_submissions_view.dart';
 import 'package:school_system/features/teacher/presentation/views/take_attendance_view.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
 import 'package:school_system/features/teacher/presentation/views/manual_attendance_view.dart';
@@ -264,9 +266,34 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => ChatView(conversation: settings.arguments),
       );
     case GradeSubmissionView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const GradeSubmissionView(),
-      );
+      {
+        final args =
+            settings.arguments as Map<String, dynamic>?;
+        if (args != null) {
+          return MaterialPageRoute(
+            builder: (context) => GradeSubmissionView(
+              submission: args['submission'] as SubmissionModel,
+              homeworkId: args['homeworkId'] as String,
+            ),
+          );
+        }
+        return MaterialPageRoute(builder: (context) => const SplashView());
+      }
+    case ReviewSubmissionsView.routeName:
+      {
+        final args =
+            settings.arguments as Map<String, dynamic>?;
+        if (args != null) {
+          return MaterialPageRoute(
+            builder: (context) => ReviewSubmissionsView(
+              homeworkId: args['homeworkId'] as String,
+              homeworkTitle: args['homeworkTitle'] as String? ?? 'Submissions',
+              subtitle: args['subtitle'] as String?,
+            ),
+          );
+        }
+        return MaterialPageRoute(builder: (context) => const SplashView());
+      }
     case SmartTutorView.routeName:
       return MaterialPageRoute(builder: (context) => const SmartTutorView());
     default:

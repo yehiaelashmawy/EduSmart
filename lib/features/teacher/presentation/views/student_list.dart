@@ -328,7 +328,10 @@ class _StudentListState extends State<StudentList>
             lessons: _classLessons,
             onLessonDeleted: _handleLessonDeleted,
           ),
-          HomeworkListBody(homeworks: _classHomeworks),
+          HomeworkListBody(
+            homeworks: _classHomeworks,
+            classStudents: _currentClass?.students ?? const [],
+          ),
           ExamsListBody(
             exams: _classExams,
             onExamDeleted: _handleExamDeleted,

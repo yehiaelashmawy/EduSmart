@@ -4,12 +4,19 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/homework_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/review_submissions_view.dart';
+import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/features/teacher/data/repos/submissions_repo.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/homework_list_item.dart';
 
 class HomeworkListBody extends StatefulWidget {
   final List<TeacherHomeworkModel> homeworks;
+  final List<TeacherStudentModel> classStudents;
 
-  const HomeworkListBody({super.key, this.homeworks = const []});
+  const HomeworkListBody({
+    super.key,
+    this.homeworks = const [],
+    this.classStudents = const [],
+  });
 
   @override
   State<HomeworkListBody> createState() => _HomeworkListBodyState();
@@ -17,11 +24,13 @@ class HomeworkListBody extends StatefulWidget {
 
 class _HomeworkListBodyState extends State<HomeworkListBody> {
   late List<TeacherHomeworkModel> _homeworks;
+  final Map<String, int> _realSubmissionCounts = {};
 
   @override
   void initState() {
     super.initState();
     _homeworks = List.from(widget.homeworks);
+    _fetchRealSubmissionCounts();
   }
 
   @override
@@ -29,6 +38,23 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.homeworks != widget.homeworks) {
       _homeworks = List.from(widget.homeworks);
+      _fetchRealSubmissionCounts();
+    }
+  }
+
+  Future<void> _fetchRealSubmissionCounts() async {
+    final repo = SubmissionsRepo(ApiService());
+    for (final hw in _homeworks) {
+      if (!_realSubmissionCounts.containsKey(hw.oid)) {
+        final res = await repo.getSubmissions(hw.oid);
+        res.fold((l) => null, (list) {
+          if (mounted) {
+            setState(() {
+              _realSubmissionCounts[hw.oid] = list.length;
+            });
+          }
+        });
+      }
     }
   }
 
@@ -108,11 +134,17 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     }
   }
 
-  void _openReview(BuildContext context) {
+  void _openReview(BuildContext context, TeacherHomeworkModel homework) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ReviewSubmissionsView(),
+        builder: (context) => ReviewSubmissionsView(
+          homeworkId: homework.oid,
+          homeworkTitle: homework.title.isNotEmpty
+              ? homework.title
+              : 'Submissions',
+          classStudents: widget.classStudents,
+        ),
       ),
     );
   }
@@ -178,6 +210,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                     itemBuilder: (context, index) {
                       final homework = _homeworks[index];
                       final ui = _mapStatus(homework.status, homework.dueDate);
+                      final realCount = _realSubmissionCounts[homework.oid] ?? homework.submittedCount ?? 0;
                       return HomeworkItemCard(
                         title: homework.title.isNotEmpty
                             ? homework.title
@@ -187,15 +220,13 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                         badgeColor: ui.badgeColor,
                         badgeTextColor: ui.badgeTextColor,
                         dueDate: _formatDate(homework.dueDate),
-                        submissions: homework.grade != null
-                            ? 'Grade: ${homework.grade!.toStringAsFixed(0)}'
-                            : '--',
-                        progress: homework.grade != null
-                            ? (homework.grade!.clamp(0, 100) / 100)
-                            : null,
+                        submissions: '$realCount/${homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)}',
+                        progress: (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)) > 0
+                            ? realCount / (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 1))
+                            : 0.0,
                         isOverdue: ui.isOverdue,
                         onDetailsTap: () => _openDetails(context, homework),
-                        onReviewTap: () => _openReview(context),
+                        onReviewTap: () => _openReview(context, homework),
                       );
                     },
                   ),

@@ -1,194 +1,263 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
-import 'package:school_system/features/teacher/presentation/views/grade_submission_view.dart';
-
-enum SubmissionStatus { graded, submitted, notTurnedIn }
+import 'package:school_system/features/teacher/data/models/submission_model.dart';
 
 class SubmissionItemCard extends StatelessWidget {
   const SubmissionItemCard({
     super.key,
-    required this.studentName,
-    required this.initials,
-    required this.status,
-    this.dateString,
-    this.score,
-    this.isOnline = false,
+    required this.submission,
+    required this.onGradeTap,
   });
 
-  final String studentName;
-  final String initials;
-  final SubmissionStatus status;
-  final String? dateString;
-  final int? score;
-  final bool isOnline;
+  final SubmissionModel submission;
+  final VoidCallback onGradeTap;
+
+  String _formatDate(String raw) {
+    final dt = DateTime.tryParse(raw);
+    if (dt == null) return raw;
+    return DateFormat('MMM d, h:mm a').format(dt.toLocal());
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bool isNotTurnedIn = status == SubmissionStatus.notTurnedIn;
+    final isGraded = submission.isGraded;
+    final isLate = submission.isLate;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: isNotTurnedIn ? Colors.transparent : AppColors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isNotTurnedIn
-              ? AppColors.lightGrey.withValues(alpha: 0.5)
-              : AppColors.lightGrey.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
+          Row(
             children: [
+              // ── Avatar ──────────────────────────────────────────────
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isNotTurnedIn
-                      ? AppColors.lightGrey.withValues(alpha: 0.3)
-                      : AppColors.primaryColor.withValues(alpha: 0.1),
+                  color: AppColors.primaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  initials,
+                  submission.initials,
                   style: TextStyle(
-                    color: isNotTurnedIn
-                        ? AppColors.grey
-                        : AppColors.primaryColor,
+                    color: AppColors.primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              if (isOnline)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981), // Green dot
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.white, width: 2),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  studentName,
-                  style: AppTextStyle.bold16.copyWith(
-                    color: isNotTurnedIn ? AppColors.grey : AppColors.black,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
+              const SizedBox(width: 14),
+
+              // ── Name + email ─────────────────────────────────────────
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (isNotTurnedIn) ...[
-                      Icon(
-                        Icons.access_time,
-                        size: 14,
-                        color: AppColors.grey.withValues(alpha: 0.8),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          'Pending Submission',
-                          style: AppTextStyle.regular12.copyWith(
-                            color: AppColors.grey.withValues(alpha: 0.8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            submission.studentName,
+                            style: AppTextStyle.bold16.copyWith(
+                              color: AppColors.black,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (isLate)
+                          Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEE2E2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'LATE',
+                              style: TextStyle(
+                                color: Color(0xFF991B1B),
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      submission.studentEmail,
+                      style: AppTextStyle.regular12.copyWith(
+                        color: AppColors.grey,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+
+              // ── Score badge (if graded) ──────────────────────────────
+              if (isGraded) ...[
+                const SizedBox(width: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      submission.grade!.toStringAsFixed(0),
+                      style: AppTextStyle.bold18.copyWith(
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Text(
+                        '/100',
+                        style: AppTextStyle.regular12.copyWith(
+                          color: AppColors.grey,
                         ),
                       ),
-                    ] else ...[
-                      Expanded(
-                        child: Text(
-                          status == SubmissionStatus.graded
-                              ? 'Graded • $dateString'
-                              : 'Submitted • $dateString',
-                          style: AppTextStyle.regular12.copyWith(
-                            color: AppColors.grey.withValues(alpha: 0.8),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                    ),
                   ],
                 ),
               ],
-            ),
+            ],
           ),
-          const SizedBox(width: 8),
-          _buildTrailingWidget(context),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildTrailingWidget(BuildContext context) {
-    switch (status) {
-      case SubmissionStatus.graded:
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '$score',
-              style: AppTextStyle.bold18.copyWith(
-                color: AppColors.secondaryColor,
+          // ── Submission time and Status ───────────────────────────────
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                isGraded
+                    ? Icons.check_circle_outline
+                    : (submission.status.toLowerCase() == 'submitted'
+                          ? Icons.check
+                          : Icons.schedule_outlined),
+                size: 14,
+                color: isGraded
+                    ? AppColors.secondaryColor
+                    : (submission.status.toLowerCase() == 'submitted'
+                          ? const Color(0xFF10B981) // Green
+                          : AppColors.grey.withValues(alpha: 0.7)),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Text(
-                '/100',
-                style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
+              const SizedBox(width: 5),
+              Text(
+                isGraded
+                    ? 'Graded • ${_formatDate(submission.submittedAt)}'
+                    : (submission.submittedAt.isNotEmpty
+                          ? '${submission.status} • ${_formatDate(submission.submittedAt)}'
+                          : submission.status),
+                style: AppTextStyle.regular12.copyWith(
+                  color: AppColors.grey.withValues(alpha: 0.8),
+                ),
+              ),
+            ],
+          ),
+
+          // ── Content preview ──────────────────────────────────────────
+          if (submission.content.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              submission.content,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.regular12.copyWith(
+                color: AppColors.grey.withValues(alpha: 0.7),
               ),
             ),
           ],
-        );
-      case SubmissionStatus.submitted:
-        return ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const GradeSubmissionView(),
-              ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.secondaryColor,
-            elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+
+          // ── Attachment chip ──────────────────────────────────────────
+          if (submission.attachmentUrl != null) ...[
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(
+                  Icons.attach_file,
+                  size: 14,
+                  color: AppColors.primaryColor,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    submission.attachmentUrl!.split('/').last,
+                    style: AppTextStyle.regular12.copyWith(
+                      color: AppColors.primaryColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
+          ],
+
+          // ── Grade button / Already graded label ──────────────────────
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: isGraded
+                ? OutlinedButton.icon(
+                    onPressed: onGradeTap,
+                    icon: Icon(
+                      Icons.edit_outlined,
+                      size: 16,
+                      color: AppColors.primaryColor,
+                    ),
+                    label: Text(
+                      'Edit Grade',
+                      style: AppTextStyle.semiBold14.copyWith(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      side: BorderSide(color: AppColors.primaryColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  )
+                : ElevatedButton.icon(
+                    onPressed: onGradeTap,
+                    icon: const Icon(
+                      Icons.star_border,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Grade Submission',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondaryColor,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
           ),
-          child: const Text(
-            'Grade',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        );
-      case SubmissionStatus.notTurnedIn:
-        return Text(
-          'Not Turned In',
-          style: AppTextStyle.regular12.copyWith(
-            color: AppColors.grey.withValues(alpha: 0.5),
-          ),
-        );
-    }
+        ],
+      ),
+    );
   }
 }
