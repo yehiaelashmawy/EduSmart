@@ -206,6 +206,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
             builder: (context) => AttendanceMethodView(
               teacherClass: args.teacherClass,
               lessonId: args.lessonId,
+              teacherClassesCubit: args.teacherClassesCubit,
             ),
           );
         } else if (args is TeacherClassModel) {

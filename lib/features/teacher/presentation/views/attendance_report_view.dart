@@ -17,10 +17,9 @@ class AttendanceReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocProvider(
-      create:
-          (context) => AttendanceReportCubit(AttendanceRepo(ApiService()))
+      create: (context) =>
+          AttendanceReportCubit(AttendanceRepo(ApiService()))
             ..fetchClassStats(teacherClass.oid),
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
+import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_report_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/take_attendance_card.dart';
@@ -105,8 +107,15 @@ class AttendanceListBody extends StatelessWidget {
             ).pushNamed(AttendanceReportView.routeName);
           },
           onTakeAttendance: () {
+            if (teacherClass == null) return;
             Navigator.of(context, rootNavigator: true)
-                .pushNamed(AttendanceMethodView.routeName, arguments: teacherClass)
+                .pushNamed(
+                  AttendanceMethodView.routeName,
+                  arguments: AttendanceMethodViewArgs(
+                    teacherClass: teacherClass!,
+                    teacherClassesCubit: context.read<TeacherClassesCubit>(),
+                  ),
+                )
                 .then((value) {
               if (!context.mounted) return;
               if (value == true && onRefresh != null) {
