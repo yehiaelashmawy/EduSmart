@@ -252,9 +252,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       }
 
     case AttendanceReportView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const AttendanceReportView(),
-      );
+      {
+        final args = settings.arguments as TeacherClassModel;
+        return MaterialPageRoute(
+          builder: (context) => AttendanceReportView(teacherClass: args),
+        );
+      }
 
     case PersonalInformationView.routeName:
       return MaterialPageRoute(

@@ -46,7 +46,7 @@ class _ManualAttendanceViewState extends State<ManualAttendanceView> {
         listener: (context, state) {
           if (state is SubmitAttendanceSuccess) {
             CustomSnackBar.showSuccess(context, state.message);
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           } else if (state is SubmitAttendanceFailure) {
             CustomSnackBar.showError(context, state.failure.errorMessage);
           }
@@ -90,11 +90,12 @@ class _ManualAttendanceViewState extends State<ManualAttendanceView> {
                                 final studentDataList =
                                     _bodyKey.currentState?.students ?? [];
                                 final attendances = studentDataList.map((s) {
-                                  String statusStr = 'Present';
-                                  if (s.status == AttendanceStatus.absent) {
+                                  String statusStr = 'WITHOUT MARK';
+                                  if (s.status == AttendanceStatus.present) {
+                                    statusStr = 'Present';
+                                  } else if (s.status == AttendanceStatus.absent) {
                                     statusStr = 'Absent';
-                                  } else if (s.status ==
-                                      AttendanceStatus.late) {
+                                  } else if (s.status == AttendanceStatus.late) {
                                     statusStr = 'Late';
                                   }
 

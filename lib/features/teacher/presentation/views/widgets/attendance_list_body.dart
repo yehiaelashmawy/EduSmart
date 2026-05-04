@@ -25,6 +25,7 @@ class AttendanceListBody extends StatelessWidget {
   final Color statusColor;
   final String statusText;
   final List<TeacherAttendanceListEntry> recentEntries;
+  final VoidCallback? onRefresh;
 
   const AttendanceListBody({
     super.key,
@@ -35,6 +36,7 @@ class AttendanceListBody extends StatelessWidget {
     required this.statusColor,
     required this.statusText,
     this.recentEntries = const [],
+    this.onRefresh,
   });
 
   String _formatDate(String raw) {
@@ -103,10 +105,14 @@ class AttendanceListBody extends StatelessWidget {
             ).pushNamed(AttendanceReportView.routeName);
           },
           onTakeAttendance: () {
-            Navigator.of(context, rootNavigator: true).pushNamed(
-              AttendanceMethodView.routeName,
-              arguments: teacherClass,
-            );
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(AttendanceMethodView.routeName, arguments: teacherClass)
+                .then((value) {
+              if (!context.mounted) return;
+              if (value == true && onRefresh != null) {
+                onRefresh!();
+              }
+            });
           },
         ),
         const SizedBox(height: 24),
@@ -182,7 +188,7 @@ class AttendanceListBody extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    r.status.isNotEmpty ? r.status : '—',
+                    r.status.isNotEmpty ? r.status : 'WITHOUT MARK',
                     style: AppTextStyle.bold12.copyWith(
                       color: _statusTextColor(r.status),
                     ),

@@ -22,9 +22,12 @@ class FileHelper {
       // 2. If not a local file, treat it as a remote URL
       final String fullUrl = UrlHelper.getFullImageUrl(url);
       final Directory tempDir = await getTemporaryDirectory();
-      
+
       // Ensure the filename is clean for the filesystem
-      final String safeFileName = fileName.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_');
+      final String safeFileName = fileName.replaceAll(
+        RegExp(r'[<>:"/\\|?*]'),
+        '_',
+      );
       final String filePath = '${tempDir.path}/$safeFileName';
 
       final File file = File(filePath);

@@ -345,6 +345,7 @@ class _StudentListState extends State<StudentList>
             statusColor: _attendanceStatusColor,
             statusText: _attendanceStatusText,
             recentEntries: _attendanceRecentEntries,
+            onRefresh: _refreshClassData,
           ),
         ],
       ),

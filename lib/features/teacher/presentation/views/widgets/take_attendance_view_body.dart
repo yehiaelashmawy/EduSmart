@@ -68,10 +68,21 @@ class TakeAttendanceViewBody extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         ...classes.map((c) {
+          final todayStr = DateTime.now().toIso8601String().split('T')[0];
+          bool hasTakenToday = false;
+          for (final student in c.students) {
+            if (student.details.attendance.recentRecords
+                .any((r) => r.date.startsWith(todayStr))) {
+              hasTakenToday = true;
+              break;
+            }
+          }
+
           return TakeAttendanceCard(
             imagePath: 'assets/images/lesson1.png',
-            statusText: 'SESSION: ${c.level}',
-            statusColor: AppColors.primaryColor,
+            statusText: hasTakenToday ? 'ATTENDANCE TAKEN' : 'WITHOUT MARK',
+            statusColor:
+                hasTakenToday ? AppColors.secondaryColor : AppColors.grey,
             grade: c.level,
             subject: c.name,
             studentsCount: c.studentsCount,
@@ -79,13 +90,20 @@ class TakeAttendanceViewBody extends StatelessWidget {
               Navigator.of(
                 context,
                 rootNavigator: true,
-              ).pushNamed(AttendanceReportView.routeName);
+              ).pushNamed(AttendanceReportView.routeName, arguments: c);
             },
             onTakeAttendance: () {
               Navigator.of(
                 context,
                 rootNavigator: true,
-              ).pushNamed(AttendanceMethodView.routeName, arguments: c);
+              ).pushNamed(AttendanceMethodView.routeName, arguments: c).then(
+                (value) {
+                  if (!context.mounted) return;
+                  if (value == true) {
+                    context.read<TeacherClassesCubit>().fetchClasses();
+                  }
+                },
+              );
             },
           );
         }),

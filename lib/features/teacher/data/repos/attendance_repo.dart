@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:school_system/core/api/api_errors.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/teacher/data/models/attendance_session_model.dart';
+import 'package:school_system/features/teacher/data/models/class_attendance_stats_model.dart';
 
 class AttendanceRepo {
   final ApiService _apiService;
@@ -65,6 +66,38 @@ class AttendanceRepo {
             errorMessage:
                 response['messages']?['EN']?.toString() ??
                 'Failed to submit attendance',
+          ),
+        );
+      }
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, ClassAttendanceStatsModel>> getClassStats(
+    String classOid,
+  ) async {
+    try {
+      final response = await _apiService.get(
+        '/api/Attendance/class-stats/$classOid',
+      );
+
+      final success = response['success'] as bool? ?? false;
+      final data = response['data'];
+
+      if (success && data != null) {
+        return Right(
+          ClassAttendanceStatsModel.fromJson(
+            (data as Map).cast<String, dynamic>(),
+          ),
+        );
+      } else {
+        return Left(
+          ApiErrors(
+            errorMessage:
+                response['messages']?['EN']?.toString() ??
+                'Failed to fetch class statistics',
           ),
         );
       }
