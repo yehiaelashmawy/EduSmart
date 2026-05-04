@@ -2,9 +2,14 @@ import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:school_system/features/teacher/data/models/submission_model.dart';
 
 class PdfGenerator {
-  static Future<String> generateExamResultsPdf() async {
+  static Future<String> generateSubmissionsPdf({
+    required String title,
+    String? subtitle,
+    required List<SubmissionModel> submissions,
+  }) async {
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -16,17 +21,19 @@ class PdfGenerator {
             children: [
               // Header
               pw.Text(
-                'Exam Results',
+                title,
                 style: pw.TextStyle(
                   fontSize: 24,
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
-              pw.SizedBox(height: 8),
-              pw.Text(
-                'Mathematics • Grade 10 - A',
-                style: pw.TextStyle(fontSize: 14, color: PdfColors.grey700),
-              ),
+              if (subtitle != null) ...[
+                pw.SizedBox(height: 8),
+                pw.Text(
+                  subtitle,
+                  style: pw.TextStyle(fontSize: 14, color: PdfColors.grey700),
+                ),
+              ],
               pw.SizedBox(height: 8),
               pw.Text(
                 'Generated on: ${DateTime.now().toLocal().toString().split('.')[0]}',
@@ -50,16 +57,17 @@ class PdfGenerator {
                   0: pw.Alignment.centerLeft,
                   1: pw.Alignment.center,
                   2: pw.Alignment.centerRight,
+                  3: pw.Alignment.centerRight,
                 },
-                headers: ['Student Name', 'Status', 'Score'],
-                data: [
-                  ['Alex Johnson', 'Graded', '92%'],
-                  ['Maria Santos', 'Graded', '88%'],
-                  ['Ryan Kim', 'Graded', '85%'],
-                  ['Liam Wilson', 'Not Turned In', 'N/A'],
-                  ['Chloe Park', 'Submitted', 'Pending'],
-                  ['David Brown', 'Graded', '78%'],
-                ],
+                headers: ['Student Name', 'Status', 'Score', 'Feedback'],
+                data: submissions.map((s) {
+                  return [
+                    s.studentName,
+                    s.status,
+                    s.grade != null ? '${s.grade}%' : 'N/A',
+                    s.feedback ?? '',
+                  ];
+                }).toList(),
               ),
             ],
           );
@@ -69,9 +77,19 @@ class PdfGenerator {
 
     // Save PDF
     final directory = await getTemporaryDirectory();
-    final file = File('${directory.path}/exam_results.pdf');
+    final fileName = '${title.replaceAll(' ', '_').toLowerCase()}_results.pdf';
+    final file = File('${directory.path}/$fileName');
     await file.writeAsBytes(await pdf.save());
 
     return file.path;
+  }
+
+  // Keep old method for backward compatibility if needed, but updated to use the new logic
+  static Future<String> generateExamResultsPdf() async {
+    return generateSubmissionsPdf(
+      title: 'Exam Results',
+      subtitle: 'Mathematics • Grade 10 - A',
+      submissions: [], // This was static anyway
+    );
   }
 }

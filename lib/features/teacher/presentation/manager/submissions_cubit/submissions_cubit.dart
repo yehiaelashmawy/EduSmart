@@ -39,15 +39,21 @@ class GradeFailure extends SubmissionsState {
 class SubmissionsCubit extends Cubit<SubmissionsState> {
   final SubmissionsRepo repo;
   final String homeworkId;
+  final bool isExam;
 
   List<SubmissionModel> _submissions = [];
 
-  SubmissionsCubit({required this.repo, required this.homeworkId})
-      : super(SubmissionsInitial());
+  SubmissionsCubit({
+    required this.repo,
+    required this.homeworkId,
+    this.isExam = false,
+  }) : super(SubmissionsInitial());
 
   Future<void> fetchSubmissions() async {
     emit(SubmissionsLoading());
-    final result = await repo.getSubmissions(homeworkId);
+    final result = isExam
+        ? await repo.getExamSubmissions(homeworkId)
+        : await repo.getSubmissions(homeworkId);
     result.fold(
       (error) => emit(SubmissionsFailure(error.errorMessage)),
       (list) {
@@ -63,12 +69,19 @@ class SubmissionsCubit extends Cubit<SubmissionsState> {
     String? feedback,
   }) async {
     emit(GradeSubmitting());
-    final result = await repo.gradeSubmission(
-      homeworkId: homeworkId,
-      submissionId: submissionId,
-      grade: grade,
-      feedback: feedback,
-    );
+    final result = isExam
+        ? await repo.gradeExamSubmission(
+            examId: homeworkId,
+            submissionId: submissionId,
+            grade: grade,
+            feedback: feedback,
+          )
+        : await repo.gradeSubmission(
+            homeworkId: homeworkId,
+            submissionId: submissionId,
+            grade: grade,
+            feedback: feedback,
+          );
     result.fold(
       (error) => emit(GradeFailure(error.errorMessage, _submissions)),
       (msg) {

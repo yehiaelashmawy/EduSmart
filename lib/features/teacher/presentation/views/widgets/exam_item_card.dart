@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
 
@@ -16,6 +17,7 @@ class ExamItemCard extends StatelessWidget {
     required this.statusColor,
     required this.isDraft,
     required this.examId,
+    this.classStudents = const [],
     this.onDeleted,
   });
 
@@ -28,6 +30,7 @@ class ExamItemCard extends StatelessWidget {
   final Color statusColor;
   final bool isDraft;
   final String examId;
+  final List<TeacherStudentModel> classStudents;
   final VoidCallback? onDeleted;
 
   @override
@@ -168,7 +171,14 @@ class ExamItemCard extends StatelessWidget {
                           Navigator.of(
                             context,
                             rootNavigator: true,
-                          ).pushNamed(ExamResultsView.routeName);
+                          ).pushNamed(
+                            ExamResultsView.routeName,
+                            arguments: {
+                              'examId': examId,
+                              'examTitle': title,
+                              'classStudents': classStudents,
+                            },
+                          );
                         },
                         icon: const Icon(
                           Icons.feed_outlined,

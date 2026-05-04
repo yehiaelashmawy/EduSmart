@@ -334,6 +334,7 @@ class _StudentListState extends State<StudentList>
           ),
           ExamsListBody(
             exams: _classExams,
+            classStudents: _currentClass?.students ?? const [],
             onExamDeleted: _handleExamDeleted,
           ),
           AttendanceListBody(

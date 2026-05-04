@@ -13,11 +13,13 @@ import 'package:school_system/features/teacher/presentation/views/widgets/lesson
 class GradeSubmissionViewBody extends StatefulWidget {
   final SubmissionModel submission;
   final String homeworkId;
+  final bool isExam;
 
   const GradeSubmissionViewBody({
     super.key,
     required this.submission,
     required this.homeworkId,
+    this.isExam = false,
   });
 
   @override
@@ -64,7 +66,11 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
     setState(() => _isSubmitting = true);
 
     final repo = SubmissionsRepo(ApiService());
-    final cubit = SubmissionsCubit(repo: repo, homeworkId: widget.homeworkId);
+    final cubit = SubmissionsCubit(
+      repo: repo,
+      homeworkId: widget.homeworkId,
+      isExam: widget.isExam,
+    );
 
     await cubit.gradeSubmission(
       submissionId: widget.submission.id,

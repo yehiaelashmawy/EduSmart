@@ -25,13 +25,13 @@ class SubmissionModel {
 
   factory SubmissionModel.fromJson(Map<String, dynamic> json) {
     return SubmissionModel(
-      id: (json['id'] ?? '').toString(),
+      id: (json['submissionId'] ?? json['id'] ?? '').toString(),
       studentName: (json['studentName'] ?? '').toString(),
-      studentEmail: (json['studentEmail'] ?? '').toString(),
-      content: (json['content'] ?? '').toString(),
+      studentEmail: (json['studentEmail'] ?? json['studentId'] ?? '').toString(),
+      content: (json['answerText'] ?? json['content'] ?? '').toString(),
       attachmentUrl: json['attachmentUrl']?.toString(),
       submittedAt: (json['submittedAt'] ?? '').toString(),
-      grade: (json['grade'] as num?)?.toDouble(),
+      grade: (json['score'] as num? ?? json['grade'] as num?)?.toDouble(),
       feedback: json['feedback']?.toString(),
       status: (json['status'] ?? '').toString(),
       isLate: json['isLate'] as bool? ?? false,

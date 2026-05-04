@@ -65,4 +65,62 @@ class SubmissionsRepo {
       return Left(ApiErrors(errorMessage: e.toString()));
     }
   }
+
+  Future<Either<ApiErrors, List<SubmissionModel>>> getExamSubmissions(
+    String examId,
+  ) async {
+    try {
+      final response = await apiService.get(
+        '/api/Exams/$examId/submissions',
+      );
+
+      if (response != null && response['success'] == true) {
+        final dataRaw = response['data']?['submissions'];
+        if (dataRaw is List) {
+          final submissions = dataRaw
+              .whereType<Map>()
+              .map(
+                (e) => SubmissionModel.fromJson(e.cast<String, dynamic>()),
+              )
+              .toList();
+          return Right(submissions);
+        }
+        return const Right([]);
+      }
+
+      return Left(ApiErrors(errorMessage: 'Failed to fetch exam submissions'));
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, String>> gradeExamSubmission({
+    required String examId,
+    required String submissionId,
+    required double grade,
+    String? feedback,
+  }) async {
+    try {
+      final response = await apiService.post(
+        '/api/Exams/$examId/grade',
+        data: {
+          'submissionId': submissionId,
+          'grade': grade,
+          if (feedback != null && feedback.isNotEmpty) 'feedback': feedback,
+        },
+      );
+
+      if (response != null && response['success'] == true) {
+        final msg =
+            response['messages']?['EN']?.toString() ?? 'Graded successfully';
+        return Right(msg);
+      }
+
+      return Left(ApiErrors(errorMessage: 'Failed to submit exam grade'));
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
 }

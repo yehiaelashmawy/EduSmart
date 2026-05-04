@@ -170,7 +170,17 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AddNewExamView.routeName:
       return MaterialPageRoute(builder: (context) => const AddNewExamView());
     case ExamResultsView.routeName:
-      return MaterialPageRoute(builder: (context) => const ExamResultsView());
+      {
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (context) => ReviewSubmissionsView(
+            homeworkId: args?['examId'] ?? '',
+            homeworkTitle: args?['examTitle'] ?? 'Exam Submissions',
+            classStudents: args?['classStudents'] as List<TeacherStudentModel>? ?? const [],
+            isExam: true,
+          ),
+        );
+      }
     case ExamDetailsView.routeName:
       final examId = settings.arguments as String?;
       return MaterialPageRoute(
@@ -274,6 +284,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
             builder: (context) => GradeSubmissionView(
               submission: args['submission'] as SubmissionModel,
               homeworkId: args['homeworkId'] as String,
+              isExam: args['isExam'] as bool? ?? false,
             ),
           );
         }
@@ -289,6 +300,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
               homeworkId: args['homeworkId'] as String,
               homeworkTitle: args['homeworkTitle'] as String? ?? 'Submissions',
               subtitle: args['subtitle'] as String?,
+              classStudents: args['classStudents'] as List<TeacherStudentModel>? ?? const [],
+              isExam: args['isExam'] as bool? ?? false,
             ),
           );
         }

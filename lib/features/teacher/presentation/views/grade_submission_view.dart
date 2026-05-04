@@ -7,11 +7,13 @@ import 'package:school_system/features/teacher/presentation/views/widgets/grade_
 class GradeSubmissionView extends StatelessWidget {
   final SubmissionModel submission;
   final String homeworkId;
+  final bool isExam;
 
   const GradeSubmissionView({
     super.key,
     required this.submission,
     required this.homeworkId,
+    this.isExam = false,
   });
 
   static const String routeName = '/grade_submission';
@@ -46,6 +48,7 @@ class GradeSubmissionView extends StatelessWidget {
       body: GradeSubmissionViewBody(
         submission: submission,
         homeworkId: homeworkId,
+        isExam: isExam,
       ),
     );
   }

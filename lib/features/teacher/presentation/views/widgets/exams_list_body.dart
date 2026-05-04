@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/data/models/teacher_exam_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/exam_item_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/exams_toggle_bar.dart';
 
 class ExamsListBody extends StatefulWidget {
   final List<TeacherExamModel> exams;
+  final List<TeacherStudentModel> classStudents;
   final void Function(String examId)? onExamDeleted;
 
-  const ExamsListBody({super.key, this.exams = const [], this.onExamDeleted});
+  const ExamsListBody({
+    super.key,
+    this.exams = const [],
+    this.classStudents = const [],
+    this.onExamDeleted,
+  });
 
   @override
   State<ExamsListBody> createState() => _ExamsListBodyState();
@@ -138,6 +145,7 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                             ? AppColors.secondaryColor
                             : AppColors.grey,
                         isDraft: isDraft,
+                        classStudents: widget.classStudents,
                         onDeleted: () {
                           widget.onExamDeleted?.call(exam.oid);
                         },

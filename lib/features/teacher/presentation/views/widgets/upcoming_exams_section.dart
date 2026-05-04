@@ -6,7 +6,10 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_exams_cubit/teacher_exams_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_exams_cubit/teacher_exams_state.dart';
 
-import '../exam_details_view.dart';
+import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
+import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
+import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_state.dart';
+import '../exam_results_view.dart';
 
 class UpcomingExamsSection extends StatelessWidget {
   const UpcomingExamsSection({super.key});
@@ -110,24 +113,42 @@ class UpcomingExamsSection extends StatelessWidget {
                     day = date.day.toString();
                   } catch (_) {}
 
+                  final classesState = context.watch<TeacherClassesCubit>().state;
+                  List<TeacherStudentModel> classStudents = [];
+                  if (classesState is TeacherClassesSuccess) {
+                    // Try exact match first
+                    var matchedClass = classesState.classes.where((c) => c.name == exam.className).toList();
+                    
+                    // Fallback: contains or startsWith
+                    if (matchedClass.isEmpty) {
+                      matchedClass = classesState.classes.where((c) => 
+                        c.name.toLowerCase().contains(exam.className.toLowerCase()) || 
+                        exam.className.toLowerCase().contains(c.name.toLowerCase())
+                      ).toList();
+                    }
+
+                    if (matchedClass.isNotEmpty) {
+                      classStudents = matchedClass.first.students;
+                    }
+                  }
+
                   return Column(
                     children: [
                       if (i > 0) const SizedBox(height: 16),
                       InkWell(
                         onTap: () async {
-                          final deleted =
-                              await Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).pushNamed(
-                                ExamDetailsView.routeName,
-                                arguments: exam.oid,
-                              );
-
-                          if (deleted == true && context.mounted) {
-                            context.read<TeacherExamsCubit>().removeExamLocal(exam.oid);
-                            context.read<TeacherExamsCubit>().fetchExams();
-                          }
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(
+                            ExamResultsView.routeName,
+                            arguments: {
+                              'examId': exam.oid,
+                              'examTitle': exam.name,
+                              'classStudents': classStudents,
+                              'isExam': true,
+                            },
+                          );
                         },
                         borderRadius: BorderRadius.circular(20),
                         child: _buildExamCard(

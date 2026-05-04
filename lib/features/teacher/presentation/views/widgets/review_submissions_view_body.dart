@@ -308,12 +308,14 @@ class _SubmissionList extends StatelessWidget {
         return SubmissionItemCard(
           submission: s,
           onGradeTap: () async {
+            final cubit = context.read<SubmissionsCubit>();
             final refreshed = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => GradeSubmissionView(
                   submission: s,
                   homeworkId: homeworkId,
+                  isExam: cubit.isExam,
                 ),
               ),
             );
