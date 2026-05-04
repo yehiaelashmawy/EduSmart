@@ -13,6 +13,7 @@ class HomeworkItemCard extends StatelessWidget {
     this.updatedTime,
     required this.dueDate,
     required this.submissions,
+    this.avgGrade,
     this.progress,
     required this.isOverdue,
     required this.onDetailsTap,
@@ -27,6 +28,7 @@ class HomeworkItemCard extends StatelessWidget {
   final String? updatedTime;
   final String dueDate;
   final String submissions;
+  final String? avgGrade;
   final double? progress;
   final bool isOverdue;
   final VoidCallback onDetailsTap;
@@ -155,6 +157,39 @@ class HomeworkItemCard extends StatelessWidget {
               ),
             ],
           ),
+          if (avgGrade != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Icon(
+                  Icons.insights_outlined,
+                  size: 18,
+                  color: const Color(0xFF10B981),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'AVERAGE SCORE',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.grey.withValues(alpha: 0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '$avgGrade/100',
+                      style: AppTextStyle.bold14.copyWith(
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
           if (progress != null) ...[
             const SizedBox(height: 16),
             Stack(

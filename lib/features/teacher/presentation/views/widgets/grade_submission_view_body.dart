@@ -6,6 +6,7 @@ import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/teacher/data/models/submission_model.dart';
 import 'package:school_system/features/teacher/data/repos/submissions_repo.dart';
 import 'package:school_system/features/teacher/presentation/manager/submissions_cubit/submissions_cubit.dart';
+import 'package:school_system/core/helper/file_helper.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/custom_text_field.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_file_card.dart';
 
@@ -135,6 +136,21 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
                     iconColor: const Color(0xFFEFF6FF),
                     iconData: Icons.description_outlined,
                     iconWidgetColor: const Color(0xFF3B82F6),
+                    onTap: () async {
+                      try {
+                        await FileHelper.downloadAndOpenFile(
+                          url: widget.submission.attachmentUrl!,
+                          fileName: fileName,
+                        );
+                      } catch (e) {
+                        if (context.mounted) {
+                          CustomSnackBar.showError(
+                            context,
+                            'Could not open file: ${e.toString()}',
+                          );
+                        }
+                      }
+                    },
                   ),
                   const SizedBox(height: 24),
                 ] else if (widget.submission.content.isEmpty) ...[

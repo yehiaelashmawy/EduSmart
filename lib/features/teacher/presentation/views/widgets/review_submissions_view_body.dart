@@ -307,8 +307,8 @@ class _SubmissionList extends StatelessWidget {
         final s = submissions[index];
         return SubmissionItemCard(
           submission: s,
-          onGradeTap: () {
-            Navigator.push(
+          onGradeTap: () async {
+            final refreshed = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => GradeSubmissionView(
@@ -317,6 +317,9 @@ class _SubmissionList extends StatelessWidget {
                 ),
               ),
             );
+            if (refreshed == true && context.mounted) {
+              context.read<SubmissionsCubit>().fetchSubmissions();
+            }
           },
         );
       },

@@ -83,4 +83,12 @@ abstract class AppTextStyle {
     fontSize: 12,
     fontWeight: FontWeight.w500,
   );
+  static const TextStyle regular10 = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.normal,
+  );
+  static const TextStyle bold10 = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.bold,
+  );
 }

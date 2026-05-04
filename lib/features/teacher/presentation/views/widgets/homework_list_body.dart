@@ -25,6 +25,7 @@ class HomeworkListBody extends StatefulWidget {
 class _HomeworkListBodyState extends State<HomeworkListBody> {
   late List<TeacherHomeworkModel> _homeworks;
   final Map<String, int> _realSubmissionCounts = {};
+  final Map<String, double> _avgGrades = {};
 
   @override
   void initState() {
@@ -51,6 +52,12 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
           if (mounted) {
             setState(() {
               _realSubmissionCounts[hw.oid] = list.length;
+              
+              final graded = list.where((s) => s.isGraded).toList();
+              if (graded.isNotEmpty) {
+                final sum = graded.map((s) => s.grade!).reduce((a, b) => a + b);
+                _avgGrades[hw.oid] = sum / graded.length;
+              }
             });
           }
         });
@@ -134,8 +141,8 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     }
   }
 
-  void _openReview(BuildContext context, TeacherHomeworkModel homework) {
-    Navigator.push(
+  Future<void> _openReview(BuildContext context, TeacherHomeworkModel homework) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ReviewSubmissionsView(
@@ -147,6 +154,9 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
         ),
       ),
     );
+    if (mounted) {
+      _fetchRealSubmissionCounts();
+    }
   }
 
   @override
@@ -211,6 +221,8 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                       final homework = _homeworks[index];
                       final ui = _mapStatus(homework.status, homework.dueDate);
                       final realCount = _realSubmissionCounts[homework.oid] ?? homework.submittedCount ?? 0;
+                      final avg = _avgGrades[homework.oid];
+                      
                       return HomeworkItemCard(
                         title: homework.title.isNotEmpty
                             ? homework.title
@@ -221,6 +233,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                         badgeTextColor: ui.badgeTextColor,
                         dueDate: _formatDate(homework.dueDate),
                         submissions: '$realCount/${homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)}',
+                        avgGrade: avg?.toStringAsFixed(0),
                         progress: (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)) > 0
                             ? realCount / (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 1))
                             : 0.0,

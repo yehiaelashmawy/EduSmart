@@ -45,8 +45,9 @@ class SubmissionsRepo {
   }) async {
     try {
       final response = await apiService.post(
-        '/api/Homeworks/$homeworkId/submissions/$submissionId/grade',
+        '/api/Homeworks/$homeworkId/grade',
         data: {
+          'submissionId': submissionId,
           'grade': grade,
           if (feedback != null && feedback.isNotEmpty) 'feedback': feedback,
         },

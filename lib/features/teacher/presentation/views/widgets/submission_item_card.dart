@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/helper/file_helper.dart';
+import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/teacher/data/models/submission_model.dart';
 
 class SubmissionItemCard extends StatelessWidget {
@@ -106,6 +108,13 @@ class SubmissionItemCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'ID: ${submission.studentEmail.split('@').first}', // Using a part of email as ID if not in model, or use submission.id
+                      style: AppTextStyle.regular10.copyWith(
+                        color: AppColors.grey.withValues(alpha: 0.8),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -181,28 +190,79 @@ class SubmissionItemCard extends StatelessWidget {
             ),
           ],
 
+          // ── Feedback (if graded) ─────────────────────────────────────
+          if (submission.feedback != null && submission.feedback!.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0FDF4), // Light Green
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.chat_bubble_outline, size: 14, color: const Color(0xFF166534)),
+                      const SizedBox(width: 4),
+                      Text(
+                        'FEEDBACK',
+                        style: AppTextStyle.bold10.copyWith(color: const Color(0xFF166534)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    submission.feedback!,
+                    style: AppTextStyle.regular12.copyWith(color: const Color(0xFF166534)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
           // ── Attachment chip ──────────────────────────────────────────
           if (submission.attachmentUrl != null) ...[
             const SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(
-                  Icons.attach_file,
-                  size: 14,
-                  color: AppColors.primaryColor,
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    submission.attachmentUrl!.split('/').last,
-                    style: AppTextStyle.regular12.copyWith(
-                      color: AppColors.primaryColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+            GestureDetector(
+              onTap: () async {
+                final fileName = submission.attachmentUrl!.split('/').last;
+                try {
+                  await FileHelper.downloadAndOpenFile(
+                    url: submission.attachmentUrl!,
+                    fileName: fileName,
+                  );
+                } catch (e) {
+                  if (context.mounted) {
+                    CustomSnackBar.showError(
+                      context,
+                      'Could not open file: ${e.toString()}',
+                    );
+                  }
+                }
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.attach_file,
+                    size: 14,
+                    color: AppColors.primaryColor,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      submission.attachmentUrl!.split('/').last,
+                      style: AppTextStyle.regular12.copyWith(
+                        color: AppColors.primaryColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
 
