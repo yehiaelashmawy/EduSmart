@@ -4,6 +4,7 @@ import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_bottom_nav_bar.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_home_view_body.dart';
+import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
 import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/widgets/profile/profile_view_body.dart';
 
@@ -43,17 +44,7 @@ class _ParentHomeViewState extends State<ParentHomeView> {
       key: _childrenNavigatorKey,
       onGenerateRoute: (settings) {
         if (settings.name == '/' || settings.name == null) {
-          return MaterialPageRoute(
-            builder: (_) => Scaffold(
-              backgroundColor: AppColors.backgroundColor,
-              body: Center(
-                child: Text(
-                  'My Children Coming Soon',
-                  style: TextStyle(color: AppColors.grey, fontSize: 18),
-                ),
-              ),
-            ),
-          );
+          return MaterialPageRoute(builder: (_) => const ParentMyKidsView());
         }
         return onGenerateRoute(settings);
       },
