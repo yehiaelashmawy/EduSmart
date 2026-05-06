@@ -11,10 +11,11 @@ import 'package:school_system/features/teacher/presentation/views/manual_attenda
 import 'package:school_system/features/teacher/presentation/views/entry_code_view.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_state.dart';
-import 'package:school_system/features/teacher/presentation/views/widgets/attendance_method_card.dart';
+
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_info_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/no_lesson_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter/services.dart';
 
 class AttendanceMethodViewBody extends StatefulWidget {
   final TeacherClassModel teacherClass;
@@ -33,11 +34,48 @@ class AttendanceMethodViewBody extends StatefulWidget {
 
 class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
   String? _selectedLessonOid;
+  int? _selectedMethod;
+  int? _correctNumber;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _selectedLessonOid = widget.lessonId ?? _nextLesson?.oid;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_selectedLessonOid != null) {
+        final lessons = _getLessonsFromClass(widget.teacherClass);
+        final index = lessons.indexWhere((l) => l.oid == _selectedLessonOid);
+        if (index != -1) _scrollToSelectedLesson(index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToSelectedLesson(int index) {
+    if (_scrollController.hasClients) {
+      final width = MediaQuery.of(context).size.width * 0.75 + 16;
+      _scrollController.animateTo(
+        index * width,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  String get _buttonLabel {
+    if (_selectedMethod == null) return "Select a Method";
+    if (_selectedMethod == 1) return "Start Manual Session";
+    if (_selectedMethod == 2) return "Generate QR Code";
+    if (_selectedMethod == 3 && (_correctNumber == null || _correctNumber! <= 0)) {
+      return "Enter a Code Number";
+    }
+    return "Generate Code Session";
   }
 
 
@@ -149,7 +187,7 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                   children: [
                     // ── Header ─────────────────────────────────────────────
                     Text(
-                      'UPCOMING LESSON',
+                      'UPCOMING LESSONS',
                       style: AppTextStyle.bold12.copyWith(
                         color: AppColors.grey,
                         letterSpacing: 1.2,
@@ -157,22 +195,53 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                     ),
                     const SizedBox(height: 10),
 
-                    // ── Next Lesson Card ────────────────────────────────────
-                    if (nextLesson == null)
+                    // ── Upcoming Lessons Horizontal List ─────────────────────────
+                    if (lessons.isEmpty)
                       const NoLessonCard()
                     else
-                      LessonInfoCard(
-                        lesson: nextLesson,
-                        isTaken: takenOids.contains(nextLesson.oid),
-                        className:
-                            '${currentClass.name} · ${currentClass.level}',
-                        formatDate: _formatDate,
-                        formatTime: _formatTime,
+                      SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        clipBehavior: Clip.none,
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: lessons.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final lesson = entry.value;
+                              final isTaken = takenOids.contains(lesson.oid);
+                              final isSelected = _selectedLessonOid == lesson.oid;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedLessonOid = lesson.oid;
+                                  });
+                                  _scrollToSelectedLesson(index);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.75,
+                                  margin: EdgeInsets.only(
+                                    right: lesson == lessons.last ? 0 : 16,
+                                  ),
+                                  child: LessonInfoCard(
+                                    lesson: lesson,
+                                    isTaken: isTaken,
+                                    isSelected: isSelected,
+                                    className:
+                                        '${currentClass.name} · ${currentClass.level}',
+                                    formatDate: _formatDate,
+                                    formatTime: _formatTime,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
 
                     const SizedBox(height: 32),
 
-                    if (nextLesson != null) ...[
+                    if (lessons.isNotEmpty) ...[
                       // ── Section heading ─────────────────────────────────
                       Text(
                         selectedIsTaken ? 'RE-TAKE SESSION' : 'SESSION MANAGEMENT',
@@ -187,6 +256,13 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                         style: AppTextStyle.bold18.copyWith(color: AppColors.black),
                       ),
                       const SizedBox(height: 6),
+                      if (selectedIsTaken) ...[
+                        Text(
+                          "Re-submitting will overwrite today's existing records.",
+                          style: AppTextStyle.medium12.copyWith(color: Colors.red),
+                        ),
+                        const SizedBox(height: 6),
+                      ],
                       RichText(
                         text: TextSpan(
                           style: AppTextStyle.medium14.copyWith(
@@ -211,89 +287,116 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                       const SizedBox(height: 24),
 
                       // ── Method cards ────────────────────────────────────
-                      AttendanceMethodCard(
-                        icon: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffDDE4FF),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.edit_calendar,
-                            color: Color(0xff065AD8),
-                          ),
-                        ),
-                        title: 'Manual Attendance',
-                        subtitle:
-                            'Personally mark students present or absent from the class roster.',
-                        actionText: 'SELECT METHOD',
-                        onTap: () {
-                          if (_selectedLessonOid == null) {
-                            CustomSnackBar.showError(
-                              context,
-                              'No lesson available',
-                            );
-                            return;
-                          }
-                          context.read<StartAttendanceCubit>().startSession(
-                            classOid: currentClass.oid,
-                            method: 1,
-                            lessonOid: _selectedLessonOid,
-                          );
-                        },
+                      _buildMethodRow(
+                        methodValue: 1,
+                        icon: Icons.assignment_rounded,
+                        title: 'Manual',
+                        subtitle: 'Mark each student directly',
                       ),
-                      AttendanceMethodCard(
-                        icon: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.qr_code, color: Colors.white),
-                        ),
-                        title: 'Generate QR Code',
-                        subtitle:
-                            'Display a dynamic code on the screen for students to scan with their devices.',
-                        actionText: 'QUICK LAUNCH',
-                        actionIcon: Icons.bolt,
-                        isPrimary: true,
-                        onTap: () {
-                          if (_selectedLessonOid == null) {
-                            CustomSnackBar.showError(context, 'No lesson available');
-                            return;
-                          }
-                          context.read<StartAttendanceCubit>().startSession(
-                            classOid: currentClass.oid,
-                            method: 2,
-                            lessonOid: _selectedLessonOid,
-                          );
-                        },
+                      _buildMethodRow(
+                        methodValue: 2,
+                        icon: Icons.qr_code_2,
+                        title: 'QR Code',
+                        subtitle: 'Students scan with their phones',
                       ),
-                      AttendanceMethodCard(
-                        icon: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.peach,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.pin, color: Color(0xff78350F)),
-                        ),
-                        title: 'Generate Code',
-                        subtitle:
-                            'Create a unique numeric key for students to enter manually.',
-                        actionText: 'SELECT METHOD',
-                        onTap: () {
-                          if (_selectedLessonOid == null) {
-                            CustomSnackBar.showError(context, 'No lesson available');
-                            return;
-                          }
-                          context.read<StartAttendanceCubit>().startSession(
-                            classOid: currentClass.oid,
-                            method: 3,
-                            lessonOid: _selectedLessonOid,
-                          );
-                        },
+                      _buildMethodRow(
+                        methodValue: 3,
+                        icon: Icons.numbers,
+                        title: 'Random Code',
+                        subtitle: 'Students enter the correct number',
                       ),
+
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        child: _selectedMethod == 3
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                  style: AppTextStyle.bold16.copyWith(
+                                    color: AppColors.black,
+                                    fontSize: 18,
+                                    letterSpacing: 2.0,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'e.g. 80',
+                                    hintStyle: AppTextStyle.medium14.copyWith(
+                                      color: AppColors.grey.withValues(alpha: 0.6),
+                                      letterSpacing: 0,
+                                    ),
+                                    filled: true,
+                                    fillColor: const Color(0xffF4F7FB),
+                                    prefixIcon: Icon(Icons.tag, color: AppColors.primaryColor),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+                                    ),
+                                  ),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _correctNumber = int.tryParse(val);
+                                    });
+                                  },
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: (_selectedLessonOid == null ||
+                                  _selectedMethod == null ||
+                                  (_selectedMethod == 3 &&
+                                      (_correctNumber == null ||
+                                          _correctNumber! <= 0)) ||
+                                  isLoading)
+                              ? null
+                              : () {
+                                  context.read<StartAttendanceCubit>().startSession(
+                                        classOid: currentClass.oid,
+                                        method: _selectedMethod!,
+                                        lessonOid: _selectedLessonOid,
+                                        correctNumber: _correctNumber ?? 0,
+                                      );
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondaryColor,
+                            disabledBackgroundColor: AppColors.grey.withValues(alpha: 0.2),
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: (_selectedLessonOid == null || _selectedMethod == null || isLoading) ? 0 : 8,
+                            shadowColor: AppColors.secondaryColor.withValues(alpha: 0.4),
+                          ),
+                          child: isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  _buttonLabel,
+                                  style: AppTextStyle.semiBold16.copyWith(
+                                    color: _selectedMethod == null ? AppColors.grey : Colors.white,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
                     ],
                   ],
                 ),
@@ -355,5 +458,103 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
       }
     }
     return taken;
+  }
+
+  Widget _buildMethodRow({
+    required int methodValue,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    final isSelected = _selectedMethod == methodValue;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedMethod = methodValue;
+          if (methodValue != 3) _correctNumber = null;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCirc,
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.04) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? AppColors.primaryColor : AppColors.lightGrey.withValues(alpha: 0.3),
+            width: isSelected ? 2.0 : 1.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected 
+                  ? AppColors.primaryColor.withValues(alpha: 0.12) 
+                  : Colors.black.withValues(alpha: 0.02),
+              blurRadius: isSelected ? 16 : 8,
+              offset: Offset(0, isSelected ? 6 : 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.1) : const Color(0xffF4F7FB),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                icon,
+                size: 28,
+                color: isSelected ? AppColors.primaryColor : AppColors.grey,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyle.bold16.copyWith(
+                      color: isSelected ? AppColors.primaryColor : AppColors.black,
+                      fontSize: 16,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    subtitle,
+                    style: AppTextStyle.medium12.copyWith(
+                      color: AppColors.grey,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCirc,
+              width: 26,
+              height: 26,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? AppColors.primaryColor : Colors.transparent,
+                border: Border.all(
+                  color: isSelected ? AppColors.primaryColor : AppColors.lightGrey.withValues(alpha: 0.5),
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

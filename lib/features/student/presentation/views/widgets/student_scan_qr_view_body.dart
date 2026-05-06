@@ -3,6 +3,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/features/student/presentation/manager/student_attendance_cubit/student_attendance_cubit.dart';
+import 'package:school_system/features/student/presentation/manager/student_attendance_cubit/student_attendance_state.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_scanner_border_painter.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_scan_action_item.dart';
 
@@ -19,6 +22,7 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
   late MobileScannerController _scannerController;
   final ImagePicker _picker = ImagePicker();
   bool _isFlashOn = false;
+  bool _hasSubmitted = false;
 
   @override
   void initState() {
@@ -28,6 +32,8 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
       facing: CameraFacing.back,
       torchEnabled: false,
     );
+    // Fetch session immediately — scanner is disabled until this succeeds
+    context.read<StudentAttendanceCubit>().getActiveSession();
   }
 
   @override
@@ -38,9 +44,7 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
 
   void _toggleFlash() {
     _scannerController.toggleTorch();
-    setState(() {
-      _isFlashOn = !_isFlashOn;
-    });
+    setState(() => _isFlashOn = !_isFlashOn);
   }
 
   Future<void> _uploadImage() async {
@@ -52,16 +56,8 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
         );
         if (!mounted) return;
         if (capture != null && capture.barcodes.isNotEmpty) {
-          // Success Feedback
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'QR Code found: ${capture.barcodes.first.rawValue}',
-              ),
-            ),
-          );
+          _submitQr(capture.barcodes.first.rawValue ?? '');
         } else {
-          // Error Feedback
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('No QR Code found in the selected image.'),
@@ -77,152 +73,268 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
     }
   }
 
+  void _submitQr(String rawValue) {
+    if (_hasSubmitted) return;
+    final state = context.read<StudentAttendanceCubit>().state;
+    if (state is ActiveSessionLoaded && rawValue.isNotEmpty) {
+      _hasSubmitted = true;
+      context.read<StudentAttendanceCubit>().submitQrCode(
+        state.session.sessionId,
+        rawValue,
+      );
+    }
+  }
+
   void _onDetect(BarcodeCapture capture) {
-    final List<Barcode> barcodes = capture.barcodes;
-    for (final barcode in barcodes) {
-      debugPrint('Barcode found! ${barcode.rawValue}');
-      // Trigger navigation or success action here
+    for (final barcode in capture.barcodes) {
+      if (barcode.rawValue != null) {
+        _submitQr(barcode.rawValue!);
+        break;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: Column(
-          children: [
-            Text(
-              'Point your camera',
-              style: AppTextStyle.bold24.copyWith(color: AppColors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Position the QR code within the frame to automatically track your attendance for ${widget.subject}.',
-              style: AppTextStyle.medium14.copyWith(
-                color: AppColors.grey,
-                height: 1.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
+    return BlocConsumer<StudentAttendanceCubit, StudentAttendanceState>(
+      listener: (context, state) {
+        if (state is StudentAttendanceSuccess) {
+          final session =
+              context.read<StudentAttendanceCubit>().state
+                  is ActiveSessionLoaded
+              ? (context.read<StudentAttendanceCubit>().state
+                        as ActiveSessionLoaded)
+                    .session
+              : null;
+          Navigator.pushReplacementNamed(
+            context,
+            'student_attendance_success_view',
+            arguments: session,
+          );
+        } else if (state is StudentAttendanceError) {
+          // Allow retry on error
+          _hasSubmitted = false;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        final sessionLoaded = state is ActiveSessionLoaded;
+        final isLoading =
+            state is StudentAttendanceLoading ||
+            state is StudentAttendanceInitial;
+        final hasError = state is StudentAttendanceError && !sessionLoaded;
 
-            // Scanner Frame
-            Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 280,
-                    height: 280,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: MobileScanner(
-                      controller: _scannerController,
-                      onDetect: _onDetect,
-                    ),
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 24.0,
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Point your camera',
+                  style: AppTextStyle.bold24.copyWith(color: AppColors.black),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Position the QR code within the frame to automatically track your attendance for ${widget.subject}.',
+                  style: AppTextStyle.medium14.copyWith(
+                    color: AppColors.grey,
+                    height: 1.5,
                   ),
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: CustomPaint(
-                      painter: StudentScannerBorderPainter(
-                        color: AppColors.secondaryColor,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+
+                // ── Scanner Frame ───────────────────────────────────────────
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 280,
+                        height: 280,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: sessionLoaded
+                            ? MobileScanner(
+                                controller: _scannerController,
+                                onDetect: _onDetect,
+                              )
+                            : _buildScannerOverlay(isLoading, hasError, state),
                       ),
+                      SizedBox(
+                        width: 250,
+                        height: 250,
+                        child: CustomPaint(
+                          painter: StudentScannerBorderPainter(
+                            color: sessionLoaded
+                                ? AppColors.secondaryColor
+                                : AppColors.lightGrey,
+                          ),
+                        ),
+                      ),
+                      if (sessionLoaded)
+                        Container(
+                          width: 250,
+                          height: 1,
+                          color: AppColors.secondaryColor.withValues(
+                            alpha: 0.5,
+                          ),
+                          margin: const EdgeInsets.only(bottom: 20),
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Status pill
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        (sessionLoaded
+                                ? AppColors.secondaryColor
+                                : AppColors.lightGrey)
+                            .withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        sessionLoaded
+                            ? Icons.filter_center_focus
+                            : isLoading
+                            ? Icons.hourglass_top_rounded
+                            : Icons.error_outline,
+                        size: 14,
+                        color: sessionLoaded
+                            ? AppColors.secondaryColor
+                            : AppColors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        sessionLoaded
+                            ? 'DETECTING...'
+                            : isLoading
+                            ? 'LOADING SESSION...'
+                            : 'NO ACTIVE SESSION',
+                        style: AppTextStyle.bold12.copyWith(
+                          color: sessionLoaded
+                              ? AppColors.secondaryColor
+                              : AppColors.grey,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 48),
+
+                // Scan button (re-fetches session if needed)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: sessionLoaded
+                        ? null
+                        : () => context
+                              .read<StudentAttendanceCubit>()
+                              .getActiveSession(),
+                    icon: Icon(
+                      sessionLoaded ? Icons.camera_alt : Icons.refresh,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      sessionLoaded ? 'Scanner Active' : 'Refresh Session',
+                      style: AppTextStyle.bold16.copyWith(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: sessionLoaded
+                          ? AppColors.secondaryColor.withValues(alpha: 0.5)
+                          : AppColors.secondaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
                     ),
                   ),
-                  // Mocks the scanning line
-                  Container(
-                    width: 250,
-                    height: 1,
-                    color: AppColors.secondaryColor.withValues(alpha: 0.5),
-                    margin: const EdgeInsets.only(bottom: 20),
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.lightGrey.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.filter_center_focus,
-                    size: 14,
-                    color: AppColors.secondaryColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'DETECTING...',
-                    style: AppTextStyle.bold12.copyWith(
-                      color: AppColors.secondaryColor,
-                      letterSpacing: 1.0,
+                const SizedBox(height: 32),
+
+                // Flash & Upload actions
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    StudentScanActionItem(
+                      icon: _isFlashOn
+                          ? Icons.flashlight_off_outlined
+                          : Icons.flashlight_on_outlined,
+                      label: 'Flash',
+                      onTap: sessionLoaded ? _toggleFlash : null,
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 48),
-
-            // Main Scan Button (Currently passive or triggers internal logic if needed)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Start or Stop the scanner manually if needed
-                },
-                icon: const Icon(Icons.camera_alt, color: Colors.white),
-                label: Text(
-                  'Scan QR',
-                  style: AppTextStyle.bold16.copyWith(color: Colors.white),
+                    const SizedBox(width: 48),
+                    StudentScanActionItem(
+                      icon: Icons.image_outlined,
+                      label: 'Upload',
+                      onTap: sessionLoaded ? _uploadImage : null,
+                    ),
+                  ],
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.secondaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-              ),
+                const SizedBox(height: 24),
+              ],
             ),
+          ),
+        );
+      },
+    );
+  }
 
-            const SizedBox(height: 32),
-
-            // Bottom Actions (Flash & Upload)
-            Row(
+  Widget _buildScannerOverlay(
+    bool isLoading,
+    bool hasError,
+    StudentAttendanceState state,
+  ) {
+    return Center(
+      child: isLoading
+          ? CircularProgressIndicator(color: AppColors.secondaryColor)
+          : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                StudentScanActionItem(
-                  icon: _isFlashOn
-                      ? Icons.flashlight_off_outlined
-                      : Icons.flashlight_on_outlined,
-                  label: 'Flash',
-                  onTap: _toggleFlash,
+                Icon(
+                  hasError ? Icons.signal_wifi_off : Icons.qr_code,
+                  color: AppColors.grey,
+                  size: 48,
                 ),
-                const SizedBox(width: 48),
-                StudentScanActionItem(
-                  icon: Icons.image_outlined,
-                  label: 'Upload',
-                  onTap: _uploadImage,
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    hasError
+                        ? (state as StudentAttendanceError).message
+                        : 'Waiting for session...',
+                    style: AppTextStyle.medium12.copyWith(
+                      color: AppColors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
     );
   }
 }

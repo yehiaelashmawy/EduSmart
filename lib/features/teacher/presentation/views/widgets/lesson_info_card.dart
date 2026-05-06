@@ -9,6 +9,7 @@ class LessonInfoCard extends StatelessWidget {
   final String className;
   final String Function(String) formatDate;
   final String Function(String) formatTime;
+  final bool isSelected;
 
   const LessonInfoCard({
     super.key,
@@ -17,6 +18,7 @@ class LessonInfoCard extends StatelessWidget {
     required this.className,
     required this.formatDate,
     required this.formatTime,
+    this.isSelected = false,
   });
 
   @override
@@ -31,6 +33,9 @@ class LessonInfoCard extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
+        border: isSelected
+            ? Border.all(color: AppColors.primaryColor, width: 2.0)
+            : Border.all(color: Colors.transparent, width: 2.0),
         boxShadow: [
           BoxShadow(
             color: (isTaken

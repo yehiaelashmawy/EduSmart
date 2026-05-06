@@ -9,6 +9,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 import 'package:school_system/features/teacher/presentation/views/widgets/take_attendance_card.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_report_view.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
+import 'package:intl/intl.dart';
 
 class TakeAttendanceViewBody extends StatefulWidget {
   const TakeAttendanceViewBody({super.key});
@@ -86,7 +87,7 @@ class _TakeAttendanceViewBodyState extends State<TakeAttendanceViewBody> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Monday, Oct 24th',
+                DateFormat('EEEE, MMM d').format(DateTime.now()),
                 style: AppTextStyle.medium16.copyWith(color: AppColors.grey),
               ),
             ],

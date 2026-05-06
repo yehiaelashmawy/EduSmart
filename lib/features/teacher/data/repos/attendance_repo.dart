@@ -13,11 +13,17 @@ class AttendanceRepo {
     required String classOid,
     required int method,
     String? lessonOid,
+    int correctNumber = 0,
   }) async {
     try {
       final response = await _apiService.post(
         '/api/Attendance/start-session',
-        data: {'classOid': classOid, 'method': method, 'lessonOid': ?lessonOid},
+        data: {
+          'classOid': classOid, 
+          'method': method, 
+          'lessonOid': lessonOid,
+          'correctNumber': correctNumber,
+        },
       );
 
       final success = response['success'] as bool? ?? false;
@@ -43,29 +49,31 @@ class AttendanceRepo {
     }
   }
 
-  Future<Either<ApiErrors, String>> submitAttendance({
-    required String classOid,
-    required String date,
+  Future<Either<ApiErrors, bool>> submitSession({
+    required String sessionId,
+    required int selectedNumber,
     required List<Map<String, dynamic>> attendances,
   }) async {
     try {
       final response = await _apiService.post(
-        '/api/Attendance',
-        data: {'classOid': classOid, 'date': date, 'attendances': attendances},
+        '/api/Attendance/submit-session',
+        data: {
+          'sessionId': sessionId,
+          'selectedNumber': selectedNumber,
+          'attendances': attendances,
+        },
       );
 
       final success = response['success'] as bool? ?? false;
       if (success) {
-        return Right(
-          response['messages']?['EN']?.toString() ??
-              'Attendance record created successfully',
-        );
+        return const Right(true);
       } else {
         return Left(
           ApiErrors(
             errorMessage:
+                response['messages']?['Error']?.toString() ??
                 response['messages']?['EN']?.toString() ??
-                'Failed to submit attendance',
+                'Failed to submit session',
           ),
         );
       }
@@ -98,6 +106,32 @@ class AttendanceRepo {
             errorMessage:
                 response['messages']?['EN']?.toString() ??
                 'Failed to fetch class statistics',
+          ),
+        );
+      }
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, AttendanceSessionModel>> getActiveSession() async {
+    try {
+      final response = await _apiService.get('/api/Attendance/active-session');
+      final success = response['success'] as bool? ?? false;
+      final data = response['data'];
+      if (success && data != null) {
+        return Right(
+          AttendanceSessionModel.fromJson(
+            (data as Map).cast<String, dynamic>(),
+          ),
+        );
+      } else {
+        return Left(
+          ApiErrors(
+            errorMessage:
+                response['messages']?['Error']?.toString() ??
+                'No active session',
           ),
         );
       }

@@ -5,13 +5,13 @@ import 'package:school_system/core/utils/app_text_style.dart';
 class StudentScanActionItem extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const StudentScanActionItem({
     super.key,
     required this.icon,
     required this.label,
-    required this.onTap,
+    this.onTap,
   });
 
   @override

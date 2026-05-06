@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/student/data/repos/student_weekly_schedule_repo.dart';
 import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_cubit.dart';
+import 'package:school_system/features/student/presentation/views/widgets/active_session_banner.dart';
 import 'package:school_system/features/student/presentation/views/widgets/next_class_card.dart';
 import 'package:school_system/features/student/presentation/views/widgets/smart_tutor_banner.dart';
 import 'package:school_system/features/student/presentation/views/widgets/student_assignments_exams.dart';
@@ -26,7 +27,10 @@ class StudentHomeViewBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const StudentHomeHeader(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
+              // Live attendance session banner — hidden when no active session
+              const ActiveSessionBanner(),
+              const SizedBox(height: 16),
               const StudentHomeActionCards(),
               const SizedBox(height: 20),
               const SmartTutorBanner(),

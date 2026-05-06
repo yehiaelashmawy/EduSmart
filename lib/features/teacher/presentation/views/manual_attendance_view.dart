@@ -90,7 +90,7 @@ class _ManualAttendanceViewState extends State<ManualAttendanceView> {
                                 final studentDataList =
                                     _bodyKey.currentState?.students ?? [];
                                 final attendances = studentDataList.map((s) {
-                                  String statusStr = 'WITHOUT MARK';
+                                  String statusStr = '';
                                   if (s.status == AttendanceStatus.present) {
                                     statusStr = 'Present';
                                   } else if (s.status == AttendanceStatus.absent) {
@@ -98,20 +98,18 @@ class _ManualAttendanceViewState extends State<ManualAttendanceView> {
                                   } else if (s.status == AttendanceStatus.late) {
                                     statusStr = 'Late';
                                   }
-
                                   return {
                                     'studentOid': s.studentOid,
                                     'status': statusStr,
-                                    'remarks': 'On time',
-                                    'checkInTime': null,
+                                    'checkInTime': '',
                                   };
                                 }).toList();
 
                                 context
                                     .read<SubmitAttendanceCubit>()
-                                    .submitAttendance(
-                                      classOid: widget.teacherClass.oid,
-                                      date: DateTime.now().toIso8601String(),
+                                    .submitSession(
+                                      sessionId: widget.session?.sessionId ?? '',
+                                      selectedNumber: 0,
                                       attendances: attendances,
                                     );
                               },
