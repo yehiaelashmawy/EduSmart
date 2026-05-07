@@ -302,7 +302,7 @@ class _SubmissionList extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       itemCount: submissions.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      separatorBuilder: (_, _) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
         final s = submissions[index];
         return SubmissionItemCard(

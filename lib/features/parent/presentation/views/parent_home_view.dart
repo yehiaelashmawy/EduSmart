@@ -81,10 +81,8 @@ class _ParentHomeViewState extends State<ParentHomeView> {
       onGenerateRoute: (settings) {
         if (settings.name == '/' || settings.name == null) {
           return MaterialPageRoute(
-            builder: (_) => const ProfileViewBody(
-              name: 'Jane Doe',
-              roleTitle: 'Parent',
-            ),
+            builder: (_) =>
+                const ProfileViewBody(name: 'Jane Doe', roleTitle: 'Parent'),
           );
         }
         return onGenerateRoute(settings);

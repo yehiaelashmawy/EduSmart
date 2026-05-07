@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
+
 
 class ParentPaymentsViewBody extends StatelessWidget {
   const ParentPaymentsViewBody({super.key});
@@ -209,6 +211,7 @@ class ParentPaymentsViewBody extends StatelessWidget {
     return Column(
       children: [
         _buildHistoryCard(
+          context,
           icon: Icons.school_outlined,
           iconColor: const Color(0xFFD32F2F),
           iconBgColor: const Color(0xFFFFF0F0),
@@ -221,6 +224,7 @@ class ParentPaymentsViewBody extends StatelessWidget {
           },
         ),
         _buildHistoryCard(
+          context,
           icon: Icons.menu_book_outlined,
           iconColor: AppColors.secondaryColor,
           iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
@@ -228,8 +232,12 @@ class ParentPaymentsViewBody extends StatelessWidget {
           subtitle: 'Paid Nov 02, 2023 • Leo Smith',
           amount: '\$145.00',
           isPayNow: false,
+          onReceiptPressed: () {
+            Navigator.pushNamed(context, ParentReceiptView.routeName);
+          },
         ),
         _buildHistoryCard(
+          context,
           icon: Icons.directions_bus_outlined,
           iconColor: AppColors.secondaryColor,
           iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
@@ -237,8 +245,12 @@ class ParentPaymentsViewBody extends StatelessWidget {
           subtitle: 'Paid Oct 28, 2023 • Sarah Smith',
           amount: '\$85.00',
           isPayNow: false,
+          onReceiptPressed: () {
+            Navigator.pushNamed(context, ParentReceiptView.routeName);
+          },
         ),
         _buildHistoryCard(
+          context,
           icon: Icons.sports_soccer_outlined,
           iconColor: Colors.grey.shade700,
           iconBgColor: Colors.grey.shade200,
@@ -255,7 +267,8 @@ class ParentPaymentsViewBody extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryCard({
+  Widget _buildHistoryCard(
+    BuildContext context, {
     required IconData icon,
     required Color iconColor,
     required Color iconBgColor,
@@ -265,6 +278,7 @@ class ParentPaymentsViewBody extends StatelessWidget {
     required bool isPayNow,
     bool isHighlighted = false,
     VoidCallback? onPayPressed,
+    VoidCallback? onReceiptPressed,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -329,7 +343,7 @@ class ParentPaymentsViewBody extends StatelessWidget {
               SizedBox(
                 height: 28,
                 child: ElevatedButton(
-                  onPressed: isPayNow ? onPayPressed : () {},
+                  onPressed: isPayNow ? onPayPressed : onReceiptPressed,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isPayNow
                         ? AppColors.secondaryColor

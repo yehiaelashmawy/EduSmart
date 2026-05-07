@@ -53,18 +53,20 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
             value: ThemeManager.isDarkMode,
             onChanged: (value) async {
               await SharedPrefsHelper.setIsDarkMode(value);
+              
+              if (!mounted) return;
+
               setState(() {
                 ThemeManager.themeNotifier.value = value
                     ? ThemeMode.dark
                     : ThemeMode.light;
               });
 
-              // Force the whole app to rebuild seamlessly to pick up AppColors
-              // without destroying the current navigation stack!
-              if (!mounted) return;
-              ThemeManager.forceAppRebuild(
-                context.findAncestorStateOfType<NavigatorState>()!.context,
-              );
+              if (context.mounted) {
+                ThemeManager.forceAppRebuild(
+                  context.findAncestorStateOfType<NavigatorState>()!.context,
+                );
+              }
             },
           ),
           SettingsLinkTile(
