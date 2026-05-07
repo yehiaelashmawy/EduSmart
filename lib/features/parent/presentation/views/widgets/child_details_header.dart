@@ -7,58 +7,95 @@ class ChildDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primaryColor.withValues(alpha: 0.1),
-            AppColors.primaryColor.withValues(alpha: 0.05),
+    return Center(
+      child: Container(
+        width: 358,
+        height: 236,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F5FF),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryColor.withValues(alpha: 0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.primaryColor.withValues(alpha: 0.1)),
-      ),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'STUDENT PROFILE',
-            style: AppTextStyle.bold12.copyWith(
-              color: AppColors.grey.withValues(alpha: 0.6),
-              letterSpacing: 1.2,
+        child: Stack(
+          children: [
+            // Background Shape 1
+            Positioned(
+              top: -80,
+              right: -60,
+              child: Container(
+                width: 240,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Alexander Wright',
-            style: AppTextStyle.bold24.copyWith(color: AppColors.darkBlue),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              _buildBadge(Icons.school, 'Grade 10-A'),
-              const SizedBox(width: 12),
-              _buildBadge(Icons.assessment, 'GPA 3.8'),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatCard('Attendance', '94.2%'),
+            // Background Shape 2 (Subtle Arc effect)
+            Positioned(
+              top: 40,
+              right: -100,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.04),
+                  shape: BoxShape.circle,
+                ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildStatCard('Total Subjects', '6'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'STUDENT PROFILE',
+                    style: AppTextStyle.bold12.copyWith(
+                      color: AppColors.grey.withValues(alpha: 0.6),
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Alexander Wright',
+                    style: AppTextStyle.bold24.copyWith(color: AppColors.darkBlue),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _buildBadge(Icons.school, 'Grade 10-A'),
+                      const SizedBox(width: 12),
+                      _buildBadge(Icons.assessment, 'GPA 3.8'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildStatCard('Attendance', '94.2%'),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildStatCard('Total Subjects', '6'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
