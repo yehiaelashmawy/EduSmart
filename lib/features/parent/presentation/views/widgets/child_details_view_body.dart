@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/presentation/views/parent_weekly_schedule_view.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/recent_activity_item.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/upcoming_event_card.dart';
 
@@ -25,7 +26,12 @@ class _ChildDetailsViewBodyState extends State<ChildDetailsViewBody> {
           const SizedBox(height: 24),
           _buildTabs(),
           const SizedBox(height: 24),
-          _buildViewScheduleBanner(),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, ParentWeeklyScheduleView.routeName);
+            },
+            child: _buildViewScheduleBanner(),
+          ),
           const SizedBox(height: 32),
           _buildSectionTitle(Icons.history_outlined, 'Recent Activity'),
           const SizedBox(height: 20),
@@ -53,7 +59,9 @@ class _ChildDetailsViewBodyState extends State<ChildDetailsViewBody> {
               margin: const EdgeInsets.only(right: 12),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+                color: isSelected
+                    ? AppColors.primaryColor.withValues(alpha: 0.1)
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -92,7 +100,10 @@ class _ChildDetailsViewBodyState extends State<ChildDetailsViewBody> {
               color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.calendar_month_outlined, color: Colors.white),
+            child: const Icon(
+              Icons.calendar_month_outlined,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -106,7 +117,9 @@ class _ChildDetailsViewBodyState extends State<ChildDetailsViewBody> {
                 const SizedBox(height: 4),
                 Text(
                   'Access daily timetable and class locations',
-                  style: AppTextStyle.regular12.copyWith(color: Colors.white.withValues(alpha: 0.8)),
+                  style: AppTextStyle.regular12.copyWith(
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
                 ),
               ],
             ),

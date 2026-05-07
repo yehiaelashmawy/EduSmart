@@ -35,7 +35,7 @@ class ChildDetailsHeader extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Aleyander Wright',
+            'Alexander Wright',
             style: AppTextStyle.bold24.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 16),

@@ -15,6 +15,7 @@ import 'package:school_system/features/parent/presentation/views/parent_my_kids_
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_weekly_schedule_view.dart';
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
 import 'package:school_system/features/student/presentation/views/weekly_schedule_view.dart';
@@ -144,13 +145,20 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ParentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentHomeView());
     case ParentPaymentsView.routeName:
-      return MaterialPageRoute(builder: (context) => const ParentPaymentsView());
+      return MaterialPageRoute(
+        builder: (context) => const ParentPaymentsView(),
+      );
     case ParentMyKidsView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentMyKidsView());
     case ParentSecurePaymentView.routeName:
-      return MaterialPageRoute(builder: (context) => const ParentSecurePaymentView());
+      return MaterialPageRoute(
+        builder: (context) => const ParentSecurePaymentView(),
+      );
     case ParentReceiptView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentReceiptView());
+    case ParentWeeklyScheduleView.routeName:
+      return MaterialPageRoute(
+          builder: (context) => const ParentWeeklyScheduleView());
     case StudentList.routeName:
       final args = settings.arguments;
       if (args is TeacherClassModel) {
@@ -179,7 +187,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
           builder: (context) => ReviewSubmissionsView(
             homeworkId: args?['examId'] ?? '',
             homeworkTitle: args?['examTitle'] ?? 'Exam Submissions',
-            classStudents: args?['classStudents'] as List<TeacherStudentModel>? ?? const [],
+            classStudents:
+                args?['classStudents'] as List<TeacherStudentModel>? ??
+                const [],
             isExam: true,
           ),
         );
@@ -284,8 +294,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
     case GradeSubmissionView.routeName:
       {
-        final args =
-            settings.arguments as Map<String, dynamic>?;
+        final args = settings.arguments as Map<String, dynamic>?;
         if (args != null) {
           return MaterialPageRoute(
             builder: (context) => GradeSubmissionView(
@@ -299,15 +308,16 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       }
     case ReviewSubmissionsView.routeName:
       {
-        final args =
-            settings.arguments as Map<String, dynamic>?;
+        final args = settings.arguments as Map<String, dynamic>?;
         if (args != null) {
           return MaterialPageRoute(
             builder: (context) => ReviewSubmissionsView(
               homeworkId: args['homeworkId'] as String,
               homeworkTitle: args['homeworkTitle'] as String? ?? 'Submissions',
               subtitle: args['subtitle'] as String?,
-              classStudents: args['classStudents'] as List<TeacherStudentModel>? ?? const [],
+              classStudents:
+                  args['classStudents'] as List<TeacherStudentModel>? ??
+                  const [],
               isExam: args['isExam'] as bool? ?? false,
             ),
           );
