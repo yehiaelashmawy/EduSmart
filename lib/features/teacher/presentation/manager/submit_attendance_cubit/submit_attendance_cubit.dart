@@ -24,20 +24,20 @@ class SubmitAttendanceCubit extends Cubit<SubmitAttendanceState> {
   SubmitAttendanceCubit(this._attendanceRepo)
     : super(SubmitAttendanceInitial());
 
-  Future<void> submitAttendance({
-    required String classOid,
-    required String date,
+  Future<void> submitSession({
+    required String sessionId,
+    required int selectedNumber,
     required List<Map<String, dynamic>> attendances,
   }) async {
     emit(SubmitAttendanceLoading());
-    final result = await _attendanceRepo.submitAttendance(
-      classOid: classOid,
-      date: date,
+    final result = await _attendanceRepo.submitSession(
+      sessionId: sessionId,
+      selectedNumber: selectedNumber,
       attendances: attendances,
     );
     result.fold(
       (failure) => emit(SubmitAttendanceFailure(failure)),
-      (message) => emit(SubmitAttendanceSuccess(message)),
+      (_) => emit(SubmitAttendanceSuccess('Attendance submitted successfully')),
     );
   }
 }

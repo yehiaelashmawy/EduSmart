@@ -1,19 +1,26 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 import 'package:school_system/features/teacher/data/models/attendance_session_model.dart';
+import 'package:school_system/features/teacher/data/repos/attendance_repo.dart';
 
 class GenerateQrCodeViewBody extends StatefulWidget {
   final AttendanceSessionModel session;
   final bool isLoading;
+  final bool isSubmitting;
+  final VoidCallback? onSubmit;
 
   const GenerateQrCodeViewBody({
     super.key,
     required this.session,
     this.isLoading = false,
+    this.isSubmitting = false,
+    this.onSubmit,
   });
 
   @override
@@ -21,20 +28,79 @@ class GenerateQrCodeViewBody extends StatefulWidget {
 }
 
 class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
-  late final List<Map<String, dynamic>> _students;
+  late AttendanceRepo _repo;
+  late List<Map<String, dynamic>> _students;
   String? _lastScannedName;
+  Timer? _pollTimer;
+  Timer? _expiryTimer;
 
   @override
   void initState() {
     super.initState();
+    _repo = AttendanceRepo(ApiService());
     _students = widget.session.students.map((s) {
       return {'oid': s.studentOid, 'name': s.studentName, 'scanned': false};
     }).toList();
+
+    // Poll every 5 seconds for real-time scan status
+    _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) => _poll());
+
+    // Refresh expiry label every 30 seconds
+    _expiryTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _pollTimer?.cancel();
+    _expiryTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _poll() async {
+    final result = await _repo.getActiveSession();
+    result.fold(
+      (_) {}, // Silently ignore polling errors
+      (session) {
+        if (!mounted) return;
+        // Build a set of scanned student OIDs from fresh data
+        final scannedOids = <String>{
+          for (final s in session.students) s.studentOid,
+        };
+        setState(() {
+          String? newScan;
+          for (final student in _students) {
+            final oid = student['oid'] as String;
+            final wasScanned = student['scanned'] as bool;
+            if (scannedOids.contains(oid) && !wasScanned) {
+              student['scanned'] = true;
+              newScan = student['name'] as String;
+            }
+          }
+          if (newScan != null) _lastScannedName = newScan;
+        });
+      },
+    );
   }
 
   int get _total => _students.length;
   int get _presentCount => _students.where((s) => s['scanned'] == true).length;
   int get _pendingCount => _total - _presentCount;
+
+  String _getExpirationText() {
+    if (widget.session.expiresAt == null) return 'No Expiration';
+    try {
+      final expiry = DateTime.parse(widget.session.expiresAt!);
+      final diff = expiry.difference(DateTime.now());
+      if (diff.isNegative) return 'Expired';
+      final m = diff.inMinutes;
+      final s = diff.inSeconds % 60;
+      return '${m}m ${s}s remaining';
+    } catch (_) {
+      return 'Active';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +252,10 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xff065AD8,
-                              ).withValues(alpha: 0.08),
+                              color: const Color(0xff065AD8).withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: const Color(
-                                  0xff065AD8,
-                                ).withValues(alpha: 0.25),
+                                color: const Color(0xff065AD8).withValues(alpha: 0.25),
                               ),
                             ),
                             child: Row(
@@ -220,7 +282,7 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
 
                   const SizedBox(height: 24),
 
-                  // Dynamic Stats Row
+                  // Live Stats Row
                   Row(
                     children: [
                       Expanded(
@@ -313,21 +375,46 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
               ),
             ),
           ),
+
+          // ── Submit Session Button ──────────────────────────────────────
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed:
+                      widget.isSubmitting ? null : widget.onSubmit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: widget.isSubmitting
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          'Submit Session',
+                          style: AppTextStyle.semiBold16.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  String _getExpirationText() {
-    if (widget.session.expiresAt == null) return 'No Expiration';
-    try {
-      final expiry = DateTime.parse(widget.session.expiresAt!);
-      final diff = expiry.difference(DateTime.now());
-      if (diff.isNegative) return 'Expired';
-      return '${diff.inMinutes}m remaining';
-    } catch (_) {
-      return 'Active';
-    }
   }
 
   Widget _buildDateTimeItem(IconData icon, String text) {

@@ -14,6 +14,7 @@ import 'package:school_system/features/parent/presentation/views/widgets/quick_a
 import 'package:school_system/features/parent/presentation/views/widgets/recent_activity_item.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/upcoming_event_card.dart';
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
 
 class ParentHomeViewBody extends StatelessWidget {
   const ParentHomeViewBody({super.key});
@@ -169,6 +170,10 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
                         gpa: child.gpa,
                         attendance: child.attendance,
                         subjectsCount: child.subjectsCount,
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, ParentMyKidsView.routeName);
+                        },
                       )),
                   const SizedBox(height: 32),
                   _buildSectionTitle('Recent Activity'),

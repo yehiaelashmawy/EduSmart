@@ -52,21 +52,22 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
             icon: Icons.nightlight_round,
             value: ThemeManager.isDarkMode,
             onChanged: (value) async {
+              final navigatorContext = context
+                  .findAncestorStateOfType<NavigatorState>()
+                  ?.context;
               await SharedPrefsHelper.setIsDarkMode(value);
-              
-              if (!mounted) return;
-
               setState(() {
                 ThemeManager.themeNotifier.value = value
                     ? ThemeMode.dark
                     : ThemeMode.light;
               });
 
-              if (context.mounted) {
-                ThemeManager.forceAppRebuild(
-                  context.findAncestorStateOfType<NavigatorState>()!.context,
-                );
-              }
+              // Force the whole app to rebuild seamlessly to pick up AppColors
+              // without destroying the current navigation stack!
+              if (!mounted) return;
+              ThemeManager.forceAppRebuild(
+                context.findAncestorStateOfType<NavigatorState>()!.context,
+              );
             },
           ),
           SettingsLinkTile(

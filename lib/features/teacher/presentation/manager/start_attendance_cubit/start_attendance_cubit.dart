@@ -11,12 +11,14 @@ class StartAttendanceCubit extends Cubit<StartAttendanceState> {
     required String classOid,
     required int method,
     String? lessonOid,
+    int correctNumber = 0,
   }) async {
     emit(StartAttendanceLoading());
     final result = await _attendanceRepo.startSession(
       classOid: classOid,
       method: method,
       lessonOid: lessonOid,
+      correctNumber: correctNumber,
     );
 
     result.fold(

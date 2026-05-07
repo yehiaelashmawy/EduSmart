@@ -7,6 +7,7 @@ import 'package:school_system/features/teacher/presentation/views/widgets/attend
 class AttendanceLessonSelector extends StatelessWidget {
   final List<TeacherLessonModel> lessons;
   final String? selectedLessonOid;
+  final Set<String> takenLessonOids;
   final ValueChanged<String> onLessonSelected;
 
   const AttendanceLessonSelector({
@@ -14,6 +15,7 @@ class AttendanceLessonSelector extends StatelessWidget {
     required this.lessons,
     required this.selectedLessonOid,
     required this.onLessonSelected,
+    this.takenLessonOids = const {},
   });
 
   @override
@@ -44,7 +46,7 @@ class AttendanceLessonSelector extends StatelessWidget {
           )
         else
           SizedBox(
-            height: 100,
+            height: 110,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: lessons.length,
@@ -54,6 +56,7 @@ class AttendanceLessonSelector extends StatelessWidget {
                 return AttendanceLessonCard(
                   lesson: lesson,
                   isSelected: selectedLessonOid == lesson.oid,
+                  hasAttendance: takenLessonOids.contains(lesson.oid),
                   onTap: () => onLessonSelected(lesson.oid),
                 );
               },

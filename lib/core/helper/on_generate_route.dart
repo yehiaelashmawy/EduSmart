@@ -11,6 +11,7 @@ import 'package:school_system/features/Auth/presentation/views/scusse_view.dart'
 import 'package:school_system/features/Auth/presentation/views/verification_view.dart';
 import 'package:school_system/features/on_broding/presentation/views/on_bording_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
@@ -144,6 +145,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const ParentHomeView());
     case ParentPaymentsView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentPaymentsView());
+    case ParentMyKidsView.routeName:
+      return MaterialPageRoute(builder: (context) => const ParentMyKidsView());
     case ParentSecurePaymentView.routeName:
       return MaterialPageRoute(builder: (context) => const ParentSecurePaymentView());
     case ParentReceiptView.routeName:
@@ -206,6 +209,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
             builder: (context) => AttendanceMethodView(
               teacherClass: args.teacherClass,
               lessonId: args.lessonId,
+              teacherClassesCubit: args.teacherClassesCubit,
             ),
           );
         } else if (args is TeacherClassModel) {
@@ -252,9 +256,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       }
 
     case AttendanceReportView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const AttendanceReportView(),
-      );
+      {
+        final args = settings.arguments as TeacherClassModel;
+        return MaterialPageRoute(
+          builder: (context) => AttendanceReportView(teacherClass: args),
+        );
+      }
 
     case PersonalInformationView.routeName:
       return MaterialPageRoute(

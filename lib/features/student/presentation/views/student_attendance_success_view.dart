@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/student/data/models/active_session_model.dart';
 
 class StudentAttendanceSuccessView extends StatelessWidget {
   static const String routeName = 'student_attendance_success_view';
@@ -9,6 +11,14 @@ class StudentAttendanceSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Accept an optional ActiveSessionModel passed as route argument
+    final session =
+        ModalRoute.of(context)?.settings.arguments as ActiveSessionModel?;
+
+    final submittedAt = DateFormat('h:mm a').format(DateTime.now());
+    final className = session?.className ?? 'Attendance Session';
+    final lessonName = session?.className ?? '';
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -50,8 +60,8 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                 ),
                 child: Center(
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1FAB71), // Success Green
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF1FAB71),
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(12),
@@ -65,7 +75,6 @@ class StudentAttendanceSuccessView extends StatelessWidget {
               ),
               const SizedBox(height: 32),
 
-              // Title
               Text(
                 'Attendance\nRecorded\nSuccessfully',
                 style: AppTextStyle.bold24.copyWith(
@@ -77,7 +86,6 @@ class StudentAttendanceSuccessView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Subtitle
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -88,7 +96,7 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '10:45 AM',
+                    submittedAt,
                     style: AppTextStyle.bold14.copyWith(
                       color: AppColors.secondaryColor,
                     ),
@@ -114,17 +122,16 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    // Teacher Image Mock
                     Container(
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: AppColors.lightGrey,
+                        color: AppColors.secondaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
-                        Icons.person,
-                        color: Colors.white,
+                      child: Icon(
+                        Icons.how_to_reg_rounded,
+                        color: AppColors.secondaryColor,
                         size: 30,
                       ),
                     ),
@@ -142,20 +149,22 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Advanced Mathematics 402',
+                            className,
                             style: AppTextStyle.bold16.copyWith(
                               color: AppColors.black,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Classroom 4B • Section A',
-                            style: AppTextStyle.medium12.copyWith(
-                              color: AppColors.grey,
+                          if (lessonName.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              lessonName,
+                              style: AppTextStyle.medium12.copyWith(
+                                color: AppColors.grey,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
@@ -164,12 +173,10 @@ class StudentAttendanceSuccessView extends StatelessWidget {
               ),
               const SizedBox(height: 64),
 
-              // Back to Home Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to root (Home)
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   style: ElevatedButton.styleFrom(
