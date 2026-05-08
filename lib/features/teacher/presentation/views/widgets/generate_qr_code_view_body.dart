@@ -32,7 +32,9 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
   late AttendanceRepo _repo;
   SessionTrackingModel? _sessionDetail;
   bool _isSessionCompleted = false;
-  bool _isSessionExpired = false;
+  bool _isPolling = false;
+  int _consecutiveErrors = 0;
+  bool _showPollingError = false;
   Timer? _pollTimer;
   Timer? _expiryTimer;
 
@@ -41,10 +43,23 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
     super.initState();
     _repo = AttendanceRepo(ApiService());
 
-    _poll();
-    _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) => _poll());
+    _startPolling();
     _expiryTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (mounted) setState(() {});
+    });
+  }
+
+  void _startPolling() {
+    _pollTimer?.cancel();
+    _poll();
+    _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      if (_isPolling) return;
+      _isPolling = true;
+      try {
+        await _poll();
+      } finally {
+        _isPolling = false;
+      }
     });
   }
 
@@ -58,13 +73,23 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
   Future<void> _poll() async {
     if (_isSessionCompleted) return;
 
-    final detailResult = await _repo.getSessionDetail(widget.session.sessionId);
-    detailResult.fold(
-      (_) {},
+    final result = await _repo.getSessionDetail(widget.session.sessionId);
+
+    result.fold(
+      (error) {
+        _consecutiveErrors++;
+        if (_consecutiveErrors >= 3) {
+          _pollTimer?.cancel();
+          if (!mounted) return;
+          setState(() => _showPollingError = true);
+        }
+      },
       (detail) {
+        _consecutiveErrors = 0;
         if (!mounted) return;
         setState(() {
           _sessionDetail = detail;
+          _showPollingError = false;
           if (detail.notRecorded == 0) {
             _isSessionCompleted = true;
             _pollTimer?.cancel();
@@ -72,39 +97,23 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
         });
       },
     );
-
-    // Check if session is expired
-    final sessionsResult = await _repo.getSessions(widget.session.classOid);
-    sessionsResult.fold(
-      (_) {},
-      (sessions) {
-        if (!mounted) return;
-        try {
-          final currentSession = sessions.firstWhere(
-              (s) => s['sessionId'] == widget.session.sessionId,
-              orElse: () => null);
-          if (currentSession != null) {
-            bool isCompleted = currentSession['isCompleted'] ?? false;
-            bool isExpired = currentSession['isExpired'] ?? false;
-            setState(() {
-              if (isCompleted) {
-                _isSessionCompleted = true;
-                _pollTimer?.cancel();
-              } else if (isExpired) {
-                _isSessionExpired = true;
-                _pollTimer?.cancel();
-              }
-            });
-          }
-        } catch (_) {}
-      },
-    );
   }
 
   int get _presentCount => _sessionDetail?.presentCount ?? 0;
   int get _absentCount => _sessionDetail?.absentCount ?? 0;
   int get _lateCount => _sessionDetail?.lateCount ?? 0;
-  int get _pendingCount => _sessionDetail?.notRecorded ?? widget.session.students.length;
+  int get _pendingCount =>
+      _sessionDetail?.notRecorded ?? widget.session.students.length;
+
+  bool get _isExpired {
+    if (widget.session.expiresAt == null) return false;
+    try {
+      final expiry = DateTime.parse(widget.session.expiresAt!);
+      return !_isSessionCompleted && DateTime.now().isAfter(expiry);
+    } catch (_) {
+      return false;
+    }
+  }
 
   String _getExpirationText() {
     if (widget.session.expiresAt == null) return 'No Expiration';
@@ -262,10 +271,18 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
                     child: _isSessionCompleted
-                        ? _buildBanner('All students checked in', Colors.green, Icons.check_circle)
-                        : _isSessionExpired
-                            ? _buildBanner('Session expired', Colors.red, Icons.error)
-                            : const SizedBox.shrink(),
+                        ? _buildBanner(
+                            'All students checked in',
+                            Colors.green,
+                            Icons.check_circle,
+                          )
+                        : _isExpired
+                        ? _buildBanner(
+                            'Session expired',
+                            Colors.red,
+                            Icons.error,
+                          )
+                        : const SizedBox.shrink(),
                   ),
 
                   const SizedBox(height: 24),
@@ -274,7 +291,12 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildCounter('✅', 'Present', _presentCount, Colors.green),
+                      _buildCounter(
+                        '✅',
+                        'Present',
+                        _presentCount,
+                        Colors.green,
+                      ),
                       _buildCounter('⏰', 'Late', _lateCount, Colors.amber),
                       _buildCounter('❌', 'Absent', _absentCount, Colors.red),
                       _buildCounter('○', 'Waiting', _pendingCount, Colors.grey),
@@ -296,7 +318,35 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ...List.generate(_sessionDetail?.students.length ?? 0, (index) {
+                  if (_showPollingError)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      color: Colors.orange.shade50,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.wifi_off, color: Colors.orange),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Live updates paused. Check your connection.',
+                              style: TextStyle(color: Colors.orange.shade800),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() => _showPollingError = false);
+                              _consecutiveErrors = 0;
+                              _startPolling();
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (_showPollingError) const SizedBox(height: 16),
+                  ...List.generate(_sessionDetail?.students.length ?? 0, (
+                    index,
+                  ) {
                     final student = _sessionDetail!.students[index];
                     return _buildStudentCard(student);
                   }),
@@ -314,11 +364,12 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed:
-                      (widget.isSubmitting || (_isSessionExpired && !_isSessionCompleted))
-                          ? null
-                          : () {
-                              widget.onSubmit?.call();
-                            },
+                      (widget.isSubmitting ||
+                          (_isExpired && !_isSessionCompleted))
+                      ? null
+                      : () {
+                          widget.onSubmit?.call();
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -401,10 +452,7 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
           style: AppTextStyle.bold16.copyWith(color: color, fontSize: 20),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTextStyle.bold12.copyWith(color: AppColors.grey),
-        ),
+        Text(label, style: AppTextStyle.bold12.copyWith(color: AppColors.grey)),
       ],
     );
   }
@@ -459,7 +507,9 @@ class _GenerateQrCodeViewBodyState extends State<GenerateQrCodeViewBody> {
                 if (student.checkInTime != null)
                   Text(
                     student.checkInTime!,
-                    style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
+                    style: AppTextStyle.medium12.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
               ],
             ),

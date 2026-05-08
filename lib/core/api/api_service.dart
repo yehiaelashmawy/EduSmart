@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:school_system/core/api/api_exceptions.dart';
 import 'package:school_system/core/api/dio_client.dart';
@@ -8,8 +9,11 @@ class ApiService {
   // GET
   Future<dynamic> get(String endPoint) async {
     try {
-      final response = await _dioClient.dio.get(endPoint);
-      return response.data;
+      final response = await _dioClient.dio.get(
+        endPoint,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return jsonDecode(utf8.decode(response.data));
     } catch (e) {
       throw ApiExceptions.handleException(e as DioException);
     }
@@ -18,8 +22,12 @@ class ApiService {
   // POST (JSON)
   Future<dynamic> post(String endPoint, {dynamic data}) async {
     try {
-      final response = await _dioClient.dio.post(endPoint, data: data);
-      return response.data;
+      final response = await _dioClient.dio.post(
+        endPoint, 
+        data: data,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return jsonDecode(utf8.decode(response.data));
     } catch (e) {
       throw ApiExceptions.handleException(e as DioException);
     }
@@ -28,8 +36,12 @@ class ApiService {
   // PUT
   Future<dynamic> put(String endPoint, {dynamic data}) async {
     try {
-      final response = await _dioClient.dio.put(endPoint, data: data);
-      return response.data;
+      final response = await _dioClient.dio.put(
+        endPoint, 
+        data: data,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return jsonDecode(utf8.decode(response.data));
     } catch (e) {
       throw ApiExceptions.handleException(e as DioException);
     }
@@ -38,8 +50,11 @@ class ApiService {
   // DELETE
   Future<dynamic> delete(String endPoint) async {
     try {
-      final response = await _dioClient.dio.delete(endPoint);
-      return response.data;
+      final response = await _dioClient.dio.delete(
+        endPoint,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return jsonDecode(utf8.decode(response.data));
     } catch (e) {
       throw ApiExceptions.handleException(e as DioException);
     }

@@ -5,7 +5,6 @@ import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/repos/student_attendance_repo.dart';
-import 'package:school_system/features/student/data/models/active_session_model.dart';
 import 'package:school_system/features/student/presentation/manager/student_attendance_cubit/student_attendance_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_attendance_cubit/student_attendance_state.dart';
 
@@ -25,9 +24,9 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StudentAttendanceCubit(
-        StudentAttendanceRepo(ApiService()),
-      )..getActiveSession(),
+      create: (context) =>
+          StudentAttendanceCubit(StudentAttendanceRepo(ApiService()))
+            ..getActiveSession(),
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
@@ -63,13 +62,14 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                 arguments: state.result,
               );
             } else if (state is StudentAttendanceError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {
-            final isLoading = state is StudentAttendanceLoading ||
+            final isLoading =
+                state is StudentAttendanceLoading ||
                 state is StudentAttendanceInitial;
             List<int> availableCodes = [];
             String sessionId = '';
@@ -87,7 +87,9 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                     Expanded(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 24.0),
+                          horizontal: 24.0,
+                          vertical: 24.0,
+                        ),
                         child: Column(
                           children: [
                             // Top Graphic Card
@@ -95,8 +97,9 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(vertical: 40),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor
-                                    .withValues(alpha: 0.05),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.05,
+                                ),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Column(
@@ -108,16 +111,19 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                                       borderRadius: BorderRadius.circular(16),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black
-                                              .withValues(alpha: 0.05),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.05,
+                                          ),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
-                                        )
+                                        ),
                                       ],
                                     ),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 8),
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: AppColors.secondaryColor,
                                         borderRadius: BorderRadius.circular(8),
@@ -169,8 +175,9 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                                 padding: const EdgeInsets.only(top: 20),
                                 child: Text(
                                   'No codes available.',
-                                  style: AppTextStyle.medium14
-                                      .copyWith(color: AppColors.grey),
+                                  style: AppTextStyle.medium14.copyWith(
+                                    color: AppColors.grey,
+                                  ),
                                 ),
                               )
                             else
@@ -189,7 +196,8 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _selectedCode == null ||
+                          onPressed:
+                              _selectedCode == null ||
                                   isLoading ||
                                   availableCodes.isEmpty ||
                                   _isSubmitted
@@ -199,7 +207,9 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                                   context
                                       .read<StudentAttendanceCubit>()
                                       .submitSelectedCode(
-                                          sessionId, _selectedCode!);
+                                        sessionId,
+                                        _selectedCode!,
+                                      );
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.secondaryColor,
@@ -221,8 +231,11 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(Icons.arrow_forward,
-                                  color: Colors.white, size: 20),
+                              const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                             ],
                           ),
                         ),
@@ -273,9 +286,7 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
           children: [
             Text(
               code.toString(),
-              style: AppTextStyle.bold16.copyWith(
-                color: AppColors.black,
-              ),
+              style: AppTextStyle.bold16.copyWith(color: AppColors.black),
             ),
             Container(
               width: 24,

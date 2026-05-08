@@ -1,6 +1,6 @@
 class SessionTrackingModel {
   final String sessionId;
-  final int method;
+  final String method;
   final String? date;
   final int totalStudents;
   final int presentCount;
@@ -24,7 +24,7 @@ class SessionTrackingModel {
   factory SessionTrackingModel.fromJson(Map<String, dynamic> json) {
     return SessionTrackingModel(
       sessionId: json['sessionId'] as String? ?? '',
-      method: json['method'] as int? ?? 0,
+      method: json['method'] as String? ?? '',
       date: json['date'] as String?,
       totalStudents: json['totalStudents'] as int? ?? 0,
       presentCount: json['presentCount'] as int? ?? 0,

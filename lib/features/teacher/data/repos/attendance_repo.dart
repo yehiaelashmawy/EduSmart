@@ -186,7 +186,8 @@ class AttendanceRepo {
       final data = response['data'];
 
       if (success && data != null) {
-        return Right(data as List<dynamic>);
+        final sessions = (data as Map)['sessions'] as List? ?? [];
+        return Right(sessions);
       } else {
         return Left(
           ApiErrors(
