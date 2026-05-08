@@ -447,14 +447,18 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
       TeacherClassModel teacherClass, List<TeacherLessonModel> lessons) {
     final todayStr = DateTime.now().toIso8601String().split('T')[0];
     final taken = <String>{};
+
+    final anyStudentHasTodayRecord = teacherClass.students.any(
+      (s) => s.details.attendance.recentRecords
+          .any((r) => r.date.startsWith(todayStr)),
+    );
+
+    if (!anyStudentHasTodayRecord) return taken;
+
+    // Only mark lessons that are scheduled TODAY
     for (final lesson in lessons) {
-      for (final student in teacherClass.students) {
-        final hasTodayRecord = student.details.attendance.recentRecords
-            .any((r) => r.date.startsWith(todayStr));
-        if (hasTodayRecord) {
-          taken.add(lesson.oid);
-          break;
-        }
+      if (lesson.date.startsWith(todayStr)) {
+        taken.add(lesson.oid);
       }
     }
     return taken;
