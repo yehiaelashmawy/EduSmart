@@ -4,20 +4,21 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/student/data/models/student_attendance_submit_model.dart';
 
-class StudentAttendanceSuccessView extends StatelessWidget {
-  static const String routeName = 'student_attendance_success_view';
+class StudentAttendanceAbsentView extends StatelessWidget {
+  static const String routeName = 'student_attendance_absent_view';
+  final StudentAttendanceSubmitModel? result;
 
-  const StudentAttendanceSuccessView({super.key});
+  const StudentAttendanceAbsentView({super.key, this.result});
 
   @override
   Widget build(BuildContext context) {
-    // Accept an optional StudentAttendanceSubmitModel passed as route argument
-    final result =
-        ModalRoute.of(context)?.settings.arguments as StudentAttendanceSubmitModel?;
-
-    final submittedAt = result?.checkInTime.isNotEmpty == true 
-        ? result!.checkInTime 
+    final argResult = result ?? ModalRoute.of(context)?.settings.arguments as StudentAttendanceSubmitModel?;
+    
+    final submittedAt = argResult?.checkInTime.isNotEmpty == true 
+        ? argResult!.checkInTime 
         : DateFormat('h:mm a').format(DateTime.now());
+        
+    final message = argResult?.message.isNotEmpty == true ? argResult!.message : "Wrong number selected. Marked as Absent.";
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -43,7 +44,7 @@ class StudentAttendanceSuccessView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Success Icon
+              // Error Icon
               Container(
                 width: 100,
                 height: 100,
@@ -61,12 +62,12 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                 child: Center(
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: Color(0xFF1FAB71),
+                      color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(12),
                     child: const Icon(
-                      Icons.check,
+                      Icons.close,
                       color: Colors.white,
                       size: 32,
                     ),
@@ -76,7 +77,7 @@ class StudentAttendanceSuccessView extends StatelessWidget {
               const SizedBox(height: 32),
 
               Text(
-                'Attendance\nRecorded\nSuccessfully',
+                'Marked as Absent',
                 style: AppTextStyle.bold24.copyWith(
                   color: AppColors.black,
                   fontSize: 28,
@@ -86,26 +87,21 @@ class StudentAttendanceSuccessView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Recorded at ',
-                    style: AppTextStyle.medium14.copyWith(
-                      color: AppColors.grey,
-                    ),
-                  ),
-                  Text(
-                    submittedAt,
-                    style: AppTextStyle.bold14.copyWith(
-                      color: AppColors.secondaryColor,
-                    ),
-                  ),
-                ],
+              Text(
+                message,
+                style: AppTextStyle.medium14.copyWith(
+                  color: AppColors.grey,
+                ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 48),
+              
+              const SizedBox(height: 32),
+              
+              const Divider(),
+              
+              const SizedBox(height: 32),
 
-              // Session Details Card
+              // Info rows
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -120,49 +116,42 @@ class StudentAttendanceSuccessView extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
+                child: Column(
                   children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: AppColors.secondaryColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.how_to_reg_rounded,
-                        color: AppColors.secondaryColor,
-                        size: 30,
-                      ),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time, color: Colors.grey, size: 20),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Recorded at $submittedAt',
+                          style: AppTextStyle.medium14.copyWith(color: AppColors.black),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'SESSION VERIFIED',
-                            style: AppTextStyle.bold12.copyWith(
-                              color: AppColors.grey,
-                              letterSpacing: 1.0,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            result?.message ?? 'Attendance recorded successfully.',
-                            style: AppTextStyle.bold16.copyWith(
-                              color: AppColors.black,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.assignment_late_outlined, color: Colors.red, size: 20),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Status: Absent',
+                          style: AppTextStyle.bold14.copyWith(color: Colors.red),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 64),
+
+              const SizedBox(height: 32),
+
+              Text(
+                "Your teacher has been notified. Contact them if you think this is a mistake.",
+                style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 32),
 
               SizedBox(
                 width: double.infinity,

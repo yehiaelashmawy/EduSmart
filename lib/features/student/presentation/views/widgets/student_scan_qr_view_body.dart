@@ -99,17 +99,16 @@ class _StudentScanQrViewBodyState extends State<StudentScanQrViewBody> {
     return BlocConsumer<StudentAttendanceCubit, StudentAttendanceState>(
       listener: (context, state) {
         if (state is StudentAttendanceSuccess) {
-          final session =
-              context.read<StudentAttendanceCubit>().state
-                  is ActiveSessionLoaded
-              ? (context.read<StudentAttendanceCubit>().state
-                        as ActiveSessionLoaded)
-                    .session
-              : null;
           Navigator.pushReplacementNamed(
             context,
             'student_attendance_success_view',
-            arguments: session,
+            arguments: state.result,
+          );
+        } else if (state is StudentAttendanceAbsent) {
+          Navigator.pushReplacementNamed(
+            context,
+            'student_attendance_absent_view',
+            arguments: state.result,
           );
         } else if (state is StudentAttendanceError) {
           // Allow retry on error

@@ -25,7 +25,7 @@ class EntryCodeView extends StatelessWidget {
             CustomSnackBar.showSuccess(context, state.message);
             Navigator.pop(context, true);
           } else if (state is SubmitAttendanceFailure) {
-            CustomSnackBar.showError(context, state.failure.errorMessage);
+            // Error is passed down to body for inline display if needed
           }
         },
         builder: (context, submitState) {
@@ -49,6 +49,7 @@ class EntryCodeView extends StatelessWidget {
             body: EntryCodeViewBody(
               session: session,
               isSubmitting: submitState is SubmitAttendanceLoading,
+              errorMessage: submitState is SubmitAttendanceFailure ? submitState.failure.errorMessage : null,
               onSubmit: (selectedNumber) {
                 context.read<SubmitAttendanceCubit>().submitSession(
                   sessionId: session.sessionId,

@@ -4,8 +4,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
-import 'package:school_system/core/utils/theme_manager.dart';
 import 'package:school_system/features/teacher/data/models/attendance_session_model.dart';
+import 'package:school_system/features/teacher/data/models/session_tracking_model.dart';
 import 'package:school_system/features/teacher/data/repos/attendance_repo.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/code_selector_card.dart';
 
@@ -13,6 +13,7 @@ class EntryCodeViewBody extends StatefulWidget {
   final AttendanceSessionModel session;
   final bool isLoading;
   final bool isSubmitting;
+  final String? errorMessage;
   // selectedNumber is the actual int value the teacher tapped
   final void Function(int selectedNumber)? onSubmit;
 
@@ -21,6 +22,7 @@ class EntryCodeViewBody extends StatefulWidget {
     required this.session,
     this.isLoading = false,
     this.isSubmitting = false,
+    this.errorMessage,
     this.onSubmit,
   });
 
@@ -30,8 +32,9 @@ class EntryCodeViewBody extends StatefulWidget {
 
 class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
   late AttendanceRepo _repo;
-  late List<Map<String, dynamic>> _students;
-  String? _lastScannedName;
+  SessionTrackingModel? _sessionDetail;
+  bool _isSessionCompleted = false;
+  bool _isSessionExpired = false;
   int? _selectedNumber; // actual number value, not index
   int _activeCodeIndex = 0;
   Timer? _pollTimer;
@@ -40,11 +43,8 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
   void initState() {
     super.initState();
     _repo = AttendanceRepo(ApiService());
-    _students = widget.session.students.map((s) {
-      return {'oid': s.studentOid, 'name': s.studentName, 'scanned': false};
-    }).toList();
 
-    // Poll every 5 seconds for real-time student join status
+    _poll();
     _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) => _poll());
   }
 
@@ -55,35 +55,55 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
   }
 
   Future<void> _poll() async {
-    final result = await _repo.getActiveSession();
-    result.fold(
+    if (_isSessionCompleted) return;
+
+    final detailResult = await _repo.getSessionDetail(widget.session.sessionId);
+    detailResult.fold(
       (_) {},
-      (session) {
+      (detail) {
         if (!mounted) return;
-        if (session.randomNumbers == null || session.randomNumbers!.isEmpty) return;
-        
-        final scannedOids = <String>{
-          for (final s in session.students) s.studentOid,
-        };
         setState(() {
-          String? newScan;
-          for (final student in _students) {
-            final oid = student['oid'] as String;
-            final wasScanned = student['scanned'] as bool;
-            if (scannedOids.contains(oid) && !wasScanned) {
-              student['scanned'] = true;
-              newScan = student['name'] as String;
-            }
+          _sessionDetail = detail;
+          if (detail.notRecorded == 0) {
+            _isSessionCompleted = true;
+            _pollTimer?.cancel();
           }
-          if (newScan != null) _lastScannedName = newScan;
         });
+      },
+    );
+
+    // Check if session is expired
+    final sessionsResult = await _repo.getSessions(widget.session.classOid);
+    sessionsResult.fold(
+      (_) {},
+      (sessions) {
+        if (!mounted) return;
+        try {
+          final currentSession = sessions.firstWhere(
+              (s) => s['sessionId'] == widget.session.sessionId,
+              orElse: () => null);
+          if (currentSession != null) {
+            bool isCompleted = currentSession['isCompleted'] ?? false;
+            bool isExpired = currentSession['isExpired'] ?? false;
+            setState(() {
+              if (isCompleted) {
+                _isSessionCompleted = true;
+                _pollTimer?.cancel();
+              } else if (isExpired) {
+                _isSessionExpired = true;
+                _pollTimer?.cancel();
+              }
+            });
+          }
+        } catch (_) {}
       },
     );
   }
 
-  int get _total => _students.length;
-  int get _presentCount => _students.where((s) => s['scanned'] == true).length;
-  int get _pendingCount => _total - _presentCount;
+  int get _presentCount => _sessionDetail?.presentCount ?? 0;
+  int get _absentCount => _sessionDetail?.absentCount ?? 0;
+  int get _lateCount => _sessionDetail?.lateCount ?? 0;
+  int get _pendingCount => _sessionDetail?.notRecorded ?? widget.session.students.length;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +162,30 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
                           'Correct code set to $_selectedNumber',
                           style: AppTextStyle.medium12.copyWith(
                             color: const Color(0xff059669),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+
+                  if (widget.errorMessage != null && widget.errorMessage!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            widget.errorMessage!.contains('Invalid') || widget.errorMessage!.contains('Wrong')
+                              ? 'Wrong number, try again'
+                              : widget.errorMessage!,
+                            style: AppTextStyle.medium12.copyWith(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
@@ -213,62 +257,21 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
                   // Live feedback banner
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
-                    child: _lastScannedName != null
-                        ? Container(
-                            key: ValueKey(_lastScannedName),
-                            margin: const EdgeInsets.only(bottom: 24),
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff065AD8).withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: const Color(0xff065AD8).withValues(alpha: 0.25),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Color(0xff065AD8),
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    '$_lastScannedName matched the code',
-                                    style: AppTextStyle.medium14.copyWith(
-                                      color: const Color(0xff065AD8),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+                    child: _isSessionCompleted
+                        ? _buildBanner('All students checked in', Colors.green, Icons.check_circle)
+                        : _isSessionExpired
+                            ? _buildBanner('Session expired', Colors.red, Icons.error)
+                            : const SizedBox.shrink(),
                   ),
 
                   // Stats Row
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Expanded(
-                        child: _buildBottomStatCard(
-                          '$_presentCount/$_total',
-                          'STUDENTS\nPRESENT',
-                          AppColors.primaryColor,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildBottomStatCard(
-                          _pendingCount.toString().padLeft(2, '0'),
-                          'PENDING',
-                          const Color(0xff993300),
-                        ),
-                      ),
+                      _buildCounter('✅', 'Present', _presentCount, Colors.green),
+                      _buildCounter('⏰', 'Late', _lateCount, Colors.amber),
+                      _buildCounter('❌', 'Absent', _absentCount, Colors.red),
+                      _buildCounter('○', 'Waiting', _pendingCount, Colors.grey),
                     ],
                   ),
 
@@ -283,57 +286,9 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ...List.generate(_students.length, (index) {
-                    final student = _students[index];
-                    final bool scanned = student['scanned'] as bool;
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: scanned
-                              ? const Color(0xff065AD8).withValues(alpha: 0.3)
-                              : AppColors.lightGrey.withValues(alpha: 0.4),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: scanned
-                                  ? const Color(0xff065AD8)
-                                  : AppColors.lightGrey,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              student['name'] as String,
-                              style: AppTextStyle.medium14.copyWith(
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            scanned ? 'Joined' : 'Waiting',
-                            style: AppTextStyle.bold12.copyWith(
-                              color: scanned
-                                  ? const Color(0xff065AD8)
-                                  : AppColors.grey,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                  ...List.generate(_sessionDetail?.students.length ?? 0, (index) {
+                    final student = _sessionDetail!.students[index];
+                    return _buildStudentCard(student);
                   }),
                   const SizedBox(height: 16),
                 ],
@@ -362,7 +317,7 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: (_selectedNumber == null || widget.isSubmitting)
+                      onPressed: (_selectedNumber == null || widget.isSubmitting || (_isSessionExpired && !_isSessionCompleted))
                           ? null
                           : () => widget.onSubmit?.call(_selectedNumber!),
                       style: ElevatedButton.styleFrom(
@@ -437,33 +392,117 @@ class _EntryCodeViewBodyState extends State<EntryCodeViewBody> {
     );
   }
 
-  Widget _buildBottomStatCard(String value, String label, Color valueColor) {
+  Widget _buildBanner(String text, Color color, IconData icon) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.only(bottom: 24),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: ThemeManager.isDarkMode
-            ? AppColors.lightGrey.withValues(alpha: 0.2)
-            : const Color(0xffF4F7FB),
-        borderRadius: BorderRadius.circular(16),
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Text(
-            value,
-            style: AppTextStyle.bold24.copyWith(
-              color: valueColor,
-              fontSize: 26,
+          Icon(icon, color: color, size: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: AppTextStyle.medium14.copyWith(color: color),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.bold12.copyWith(
-              color: AppColors.grey,
-              letterSpacing: 1.0,
-              fontSize: 10,
-              height: 1.4,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCounter(String icon, String label, int count, Color color) {
+    return Column(
+      children: [
+        Text(
+          '$icon $count',
+          style: AppTextStyle.bold16.copyWith(color: color, fontSize: 20),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: AppTextStyle.bold12.copyWith(color: AppColors.grey),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStudentCard(SessionTrackingStudentModel student) {
+    Color statusColor;
+    IconData statusIcon;
+    switch (student.status) {
+      case 'Present':
+        statusColor = Colors.green;
+        statusIcon = Icons.check_circle;
+        break;
+      case 'Late':
+        statusColor = Colors.amber;
+        statusIcon = Icons.access_time;
+        break;
+      case 'Absent':
+        statusColor = Colors.red;
+        statusIcon = Icons.cancel;
+        break;
+      default:
+        statusColor = Colors.grey;
+        statusIcon = Icons.pause_circle_outline;
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: statusColor.withValues(alpha: 0.1),
+            child: Text(
+              student.studentName.isNotEmpty ? student.studentName[0] : '?',
+              style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  student.studentName,
+                  style: AppTextStyle.medium14.copyWith(color: AppColors.black),
+                ),
+                if (student.checkInTime != null)
+                  Text(
+                    student.checkInTime!,
+                    style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
+                  ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: statusColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                Icon(statusIcon, size: 14, color: statusColor),
+                const SizedBox(width: 4),
+                Text(
+                  student.status,
+                  style: AppTextStyle.bold12.copyWith(color: statusColor),
+                ),
+              ],
             ),
           ),
         ],

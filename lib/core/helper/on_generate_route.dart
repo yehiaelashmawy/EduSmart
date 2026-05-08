@@ -29,6 +29,8 @@ import 'package:school_system/features/student/presentation/views/student_attend
 import 'package:school_system/features/student/presentation/views/student_scan_qr_view.dart';
 import 'package:school_system/features/student/presentation/views/student_select_code_view.dart';
 import 'package:school_system/features/student/presentation/views/student_attendance_success_view.dart';
+import 'package:school_system/features/student/presentation/views/student_attendance_absent_view.dart';
+import 'package:school_system/features/student/data/models/student_attendance_submit_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
@@ -126,6 +128,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case StudentAttendanceSuccessView.routeName:
       return MaterialPageRoute(
         builder: (context) => const StudentAttendanceSuccessView(),
+        settings: settings,
+      );
+    case StudentAttendanceAbsentView.routeName:
+      final result = settings.arguments as StudentAttendanceSubmitModel?;
+      return MaterialPageRoute(
+        builder: (context) => StudentAttendanceAbsentView(result: result),
       );
 
     case StudentExamDetailsView.routeName:

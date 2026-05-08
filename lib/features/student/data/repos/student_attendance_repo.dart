@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:school_system/core/api/api_errors.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/student/data/models/active_session_model.dart';
+import 'package:school_system/features/student/data/models/student_attendance_submit_model.dart';
 
 class StudentAttendanceRepo {
   final ApiService _apiService;
@@ -33,7 +34,7 @@ class StudentAttendanceRepo {
     }
   }
 
-  Future<Either<ApiErrors, bool>> submitAttendance({
+  Future<Either<ApiErrors, StudentAttendanceSubmitModel>> submitAttendance({
     required String sessionId,
     required int selectedNumber,
     required String remarks,
@@ -48,18 +49,7 @@ class StudentAttendanceRepo {
         },
       );
 
-      final success = response['success'] as bool? ?? false;
-
-      if (success) {
-        return const Right(true);
-      } else {
-        return Left(
-          ApiErrors(
-            errorMessage:
-                response['messages']?['Error'] ?? 'Failed to submit attendance',
-          ),
-        );
-      }
+      return Right(StudentAttendanceSubmitModel.fromJson(response as Map<String, dynamic>));
     } catch (e) {
       if (e is ApiErrors) return Left(e);
       return Left(ApiErrors(errorMessage: e.toString()));

@@ -20,7 +20,7 @@ class StudentSelectCodeView extends StatefulWidget {
 
 class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
   int? _selectedCode;
-  ActiveSessionModel? _lastSession; // cached so listener can use it
+  bool _isSubmitted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +49,18 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
         body: BlocConsumer<StudentAttendanceCubit, StudentAttendanceState>(
           listener: (context, state) {
             if (state is StudentAttendanceSuccess) {
+              setState(() => _isSubmitted = true);
               Navigator.pushReplacementNamed(
                 context,
                 'student_attendance_success_view',
-                arguments: _lastSession,
+                arguments: state.result,
+              );
+            } else if (state is StudentAttendanceAbsent) {
+              setState(() => _isSubmitted = true);
+              Navigator.pushReplacementNamed(
+                context,
+                'student_attendance_absent_view',
+                arguments: state.result,
               );
             } else if (state is StudentAttendanceError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -69,8 +77,6 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
             if (state is ActiveSessionLoaded) {
               availableCodes = state.session.randomNumbers ?? [];
               sessionId = state.session.sessionId;
-              // Cache for the listener to use after state changes to Success
-              _lastSession = state.session;
             }
 
             return SafeArea(
@@ -185,9 +191,11 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
                         child: ElevatedButton(
                           onPressed: _selectedCode == null ||
                                   isLoading ||
-                                  availableCodes.isEmpty
+                                  availableCodes.isEmpty ||
+                                  _isSubmitted
                               ? null
                               : () {
+                                  setState(() => _isSubmitted = true);
                                   context
                                       .read<StudentAttendanceCubit>()
                                       .submitSelectedCode(
@@ -233,11 +241,13 @@ class _StudentSelectCodeViewState extends State<StudentSelectCodeView> {
   Widget _buildCodeOption(int code) {
     final bool isSelected = _selectedCode == code;
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedCode = code;
-        });
-      },
+      onTap: _isSubmitted
+          ? null
+          : () {
+              setState(() {
+                _selectedCode = code;
+              });
+            },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(20),

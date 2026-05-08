@@ -29,7 +29,13 @@ class StudentAttendanceCubit extends Cubit<StudentAttendanceState> {
 
     result.fold(
       (failure) => emit(StudentAttendanceError(failure.errorMessage)),
-      (_) => emit(StudentAttendanceSuccess()),
+      (submitResult) {
+        if (submitResult.status == 'Present' || submitResult.status == 'Late') {
+          emit(StudentAttendanceSuccess(submitResult));
+        } else {
+          emit(StudentAttendanceAbsent(submitResult));
+        }
+      },
     );
   }
 
@@ -44,7 +50,13 @@ class StudentAttendanceCubit extends Cubit<StudentAttendanceState> {
 
     result.fold(
       (failure) => emit(StudentAttendanceError(failure.errorMessage)),
-      (_) => emit(StudentAttendanceSuccess()),
+      (submitResult) {
+        if (submitResult.status == 'Present' || submitResult.status == 'Late') {
+          emit(StudentAttendanceSuccess(submitResult));
+        } else {
+          emit(StudentAttendanceAbsent(submitResult));
+        }
+      },
     );
   }
 }
