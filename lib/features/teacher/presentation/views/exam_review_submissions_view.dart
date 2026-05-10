@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
@@ -10,6 +11,9 @@ import 'package:school_system/features/teacher/presentation/views/widgets/exam_s
 import 'package:school_system/features/teacher/data/models/exam_submission_model.dart';
 import 'package:school_system/features/teacher/data/repos/teacher_exams_repo.dart';
 import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/core/widgets/custom_snack_bar.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:school_system/core/utils/pdf_generator.dart';
 
 class ExamReviewSubmissionsView extends StatefulWidget {
   static const String routeName = '/exam-review-submissions';
@@ -82,11 +86,93 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
           icon: Icon(Icons.arrow_back, color: AppColors.primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          BlocBuilder<ExamGradingCubit, ExamGradingState>(
+            builder: (context, state) {
+              List<ExamSubmissionModel> currentSubmissions = [];
+              if (state is ExamGradingLoaded) {
+                currentSubmissions = state.response.submissions;
+              } else if (state is ExamGradingSubmitting) {
+                currentSubmissions = state.response.submissions;
+              } else if (state is ExamGradingSubmitSuccess) {
+                currentSubmissions = state.response.submissions;
+              }
+
+              if (currentSubmissions.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
+              return IconButton(
+                icon: Icon(Icons.download_outlined, color: AppColors.primaryColor),
+                onPressed: () async {
+                  try {
+                    final path = await PdfGenerator.generateExamSubmissionsPdf(
+                      title: _currentExam.name,
+                      subtitle: '${_currentExam.subjectName} • ${_currentExam.className}',
+                      submissions: currentSubmissions,
+                    );
+                    await OpenFilex.open(path);
+                  } catch (e) {
+                    if (context.mounted) {
+                      CustomSnackBar.showError(context, 'Error generating PDF: $e');
+                    }
+                  }
+                },
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocBuilder<ExamGradingCubit, ExamGradingState>(
         builder: (context, state) {
           if (state is ExamGradingLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: Column(
+                children: [
+                  // Mock Summary Bar
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: List.generate(
+                        3,
+                        (i) => Expanded(
+                          child: Container(
+                            height: 60,
+                            margin: EdgeInsets.only(right: i == 2 ? 0 : 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Mock List
+                  Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: 6,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) => ExamSubmissionCard(
+                        submission: ExamSubmissionModel(
+                          submissionId: 'skeleton_$index',
+                          studentId: 'skeleton_$index',
+                          studentName: 'Student Name Placeholder',
+                          submittedAt: '2026-01-01',
+                          score: 0,
+                          status: 'Pending',
+                          isGraded: false,
+                        ),
+                        onTap: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
 
           if (state is ExamGradingError) {
@@ -202,6 +288,10 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
         return ExamSubmissionCard(
           submission: submission,
           onTap: () async {
+            if (submission.submittedAt.isEmpty || submission.submissionId.startsWith('missing_')) {
+              CustomSnackBar.showInfo(context, 'This student has not submitted the exam yet.');
+              return;
+            }
             final refresh = await Navigator.pushNamed(
               context,
               ExamGradeSubmissionView.routeName,
