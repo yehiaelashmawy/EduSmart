@@ -65,6 +65,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
               // Force the whole app to rebuild seamlessly to pick up AppColors
               // without destroying the current navigation stack!
               if (!mounted || navigatorContext == null) return;
+              // ignore: use_build_context_synchronously
               ThemeManager.forceAppRebuild(navigatorContext);
             },
           ),

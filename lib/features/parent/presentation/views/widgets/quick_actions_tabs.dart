@@ -21,7 +21,7 @@ class QuickActionsTabs extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         itemCount: tabs.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final isSelected = index == currentIndex;
           return GestureDetector(
@@ -34,8 +34,9 @@ class QuickActionsTabs extends StatelessWidget {
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color:
-                      isSelected ? AppColors.primaryColor : Colors.transparent,
+                  color: isSelected
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
                 ),
               ),
               child: Text(

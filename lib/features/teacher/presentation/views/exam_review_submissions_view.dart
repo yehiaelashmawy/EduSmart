@@ -103,18 +103,25 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
               }
 
               return IconButton(
-                icon: Icon(Icons.download_outlined, color: AppColors.primaryColor),
+                icon: Icon(
+                  Icons.download_outlined,
+                  color: AppColors.primaryColor,
+                ),
                 onPressed: () async {
                   try {
                     final path = await PdfGenerator.generateExamSubmissionsPdf(
                       title: _currentExam.name,
-                      subtitle: '${_currentExam.subjectName} • ${_currentExam.className}',
+                      subtitle:
+                          '${_currentExam.subjectName} • ${_currentExam.className}',
                       submissions: currentSubmissions,
                     );
                     await OpenFilex.open(path);
                   } catch (e) {
                     if (context.mounted) {
-                      CustomSnackBar.showError(context, 'Error generating PDF: $e');
+                      CustomSnackBar.showError(
+                        context,
+                        'Error generating PDF: $e',
+                      );
                     }
                   }
                 },
@@ -155,7 +162,7 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: 6,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      separatorBuilder: (_, _) => const SizedBox(height: 16),
                       itemBuilder: (context, index) => ExamSubmissionCard(
                         submission: ExamSubmissionModel(
                           submissionId: 'skeleton_$index',
@@ -282,14 +289,18 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: submissions.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      separatorBuilder: (_, _) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final submission = submissions[index];
         return ExamSubmissionCard(
           submission: submission,
           onTap: () async {
-            if (submission.submittedAt.isEmpty || submission.submissionId.startsWith('missing_')) {
-              CustomSnackBar.showInfo(context, 'This student has not submitted the exam yet.');
+            if (submission.submittedAt.isEmpty ||
+                submission.submissionId.startsWith('missing_')) {
+              CustomSnackBar.showInfo(
+                context,
+                'This student has not submitted the exam yet.',
+              );
               return;
             }
             final refresh = await Navigator.pushNamed(
@@ -302,6 +313,7 @@ class _ExamReviewSubmissionsViewState extends State<ExamReviewSubmissionsView>
               },
             );
             if (refresh == true && mounted) {
+              // ignore: use_build_context_synchronously
               context.read<ExamGradingCubit>().fetchSubmissions(
                 classStudents: widget.classStudents,
               );

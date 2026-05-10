@@ -16,8 +16,7 @@ class ActiveSessionBanner extends StatefulWidget {
 
 class _ActiveSessionBannerState extends State<ActiveSessionBanner>
     with SingleTickerProviderStateMixin {
-  final StudentAttendanceRepo _repo =
-      StudentAttendanceRepo(ApiService());
+  final StudentAttendanceRepo _repo = StudentAttendanceRepo(ApiService());
 
   ActiveSessionModel? _session;
   bool _checking = true;
@@ -95,8 +94,11 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
     final session = _session;
     if (session == null) return;
     if (session.method == 2) {
-      Navigator.pushNamed(context, 'student_scan_qr_view',
-          arguments: session.className);
+      Navigator.pushNamed(
+        context,
+        'student_scan_qr_view',
+        arguments: session.className,
+      );
     } else if (session.method == 3) {
       Navigator.pushNamed(context, StudentSelectCodeView.routeName);
     }
@@ -121,18 +123,16 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  AppColors.secondaryColor,
-                  const Color(0xff1a3f8f),
-                ],
+                colors: [AppColors.secondaryColor, const Color(0xff1a3f8f)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.secondaryColor
-                      .withValues(alpha: 0.3 * _pulseAnim.value),
+                  color: AppColors.secondaryColor.withValues(
+                    alpha: 0.3 * _pulseAnim.value,
+                  ),
                   blurRadius: 20,
                   offset: const Offset(0, 6),
                 ),
@@ -150,13 +150,12 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
                 // Pulsing dot
                 AnimatedBuilder(
                   animation: _pulseAnim,
-                  builder: (_, __) => Container(
+                  builder: (_, _) => Container(
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white
-                          .withValues(alpha: _pulseAnim.value),
+                      color: Colors.white.withValues(alpha: _pulseAnim.value),
                     ),
                   ),
                 ),
@@ -172,7 +171,9 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
                 const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
@@ -206,8 +207,7 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
             ),
             const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -216,9 +216,7 @@ class _ActiveSessionBannerState extends State<ActiveSessionBanner>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    session.method == 2
-                        ? Icons.qr_code_scanner
-                        : Icons.pin,
+                    session.method == 2 ? Icons.qr_code_scanner : Icons.pin,
                     color: AppColors.secondaryColor,
                     size: 16,
                   ),
