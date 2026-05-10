@@ -126,6 +126,7 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                           exam.status.toLowerCase() == 'pending';
 
                       return ExamItemCard(
+                        exam: exam,
                         examId: exam.oid,
                         title: exam.name.isNotEmpty
                             ? exam.name

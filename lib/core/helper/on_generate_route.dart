@@ -33,7 +33,6 @@ import 'package:school_system/features/student/presentation/views/student_attend
 import 'package:school_system/features/student/data/models/student_attendance_submit_model.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_exam_view.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
-import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
 import 'package:school_system/features/teacher/presentation/views/add_new_lesson_view.dart';
 import 'package:school_system/features/teacher/presentation/views/lesson_details_view.dart';
@@ -55,6 +54,14 @@ import 'package:school_system/features/teacher/presentation/views/entry_code_vie
 import 'package:school_system/features/teacher/presentation/views/attendance_report_view.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_weekly_schedule_view.dart';
 import 'package:school_system/features/teacher/data/models/attendance_session_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/features/teacher/data/models/teacher_exam_model.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_review_submissions_view.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_grade_submission_view.dart';
+import 'package:school_system/features/teacher/presentation/manager/exam_grading_cubit/exam_grading_cubit.dart';
+import 'package:school_system/features/teacher/data/repos/exam_grading_repo.dart';
+import 'package:school_system/features/teacher/data/models/exam_submission_model.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -166,7 +173,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const ParentReceiptView());
     case ParentWeeklyScheduleView.routeName:
       return MaterialPageRoute(
-          builder: (context) => const ParentWeeklyScheduleView());
+        builder: (context) => const ParentWeeklyScheduleView(),
+      );
     case StudentList.routeName:
       final args = settings.arguments;
       if (args is TeacherClassModel) {
@@ -188,20 +196,43 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const AddNewLessonView());
     case AddNewExamView.routeName:
       return MaterialPageRoute(builder: (context) => const AddNewExamView());
-    case ExamResultsView.routeName:
-      {
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder: (context) => ReviewSubmissionsView(
-            homeworkId: args?['examId'] ?? '',
-            homeworkTitle: args?['examTitle'] ?? 'Exam Submissions',
-            classStudents:
-                args?['classStudents'] as List<TeacherStudentModel>? ??
-                const [],
-            isExam: true,
-          ),
-        );
+    case ExamReviewSubmissionsView.routeName:
+      final dynamic args = settings.arguments;
+      final TeacherExamModel exam;
+      List<TeacherStudentModel> classStudents = [];
+
+      if (args is TeacherExamModel) {
+        exam = args;
+      } else {
+        final mapArgs = args as Map<String, dynamic>;
+        exam = mapArgs['exam'] as TeacherExamModel;
+        classStudents =
+            mapArgs['classStudents'] as List<TeacherStudentModel>? ?? [];
       }
+
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) =>
+              ExamGradingCubit(ExamGradingRepo(ApiService()), examId: exam.oid)
+                ..fetchSubmissions(classStudents: classStudents),
+          child: ExamReviewSubmissionsView(
+            exam: exam,
+            classStudents: classStudents,
+          ),
+        ),
+      );
+
+    case ExamGradeSubmissionView.routeName:
+      final args = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: args['cubit'] as ExamGradingCubit,
+          child: ExamGradeSubmissionView(
+            submission: args['submission'] as ExamSubmissionModel,
+            exam: args['exam'] as TeacherExamModel,
+          ),
+        ),
+      );
     case ExamDetailsView.routeName:
       final examId = settings.arguments as String?;
       return MaterialPageRoute(

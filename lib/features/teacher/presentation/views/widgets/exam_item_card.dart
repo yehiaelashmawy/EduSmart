@@ -3,11 +3,13 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_details_view.dart';
-import 'package:school_system/features/teacher/presentation/views/exam_results_view.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_review_submissions_view.dart';
+import 'package:school_system/features/teacher/data/models/teacher_exam_model.dart';
 
 class ExamItemCard extends StatelessWidget {
   const ExamItemCard({
     super.key,
+    required this.exam,
     required this.title,
     required this.date,
     required this.time,
@@ -20,6 +22,8 @@ class ExamItemCard extends StatelessWidget {
     this.classStudents = const [],
     this.onDeleted,
   });
+
+  final TeacherExamModel exam;
 
   final String title;
   final String date;
@@ -172,10 +176,9 @@ class ExamItemCard extends StatelessWidget {
                             context,
                             rootNavigator: true,
                           ).pushNamed(
-                            ExamResultsView.routeName,
+                            ExamReviewSubmissionsView.routeName,
                             arguments: {
-                              'examId': examId,
-                              'examTitle': title,
+                              'exam': exam,
                               'classStudents': classStudents,
                             },
                           );

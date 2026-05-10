@@ -9,7 +9,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_exam
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_state.dart';
-import '../exam_results_view.dart';
+import 'package:school_system/features/teacher/presentation/views/exam_review_submissions_view.dart';
 
 class UpcomingExamsSection extends StatelessWidget {
   const UpcomingExamsSection({super.key});
@@ -141,12 +141,10 @@ class UpcomingExamsSection extends StatelessWidget {
                             context,
                             rootNavigator: true,
                           ).pushNamed(
-                            ExamResultsView.routeName,
+                            ExamReviewSubmissionsView.routeName,
                             arguments: {
-                              'examId': exam.oid,
-                              'examTitle': exam.name,
+                              'exam': exam,
                               'classStudents': classStudents,
-                              'isExam': true,
                             },
                           );
                         },
