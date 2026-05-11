@@ -7,6 +7,7 @@ import 'package:school_system/features/teacher/presentation/manager/submissions_
 import 'package:school_system/features/teacher/presentation/views/grade_submission_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/submission_item_card.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
+import 'package:school_system/core/widgets/custom_snack_bar.dart';
 
 class ReviewSubmissionsViewBody extends StatelessWidget {
   final List<TeacherStudentModel> classStudents;
@@ -32,22 +33,28 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.error_outline,
-                      size: 48, color: AppColors.grey.withValues(alpha: 0.5)),
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: AppColors.grey.withValues(alpha: 0.5),
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     state.errorMessage,
                     textAlign: TextAlign.center,
-                    style:
-                        AppTextStyle.regular14.copyWith(color: AppColors.grey),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () =>
                         context.read<SubmissionsCubit>().fetchSubmissions(),
                     icon: const Icon(Icons.refresh, color: Colors.white),
-                    label: const Text('Retry',
-                        style: TextStyle(color: Colors.white)),
+                    label: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
                       shape: RoundedRectangleBorder(
@@ -73,11 +80,16 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
         }
 
         // Merge API submissions with class students
+        final cubit = context.read<SubmissionsCubit>();
+        final cubitTotalMarks = cubit.totalMarks;
         final mergedSubmissions = <SubmissionModel>[];
         for (final student in classStudents) {
           final existing = apiSubmissions.where(
-              (s) => s.studentEmail.toLowerCase() == student.email.toLowerCase() || s.studentName.toLowerCase() == student.fullName.toLowerCase());
-          
+            (s) =>
+                s.studentEmail.toLowerCase() == student.email.toLowerCase() ||
+                s.studentName.toLowerCase() == student.fullName.toLowerCase(),
+          );
+
           if (existing.isNotEmpty) {
             mergedSubmissions.add(existing.first);
           } else {
@@ -90,6 +102,7 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
                 attachmentUrl: null,
                 submittedAt: '',
                 grade: null,
+                totalMarks: cubitTotalMarks,
                 feedback: null,
                 status: 'NotSubmitted',
                 isLate: false,
@@ -97,24 +110,33 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
             );
           }
         }
-        
+
         // If there are submissions from students not in classStudents, add them too
         for (final s in apiSubmissions) {
-          if (!mergedSubmissions.any((ms) => ms.id == s.id || ms.studentEmail == s.studentEmail)) {
+          if (!mergedSubmissions.any(
+            (ms) => ms.id == s.id || ms.studentEmail == s.studentEmail,
+          )) {
             mergedSubmissions.add(s);
           }
         }
 
-        final submissions = mergedSubmissions.isEmpty && apiSubmissions.isNotEmpty ? apiSubmissions : mergedSubmissions;
+        final submissions =
+            mergedSubmissions.isEmpty && apiSubmissions.isNotEmpty
+            ? apiSubmissions
+            : mergedSubmissions;
 
-        final submitted =
-            submissions.where((s) => s.status != 'NotSubmitted').toList();
+        final submitted = submissions
+            .where((s) => s.status != 'NotSubmitted')
+            .toList();
         final toGrade = submitted.where((s) => !s.isGraded).length;
         final gradedList = submitted.where((s) => s.isGraded).toList();
         final avgGrade = gradedList.isEmpty
             ? null
             : gradedList.map((s) => s.grade!).reduce((a, b) => a + b) /
-                gradedList.length;
+                  gradedList.length;
+        final totalMarks = submissions.any((s) => s.totalMarks != null)
+            ? submissions.firstWhere((s) => s.totalMarks != null).totalMarks
+            : cubitTotalMarks;
 
         return DefaultTabController(
           length: 2,
@@ -125,7 +147,9 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
                 // ── Summary cards ──────────────────────────────────────────
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 20),
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
                   child: Row(
                     children: [
                       _SummaryCard(
@@ -134,7 +158,9 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
                         value: avgGrade != null
                             ? avgGrade.toStringAsFixed(0)
                             : '--',
-                        suffix: avgGrade != null ? '/100' : '',
+                        suffix: avgGrade != null
+                            ? '/${totalMarks?.toStringAsFixed(0) ?? '100'}'
+                            : '',
                         color: AppColors.primaryColor,
                       ),
                       const SizedBox(width: 16),
@@ -163,8 +189,7 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                   indicatorWeight: 2,
-                  dividerColor:
-                      AppColors.lightGrey.withValues(alpha: 0.3),
+                  dividerColor: AppColors.lightGrey.withValues(alpha: 0.3),
                   tabs: [
                     Tab(text: 'All (${submissions.length})'),
                     Tab(text: 'Submitted (${submitted.length})'),
@@ -177,13 +202,11 @@ class ReviewSubmissionsViewBody extends StatelessWidget {
                     children: [
                       _SubmissionList(
                         submissions: submissions,
-                        homeworkId:
-                            context.read<SubmissionsCubit>().homeworkId,
+                        homeworkId: context.read<SubmissionsCubit>().homeworkId,
                       ),
                       _SubmissionList(
                         submissions: submitted,
-                        homeworkId:
-                            context.read<SubmissionsCubit>().homeworkId,
+                        homeworkId: context.read<SubmissionsCubit>().homeworkId,
                       ),
                     ],
                   ),
@@ -222,8 +245,7 @@ class _SummaryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: AppColors.lightGrey.withValues(alpha: 0.3)),
+          border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,15 +271,15 @@ class _SummaryCard extends StatelessWidget {
               children: [
                 Text(
                   value,
-                  style: AppTextStyle.bold24
-                      .copyWith(color: AppColors.black),
+                  style: AppTextStyle.bold24.copyWith(color: AppColors.black),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4, left: 3),
                   child: Text(
                     suffix,
-                    style: AppTextStyle.regular14
-                        .copyWith(color: AppColors.grey),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                 ),
               ],
@@ -275,10 +297,7 @@ class _SubmissionList extends StatelessWidget {
   final List<SubmissionModel> submissions;
   final String homeworkId;
 
-  const _SubmissionList({
-    required this.submissions,
-    required this.homeworkId,
-  });
+  const _SubmissionList({required this.submissions, required this.homeworkId});
 
   @override
   Widget build(BuildContext context) {
@@ -287,8 +306,11 @@ class _SubmissionList extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.inbox_outlined,
-                size: 56, color: AppColors.grey.withValues(alpha: 0.4)),
+            Icon(
+              Icons.inbox_outlined,
+              size: 56,
+              color: AppColors.grey.withValues(alpha: 0.4),
+            ),
             const SizedBox(height: 12),
             Text(
               'No submissions yet',
@@ -308,6 +330,13 @@ class _SubmissionList extends StatelessWidget {
         return SubmissionItemCard(
           submission: s,
           onGradeTap: () async {
+            if (s.status == 'NotSubmitted') {
+              CustomSnackBar.showInfo(
+                context,
+                'This student has not submitted yet.',
+              );
+              return;
+            }
             final cubit = context.read<SubmissionsCubit>();
             final refreshed = await Navigator.push(
               context,
@@ -316,6 +345,7 @@ class _SubmissionList extends StatelessWidget {
                   submission: s,
                   homeworkId: homeworkId,
                   isExam: cubit.isExam,
+                  totalMarks: s.totalMarks ?? cubit.totalMarks,
                 ),
               ),
             );

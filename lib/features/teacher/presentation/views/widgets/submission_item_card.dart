@@ -134,7 +134,7 @@ class SubmissionItemCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 2),
                       child: Text(
-                        '/100',
+                        '/${submission.totalMarks?.toStringAsFixed(0) ?? '100'}',
                         style: AppTextStyle.regular12.copyWith(
                           color: AppColors.grey,
                         ),
@@ -270,51 +270,79 @@ class SubmissionItemCard extends StatelessWidget {
           const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
-            child: isGraded
-                ? OutlinedButton.icon(
-                    onPressed: onGradeTap,
-                    icon: Icon(
-                      Icons.edit_outlined,
-                      size: 16,
-                      color: AppColors.primaryColor,
-                    ),
-                    label: Text(
-                      'Edit Grade',
-                      style: AppTextStyle.semiBold14.copyWith(
-                        color: AppColors.primaryColor,
+            child: submission.status == 'NotSubmitted'
+                ? Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGrey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.lightGrey.withValues(alpha: 0.5),
                       ),
                     ),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      side: BorderSide(color: AppColors.primaryColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.hourglass_empty_outlined,
+                          size: 16,
+                          color: AppColors.grey.withValues(alpha: 0.6),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Not Submitted',
+                          style: AppTextStyle.semiBold14.copyWith(
+                            color: AppColors.grey.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
                     ),
                   )
-                : ElevatedButton.icon(
-                    onPressed: onGradeTap,
-                    icon: const Icon(
-                      Icons.star_border,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Grade Submission',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                : isGraded
+                    ? OutlinedButton.icon(
+                        onPressed: onGradeTap,
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 16,
+                          color: AppColors.primaryColor,
+                        ),
+                        label: Text(
+                          'Edit Grade',
+                          style: AppTextStyle.semiBold14.copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          side: BorderSide(color: AppColors.primaryColor),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      )
+                    : ElevatedButton.icon(
+                        onPressed: onGradeTap,
+                        icon: const Icon(
+                          Icons.star_border,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          'Grade Submission',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondaryColor,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.secondaryColor,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
           ),
         ],
       ),

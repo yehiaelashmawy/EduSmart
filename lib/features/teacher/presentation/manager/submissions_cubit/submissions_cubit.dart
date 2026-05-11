@@ -40,6 +40,7 @@ class SubmissionsCubit extends Cubit<SubmissionsState> {
   final SubmissionsRepo repo;
   final String homeworkId;
   final bool isExam;
+  final double? totalMarks;
 
   List<SubmissionModel> _submissions = [];
 
@@ -47,6 +48,7 @@ class SubmissionsCubit extends Cubit<SubmissionsState> {
     required this.repo,
     required this.homeworkId,
     this.isExam = false,
+    this.totalMarks,
   }) : super(SubmissionsInitial());
 
   Future<void> fetchSubmissions() async {
@@ -57,8 +59,20 @@ class SubmissionsCubit extends Cubit<SubmissionsState> {
     result.fold(
       (error) => emit(SubmissionsFailure(error.errorMessage)),
       (list) {
-        _submissions = list;
-        emit(SubmissionsSuccess(list));
+        _submissions = list.map((s) => SubmissionModel(
+          id: s.id,
+          studentName: s.studentName,
+          studentEmail: s.studentEmail,
+          content: s.content,
+          attachmentUrl: s.attachmentUrl,
+          submittedAt: s.submittedAt,
+          grade: s.grade,
+          totalMarks: s.totalMarks ?? totalMarks,
+          feedback: s.feedback,
+          status: s.status,
+          isLate: s.isLate,
+        )).toList();
+        emit(SubmissionsSuccess(_submissions));
       },
     );
   }
@@ -96,6 +110,7 @@ class SubmissionsCubit extends Cubit<SubmissionsState> {
               attachmentUrl: s.attachmentUrl,
               submittedAt: s.submittedAt,
               grade: grade,
+              totalMarks: s.totalMarks ?? totalMarks,
               feedback: feedback,
               status: 'Graded',
               isLate: s.isLate,

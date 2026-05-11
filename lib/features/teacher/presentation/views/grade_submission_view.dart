@@ -8,12 +8,14 @@ class GradeSubmissionView extends StatelessWidget {
   final SubmissionModel submission;
   final String homeworkId;
   final bool isExam;
+  final double? totalMarks;
 
   const GradeSubmissionView({
     super.key,
     required this.submission,
     required this.homeworkId,
     this.isExam = false,
+    this.totalMarks,
   });
 
   static const String routeName = '/grade_submission';
@@ -49,6 +51,7 @@ class GradeSubmissionView extends StatelessWidget {
         submission: submission,
         homeworkId: homeworkId,
         isExam: isExam,
+        totalMarks: totalMarks,
       ),
     );
   }

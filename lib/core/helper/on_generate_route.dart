@@ -358,6 +358,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
                   args['classStudents'] as List<TeacherStudentModel>? ??
                   const [],
               isExam: args['isExam'] as bool? ?? false,
+              totalMarks: (args['totalMarks'] as num?)?.toDouble(),
             ),
           );
         }

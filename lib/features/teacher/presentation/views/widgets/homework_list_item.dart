@@ -18,6 +18,7 @@ class HomeworkItemCard extends StatelessWidget {
     required this.isOverdue,
     required this.onDetailsTap,
     required this.onReviewTap,
+    this.totalMarks,
   });
 
   final String title;
@@ -33,6 +34,7 @@ class HomeworkItemCard extends StatelessWidget {
   final bool isOverdue;
   final VoidCallback onDetailsTap;
   final VoidCallback onReviewTap;
+  final int? totalMarks;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +182,7 @@ class HomeworkItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '$avgGrade/100',
+                      '$avgGrade/${totalMarks ?? 100}',
                       style: AppTextStyle.bold14.copyWith(
                         color: AppColors.black,
                       ),

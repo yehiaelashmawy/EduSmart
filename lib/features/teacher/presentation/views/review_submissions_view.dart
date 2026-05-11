@@ -19,6 +19,7 @@ class ReviewSubmissionsView extends StatelessWidget {
   final String? subtitle;
   final List<TeacherStudentModel> classStudents;
   final bool isExam;
+  final double? totalMarks;
 
   const ReviewSubmissionsView({
     super.key,
@@ -27,6 +28,7 @@ class ReviewSubmissionsView extends StatelessWidget {
     this.subtitle,
     this.classStudents = const [],
     this.isExam = false,
+    this.totalMarks,
   });
 
   static const String routeName = '/review_submissions';
@@ -38,6 +40,7 @@ class ReviewSubmissionsView extends StatelessWidget {
         repo: SubmissionsRepo(ApiService()),
         homeworkId: homeworkId,
         isExam: isExam,
+        totalMarks: totalMarks,
       )..fetchSubmissions(),
       child: BlocListener<SubmissionsCubit, SubmissionsState>(
         listener: (context, state) {

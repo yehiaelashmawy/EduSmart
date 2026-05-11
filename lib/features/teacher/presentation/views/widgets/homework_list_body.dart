@@ -26,6 +26,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
   late List<TeacherHomeworkModel> _homeworks;
   final Map<String, int> _realSubmissionCounts = {};
   final Map<String, double> _avgGrades = {};
+  final Map<String, int> _totalMarks = {};
 
   @override
   void initState() {
@@ -53,6 +54,10 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
             setState(() {
               _realSubmissionCounts[hw.oid] = list.length;
               
+              if (list.isNotEmpty && list.any((s) => s.totalMarks != null)) {
+                _totalMarks[hw.oid] = list.firstWhere((s) => s.totalMarks != null).totalMarks!.toInt();
+              }
+
               final graded = list.where((s) => s.isGraded).toList();
               if (graded.isNotEmpty) {
                 final sum = graded.map((s) => s.grade!).reduce((a, b) => a + b);
@@ -151,6 +156,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
               ? homework.title
               : 'Submissions',
           classStudents: widget.classStudents,
+          totalMarks: homework.totalMarks?.toDouble(),
         ),
       ),
     );
@@ -240,6 +246,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                         isOverdue: ui.isOverdue,
                         onDetailsTap: () => _openDetails(context, homework),
                         onReviewTap: () => _openReview(context, homework),
+                        totalMarks: _totalMarks[homework.oid] ?? homework.totalMarks,
                       );
                     },
                   ),

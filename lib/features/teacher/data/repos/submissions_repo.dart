@@ -12,18 +12,56 @@ class SubmissionsRepo {
     String homeworkId,
   ) async {
     try {
-      final response = await apiService.get(
-        '/api/Homeworks/$homeworkId/submissions',
-      );
+      // Fetch submissions and homework list in parallel
+      final results = await Future.wait([
+        apiService.get('/api/Homeworks/$homeworkId/submissions'),
+        apiService.get('/api/Homeworks/teacher'),
+      ]);
 
-      if (response != null && response['success'] == true) {
-        final dataRaw = response['data'];
+      final subResponse = results[0];
+      final hwResponse = results[1];
+
+      if (subResponse != null && subResponse['success'] == true) {
+        // Extract totalMarks from the teacher homework list
+        double? totalMarks;
+        if (hwResponse != null && hwResponse['success'] == true) {
+          final hwList = hwResponse['data'];
+          if (hwList is List) {
+            final match = hwList.whereType<Map>().firstWhere(
+              (hw) =>
+                  (hw['id'] ?? hw['oid'] ?? '').toString() == homeworkId,
+              orElse: () => {},
+            );
+            if (match.isNotEmpty) {
+              totalMarks = (match['totalMarks'] as num?)?.toDouble();
+            }
+          }
+        }
+
+        final dataRaw = subResponse['data'];
         if (dataRaw is List) {
           final submissions = dataRaw
               .whereType<Map>()
-              .map(
-                (e) => SubmissionModel.fromJson(e.cast<String, dynamic>()),
-              )
+              .map((e) {
+                final model = SubmissionModel.fromJson(e.cast<String, dynamic>());
+                // Inject totalMarks from homework list if not present in submission
+                if (model.totalMarks == null && totalMarks != null) {
+                  return SubmissionModel(
+                    id: model.id,
+                    studentName: model.studentName,
+                    studentEmail: model.studentEmail,
+                    content: model.content,
+                    attachmentUrl: model.attachmentUrl,
+                    submittedAt: model.submittedAt,
+                    grade: model.grade,
+                    totalMarks: totalMarks,
+                    feedback: model.feedback,
+                    status: model.status,
+                    isLate: model.isLate,
+                  );
+                }
+                return model;
+              })
               .toList();
           return Right(submissions);
         }

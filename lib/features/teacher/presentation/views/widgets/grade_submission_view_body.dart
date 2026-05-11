@@ -14,12 +14,14 @@ class GradeSubmissionViewBody extends StatefulWidget {
   final SubmissionModel submission;
   final String homeworkId;
   final bool isExam;
+  final double? totalMarks;
 
   const GradeSubmissionViewBody({
     super.key,
     required this.submission,
     required this.homeworkId,
     this.isExam = false,
+    this.totalMarks,
   });
 
   @override
@@ -55,10 +57,11 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
     final gradeText = _gradeController.text.trim();
     final gradeValue = double.tryParse(gradeText);
 
-    if (gradeValue == null || gradeValue < 0 || gradeValue > 100) {
+    final totalMarks = widget.totalMarks ?? widget.submission.totalMarks ?? 100.0;
+    if (gradeValue == null || gradeValue < 0 || gradeValue > totalMarks) {
       CustomSnackBar.showError(
         context,
-        'Please enter a valid grade between 0 and 100.',
+        'Please enter a valid grade between 0 and ${totalMarks.toStringAsFixed(0)}.',
       );
       return;
     }
@@ -70,6 +73,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
       repo: repo,
       homeworkId: widget.homeworkId,
       isExam: widget.isExam,
+      totalMarks: totalMarks,
     );
 
     await cubit.gradeSubmission(
@@ -98,6 +102,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
     final fileName = hasAttachment
         ? widget.submission.attachmentUrl!.split('/').last
         : null;
+    final totalMarks = widget.totalMarks ?? widget.submission.totalMarks ?? 100.0;
 
     return Container(
       color: AppColors.backgroundColor,
@@ -173,7 +178,7 @@ class _GradeSubmissionViewBodyState extends State<GradeSubmissionViewBody> {
 
                 // ── Grade field ──────────────────────────────────────────
                 Text(
-                  'Grade / Score (out of 100)',
+                  'Grade / Score (out of ${totalMarks.toStringAsFixed(0)})',
                   style: AppTextStyle.bold14.copyWith(color: AppColors.black),
                 ),
                 const SizedBox(height: 12),
