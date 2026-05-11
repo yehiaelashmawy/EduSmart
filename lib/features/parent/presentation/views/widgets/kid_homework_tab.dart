@@ -1,12 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/features/parent/data/models/parent_homework_model.dart';
+import 'package:school_system/features/parent/data/repos/parent_dashboard_repo.dart';
+import 'package:school_system/features/parent/presentation/manager/child_homework_cubit/child_homework_cubit.dart';
+import 'package:school_system/features/parent/presentation/manager/child_homework_cubit/child_homework_state.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/kid_homework_card.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/kid_section_header.dart';
 
 class KidHomeworkTab extends StatelessWidget {
-  const KidHomeworkTab({super.key});
+  final String? childId;
+  const KidHomeworkTab({super.key, this.childId});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ChildHomeworkCubit(
+        ParentDashboardRepo(ApiService()),
+        childId: childId ?? '',
+      )..fetchHomework(),
+      child: const _KidHomeworkTabContent(),
+    );
+  }
+}
+
+class _KidHomeworkTabContent extends StatelessWidget {
+  const _KidHomeworkTabContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChildHomeworkCubit, ChildHomeworkState>(
+      builder: (context, state) {
+        if (state is ChildHomeworkLoading) {
+          return _buildLoadingState();
+        } else if (state is ChildHomeworkFailure) {
+          return Center(child: Text(state.error.errorMessage));
+        } else if (state is ChildHomeworkSuccess) {
+          return _buildContent(state.homework);
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Skeletonizer(
+      enabled: true,
+      child: _buildContent(
+        List.generate(
+          3,
+          (index) => ParentHomeworkModel(
+            studentOid: '',
+            studentName: 'Student Name',
+            subjectName: 'Subject Name',
+            title: 'Homework Title',
+            dueDate: DateTime.now(),
+            status: 'Pending',
+            totalMarks: 100,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(List<ParentHomeworkModel> homework) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -17,32 +76,18 @@ class KidHomeworkTab extends StatelessWidget {
             title: 'Homework Assignments',
           ),
           const SizedBox(height: 24),
-          const KidHomeworkCard(
-            title: 'Algebra Worksheet 4.2',
-            subject: 'Mathematics',
-            info: 'Due: Tomorrow, 11:59 PM',
-            status: 'PENDING',
-          ),
-          const KidHomeworkCard(
-            title: 'Physics Lab Report',
-            subject: 'Science',
-            info: 'Submitted: Oct 23, 2024',
-            status: 'SUBMITTED',
-          ),
-          const KidHomeworkCard(
-            title: 'English Essay: The Great Gatsby',
-            subject: 'Literature',
-            info: 'Submitted: Oct 18, 2024',
-            status: 'GRADED',
-            grade: '95/100',
-            comment: 'Excellent analysis!',
-          ),
-          const KidHomeworkCard(
-            title: 'World History Chapter 5 Quiz',
-            subject: 'History',
-            info: 'Submitted: Oct 15, 2024',
-            status: 'GRADED',
-            grade: '98/100',
+          if (homework.isEmpty)
+            const Center(child: Text('No homework assigned')),
+          ...homework.map(
+            (h) => KidHomeworkCard(
+              title: h.title,
+              subject: h.subjectName,
+              info: h.status == 'Graded' || h.status == 'Submitted'
+                  ? 'Due: ${DateFormat('MMM d, yyyy').format(h.dueDate)}'
+                  : 'Due: ${DateFormat('MMM d, yyyy').format(h.dueDate)}',
+              status: h.status.toUpperCase(),
+              grade: h.grade != null ? '${h.grade!.toInt()}/${h.totalMarks.toInt()}' : null,
+            ),
           ),
           const SizedBox(height: 32),
         ],
@@ -50,3 +95,4 @@ class KidHomeworkTab extends StatelessWidget {
     );
   }
 }
+

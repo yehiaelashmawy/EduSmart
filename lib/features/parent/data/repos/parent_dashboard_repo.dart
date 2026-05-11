@@ -4,6 +4,7 @@ import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
 import 'package:school_system/features/parent/data/models/parent_attendance_model.dart';
 import 'package:school_system/features/parent/data/models/parent_grades_model.dart';
+import 'package:school_system/features/parent/data/models/parent_homework_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
@@ -48,6 +49,17 @@ class ParentDashboardRepo {
       final response = await apiService.get('/api/Parents/grades');
       final List dataJson = response['data'] ?? [];
       final data = dataJson.map((e) => ParentGradesModel.fromJson(e)).toList();
+      return Right(data);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+  Future<Either<ApiErrors, List<ParentHomeworkModel>>> getChildrenHomework() async {
+    try {
+      final response = await apiService.get('/api/Parents/children-homework');
+      final List dataJson = response['data'] ?? [];
+      final data = dataJson.map((e) => ParentHomeworkModel.fromJson(e)).toList();
       return Right(data);
     } catch (e) {
       if (e is ApiErrors) return Left(e);

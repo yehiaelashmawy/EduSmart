@@ -24,7 +24,7 @@ class _ParentMyKidsViewBodyState extends State<ParentMyKidsViewBody> {
       case 0: return const KidOverviewTab();
       case 1: return KidAttendanceTab(childId: widget.child?.childId);
       case 2: return KidGradesTab(childId: widget.child?.childId);
-      case 3: return const KidHomeworkTab();
+      case 3: return KidHomeworkTab(childId: widget.child?.childId);
       default: return const KidComingSoon();
     }
   }
