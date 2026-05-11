@@ -11,24 +11,18 @@ class ParentMyKidsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ParentChildModel? args = ModalRoute.of(context)?.settings.arguments as ParentChildModel?;
-    final ParentChildModel? activeChild = child ?? args;
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
-        centerTitle: false,
-        title: Center(
-          child: Text(
-            'Child Details',
-
-            style: AppTextStyle.bold18.copyWith(color: AppColors.darkBlue),
-          ),
+        centerTitle: true,
+        title: Text(
+          child?.name ?? 'Child Details',
+          style: AppTextStyle.bold18.copyWith(color: AppColors.darkBlue),
         ),
       ),
-      body: ParentMyKidsViewBody(child: activeChild),
+      body: ParentMyKidsViewBody(child: child),
     );
   }
 }

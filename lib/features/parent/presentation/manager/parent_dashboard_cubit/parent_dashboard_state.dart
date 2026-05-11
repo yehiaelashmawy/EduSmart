@@ -18,3 +18,9 @@ class ParentDashboardFailure extends ParentDashboardState {
 
   ParentDashboardFailure(this.error);
 }
+
+class ParentChildrenSuccess extends ParentDashboardState {
+  final List<ParentChildModel> children;
+
+  ParentChildrenSuccess(this.children);
+}

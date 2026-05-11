@@ -18,4 +18,16 @@ class ParentDashboardRepo {
       return Left(ApiErrors(errorMessage: e.toString()));
     }
   }
+
+  Future<Either<ApiErrors, List<ParentChildModel>>> getChildren() async {
+    try {
+      final response = await apiService.get('/api/Parents/my-children');
+      final List childrenJson = response['data']['children'] ?? [];
+      final children = childrenJson.map((e) => ParentChildModel.fromJson(e)).toList();
+      return Right(children);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
 }

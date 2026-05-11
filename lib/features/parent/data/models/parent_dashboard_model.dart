@@ -15,21 +15,21 @@ class ParentDashboardModel {
     return ParentDashboardModel(
       children: json['children'] != null
           ? (json['children'] as List)
-              .map((e) => ParentChildModel.fromJson(e))
-              .toList()
+                .map((e) => ParentChildModel.fromJson(e))
+                .toList()
           : [],
       subjectPerformance: json['subjectPerformance'] != null
           ? SubjectPerformanceModel.fromJson(json['subjectPerformance'])
           : null,
       upcomingEvents: json['upcomingEvents'] != null
           ? (json['upcomingEvents'] as List)
-              .map((e) => UpcomingEventModel.fromJson(e))
-              .toList()
+                .map((e) => UpcomingEventModel.fromJson(e))
+                .toList()
           : [],
       recentActivities: json['recentActivities'] != null
           ? (json['recentActivities'] as List)
-              .map((e) => RecentActivityModel.fromJson(e))
-              .toList()
+                .map((e) => RecentActivityModel.fromJson(e))
+                .toList()
           : [],
     );
   }
@@ -65,17 +65,14 @@ class SubjectPerformanceModel {
   final List<SubjectModel> subjects;
   final String? viewFullReportLink;
 
-  SubjectPerformanceModel({
-    required this.subjects,
-    this.viewFullReportLink,
-  });
+  SubjectPerformanceModel({required this.subjects, this.viewFullReportLink});
 
   factory SubjectPerformanceModel.fromJson(Map<String, dynamic> json) {
     return SubjectPerformanceModel(
       subjects: json['subjects'] != null
           ? (json['subjects'] as List)
-              .map((e) => SubjectModel.fromJson(e))
-              .toList()
+                .map((e) => SubjectModel.fromJson(e))
+                .toList()
           : [],
       viewFullReportLink: json['viewFullReportLink'],
     );
@@ -86,10 +83,7 @@ class SubjectModel {
   final String name;
   final double percentage;
 
-  SubjectModel({
-    required this.name,
-    required this.percentage,
-  });
+  SubjectModel({required this.name, required this.percentage});
 
   factory SubjectModel.fromJson(Map<String, dynamic> json) {
     return SubjectModel(

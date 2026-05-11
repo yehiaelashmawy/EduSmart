@@ -15,7 +15,7 @@ class ParentChildrenListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ParentDashboardCubit(ParentDashboardRepo(ApiService()))..fetchDashboard(),
+      create: (context) => ParentDashboardCubit(ParentDashboardRepo(ApiService()))..fetchChildren(),
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
@@ -33,27 +33,32 @@ class ParentChildrenListView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ParentDashboardFailure) {
               return Center(child: Text(state.error.errorMessage));
-            } else if (state is ParentDashboardSuccess) {
-              return ListView.builder(
-                padding: const EdgeInsets.all(24),
-                itemCount: state.data.children.length,
-                itemBuilder: (context, index) {
-                  final child = state.data.children[index];
-                  return ChildCard(
-                    name: child.name,
-                    grade: 'Grade ${child.gradeLevel}',
-                    gpa: child.gpa,
-                    attendance: child.attendance,
-                    subjectsCount: child.subjectsCount,
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        ParentMyKidsView.routeName,
-                        arguments: child,
-                      );
-                    },
-                  );
+            } else if (state is ParentChildrenSuccess) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await context.read<ParentDashboardCubit>().fetchChildren();
                 },
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(24),
+                  itemCount: state.children.length,
+                  itemBuilder: (context, index) {
+                    final child = state.children[index];
+                    return ChildCard(
+                      name: child.name,
+                      grade: 'Grade ${child.gradeLevel}',
+                      gpa: child.gpa,
+                      attendance: child.attendance,
+                      subjectsCount: child.subjectsCount,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          ParentMyKidsView.routeName,
+                          arguments: child,
+                        );
+                      },
+                    );
+                  },
+                ),
               );
             }
             return const SizedBox.shrink();

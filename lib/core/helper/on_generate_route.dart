@@ -12,6 +12,7 @@ import 'package:school_system/features/Auth/presentation/views/verification_view
 import 'package:school_system/features/on_broding/presentation/views/on_bording_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
+import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
@@ -164,7 +165,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => const ParentPaymentsView(),
       );
     case ParentMyKidsView.routeName:
-      return MaterialPageRoute(builder: (context) => const ParentMyKidsView());
+      final childArg = settings.arguments as ParentChildModel?;
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (context) => ParentMyKidsView(child: childArg),
+      );
     case ParentSecurePaymentView.routeName:
       return MaterialPageRoute(
         builder: (context) => const ParentSecurePaymentView(),

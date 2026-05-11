@@ -15,4 +15,13 @@ class ParentDashboardCubit extends Cubit<ParentDashboardState> {
       (data) => emit(ParentDashboardSuccess(data)),
     );
   }
+
+  Future<void> fetchChildren() async {
+    emit(ParentDashboardLoading());
+    final result = await _repo.getChildren();
+    result.fold(
+      (error) => emit(ParentDashboardFailure(error)),
+      (children) => emit(ParentChildrenSuccess(children)),
+    );
+  }
 }
