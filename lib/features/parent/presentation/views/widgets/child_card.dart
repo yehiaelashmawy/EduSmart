@@ -25,84 +25,92 @@ class ChildCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Container(
-                  width: 4,
-                  color: AppColors.secondaryColor,
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.person_rounded,
+                  color: AppColors.primaryColor,
+                  size: 30,
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          grade,
-                          style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            _buildStat('GPA', gpa > 0 ? gpa.toStringAsFixed(1) : '-'),
-                            const SizedBox(width: 16),
-                            _buildStat('Attendance', attendance > 0 ? '${attendance.toInt()}%' : '-'),
-                            const SizedBox(width: 16),
-                            _buildStat('Subjects', subjectsCount > 0 ? subjectsCount.toString() : '-'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Icon(
-                    Icons.chevron_right,
-                    color: AppColors.grey,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    grade,
+                    style: AppTextStyle.medium12.copyWith(color: AppColors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      _buildMiniStat(Icons.star_rounded, gpa > 0 ? gpa.toStringAsFixed(1) : '-', const Color(0xffFDB022)),
+                      const SizedBox(width: 12),
+                      _buildMiniStat(Icons.calendar_today_rounded, attendance > 0 ? '${attendance.toInt()}%' : '-', AppColors.primaryColor),
+                      const SizedBox(width: 12),
+                      _buildMiniStat(Icons.menu_book_rounded, subjectsCount > 0 ? subjectsCount.toString() : '-', const Color(0xff12B76A)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: AppColors.grey.withValues(alpha: 0.3),
+              size: 16,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildStat(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: AppTextStyle.bold14.copyWith(color: AppColors.secondaryColor),
-        ),
-        Text(
-          label,
-          style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
-        ),
-      ],
+  Widget _buildMiniStat(IconData icon, String value, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 12, color: color),
+          const SizedBox(width: 4),
+          Text(
+            value,
+            style: AppTextStyle.bold12.copyWith(color: color),
+          ),
+        ],
+      ),
     );
   }
 }

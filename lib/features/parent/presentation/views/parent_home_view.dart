@@ -4,7 +4,7 @@ import 'package:school_system/core/widgets/messages/messages_view.dart';
 import 'package:school_system/core/widgets/notifications/notifications_view.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_bottom_nav_bar.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_home_view_body.dart';
-import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
+import 'package:school_system/features/parent/presentation/views/parent_children_list_view.dart';
 import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/widgets/profile/profile_view_body.dart';
 
@@ -30,12 +30,20 @@ class _ParentHomeViewState extends State<ParentHomeView> {
   final GlobalKey<NavigatorState> _profileNavigatorKey =
       GlobalKey<NavigatorState>();
 
+  void _onViewAllChildren() {
+    setState(() {
+      _currentIndex = 1;
+    });
+  }
+
   late final List<Widget> _views = [
     Navigator(
       key: _homeNavigatorKey,
       onGenerateRoute: (settings) {
         if (settings.name == '/' || settings.name == null) {
-          return MaterialPageRoute(builder: (_) => const ParentHomeViewBody());
+          return MaterialPageRoute(
+            builder: (_) => ParentHomeViewBody(onViewAll: _onViewAllChildren),
+          );
         }
         return onGenerateRoute(settings);
       },
@@ -44,7 +52,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
       key: _childrenNavigatorKey,
       onGenerateRoute: (settings) {
         if (settings.name == '/' || settings.name == null) {
-          return MaterialPageRoute(builder: (_) => const ParentMyKidsView());
+          return MaterialPageRoute(
+            builder: (_) => const ParentChildrenListView(),
+          );
         }
         return onGenerateRoute(settings);
       },

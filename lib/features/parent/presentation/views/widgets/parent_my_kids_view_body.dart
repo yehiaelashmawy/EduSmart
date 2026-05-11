@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/child_details_header.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/quick_actions_tabs.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/recent_activity_list.dart';
@@ -9,7 +10,8 @@ import 'package:school_system/features/parent/presentation/views/widgets/upcomin
 import 'package:school_system/features/parent/presentation/views/widgets/view_schedule_button.dart';
 
 class ParentMyKidsViewBody extends StatefulWidget {
-  const ParentMyKidsViewBody({super.key});
+  final ParentChildModel? child;
+  const ParentMyKidsViewBody({super.key, this.child});
 
   @override
   State<ParentMyKidsViewBody> createState() => _ParentMyKidsViewBodyState();
@@ -25,7 +27,7 @@ class _ParentMyKidsViewBodyState extends State<ParentMyKidsViewBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ChildDetailsHeader(),
+          ChildDetailsHeader(child: widget.child),
           const SizedBox(height: 16),
           QuickActionsTabs(
             currentIndex: _selectedTabIndex,
@@ -56,16 +58,29 @@ class _ParentMyKidsViewBodyState extends State<ParentMyKidsViewBody> {
     
     if (_selectedTabIndex != 0) {
       return Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 32),
         child: Center(
           child: Column(
             children: [
-              Icon(Icons.construction,
-                  size: 64, color: AppColors.grey.withValues(alpha: 0.3)),
-              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.lightGrey.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.auto_awesome_mosaic_rounded,
+                    size: 48, color: AppColors.grey.withValues(alpha: 0.4)),
+              ),
+              const SizedBox(height: 24),
               Text(
-                'Content for this tab is coming soon',
-                style: AppTextStyle.medium16.copyWith(color: AppColors.grey),
+                'Coming Soon',
+                style: AppTextStyle.bold18.copyWith(color: AppColors.darkBlue),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'We\'re working on bringing more\ndetails for this section.',
+                textAlign: TextAlign.center,
+                style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
               ),
             ],
           ),
@@ -76,25 +91,28 @@ class _ParentMyKidsViewBodyState extends State<ParentMyKidsViewBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ViewScheduleButton(),
-        const SizedBox(height: 24),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: ViewScheduleButton(),
+        ),
+        const SizedBox(height: 32),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionHeader(Icons.bar_chart, 'SUBJECT PERFORMANCE'),
+              _buildSectionHeader(Icons.bar_chart_rounded, 'Performance Overview'),
               const SizedBox(height: 16),
               const SubjectPerformanceList(),
               const SizedBox(height: 32),
-              _buildSectionHeader(Icons.history, 'Recent Activity'),
+              _buildSectionHeader(Icons.history_rounded, 'Recent Activities'),
               const SizedBox(height: 16),
               const RecentActivityList(),
               const SizedBox(height: 32),
-              _buildSectionHeader(Icons.calendar_today, 'Upcoming Events'),
+              _buildSectionHeader(Icons.event_note_rounded, 'Upcoming Schedule'),
               const SizedBox(height: 16),
               const UpcomingEventsList(),
-              const SizedBox(height: 32),
+              const SizedBox(height: 40),
             ],
           ),
         ),

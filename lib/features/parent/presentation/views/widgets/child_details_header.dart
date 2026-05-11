@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
 
 class ChildDetailsHeader extends StatelessWidget {
-  const ChildDetailsHeader({super.key});
+  final ParentChildModel? child;
+  const ChildDetailsHeader({super.key, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +42,7 @@ class ChildDetailsHeader extends StatelessWidget {
                 ),
               ),
             ),
-            // Background Shape 2 (Subtle Arc effect)
-            Positioned(
-              top: 40,
-              right: -100,
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withValues(alpha: 0.04),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
+            // Padding
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -68,26 +58,26 @@ class ChildDetailsHeader extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Alexander Wright',
+                    child?.name ?? 'Alexander Wright',
                     style: AppTextStyle.bold24.copyWith(color: AppColors.darkBlue),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      _buildBadge(Icons.school, 'Grade 10-A'),
+                      _buildBadge(Icons.school, 'Grade ${child?.gradeLevel ?? '10-A'}'),
                       const SizedBox(width: 12),
-                      _buildBadge(Icons.assessment, 'GPA 3.8'),
+                      _buildBadge(Icons.assessment, 'GPA ${child?.gpa.toStringAsFixed(1) ?? '3.8'}'),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
-                        child: _buildStatCard('Attendance', '94.2%'),
+                        child: _buildStatCard('Attendance', '${child?.attendance.toInt() ?? '94.2'}%'),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: _buildStatCard('Total Subjects', '6'),
+                        child: _buildStatCard('Total Subjects', child?.subjectsCount.toString() ?? '6'),
                       ),
                     ],
                   ),

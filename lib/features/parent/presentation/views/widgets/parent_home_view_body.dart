@@ -10,26 +10,28 @@ import 'package:school_system/features/parent/presentation/manager/parent_dashbo
 import 'package:school_system/features/parent/presentation/manager/parent_dashboard_cubit/parent_dashboard_state.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/child_card.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_home_header.dart';
-import 'package:school_system/features/parent/presentation/views/widgets/quick_action_card.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/recent_activity_item.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/upcoming_event_card.dart';
 import 'package:school_system/features/parent/presentation/views/parent_payments_view.dart';
-import 'package:school_system/features/parent/presentation/views/parent_my_kids_view.dart';
 
 class ParentHomeViewBody extends StatelessWidget {
-  const ParentHomeViewBody({super.key});
+  final VoidCallback? onViewAll;
+  const ParentHomeViewBody({super.key, this.onViewAll});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ParentDashboardCubit(ParentDashboardRepo(ApiService()))..fetchDashboard(),
-      child: const _ParentHomeViewBodyContent(),
+      create: (context) =>
+          ParentDashboardCubit(ParentDashboardRepo(ApiService()))
+            ..fetchDashboard(),
+      child: _ParentHomeViewBodyContent(onViewAll: onViewAll),
     );
   }
 }
 
 class _ParentHomeViewBodyContent extends StatelessWidget {
-  const _ParentHomeViewBodyContent();
+  final VoidCallback? onViewAll;
+  const _ParentHomeViewBodyContent({this.onViewAll});
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +69,7 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  Container(
-                    width: 200,
-                    height: 32,
-                    color: Colors.white,
-                  ),
+                  Container(width: 200, height: 32, color: Colors.white),
                   const SizedBox(height: 16),
                   Container(
                     width: double.infinity,
@@ -79,11 +77,7 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
                     color: Colors.white,
                   ),
                   const SizedBox(height: 32),
-                  Container(
-                    width: 100,
-                    height: 24,
-                    color: Colors.white,
-                  ),
+                  Container(width: 100, height: 24, color: Colors.white),
                   const SizedBox(height: 16),
                   Container(
                     width: double.infinity,
@@ -106,10 +100,7 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
         children: [
           Icon(Icons.error_outline, color: Colors.red, size: 48),
           const SizedBox(height: 16),
-          Text(
-            error,
-            style: AppTextStyle.medium16.copyWith(color: Colors.red),
-          ),
+          Text(error, style: AppTextStyle.medium16.copyWith(color: Colors.red)),
         ],
       ),
     );
@@ -117,7 +108,9 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, ParentDashboardModel data) {
     return RefreshIndicator(
-      onRefresh: () async {},
+      onRefresh: () async {
+        await context.read<ParentDashboardCubit>().fetchDashboard();
+      },
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -130,80 +123,138 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Academic Curator',
-                    style: AppTextStyle.bold30.copyWith(
-                      color: AppColors.secondaryColor,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Monitor your children\'s academic progress',
-                    style: AppTextStyle.medium14.copyWith(
-                      color: AppColors.grey,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Academic Curator',
+                            style: AppTextStyle.bold30.copyWith(
+                              color: AppColors.secondaryColor,
+                              height: 1.1,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Your family academic overview',
+                            style: AppTextStyle.medium14.copyWith(
+                              color: AppColors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withValues(alpha: 0.08),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.auto_graph_rounded,
+                          color: AppColors.primaryColor,
+                          size: 24,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 24),
-                  QuickActionCard(
-                    title: 'Contact Teacher',
-                    icon: Icons.chat_bubble_outline,
-                    backgroundColor: AppColors.secondaryColor,
-                    contentColor: Colors.white,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 12),
-                  QuickActionCard(
-                    title: 'Payments',
+                  _ActionGridItem(
+                    title: 'Fee Payments',
                     icon: Icons.payments_outlined,
-                    backgroundColor: Colors.white,
-                    contentColor: AppColors.darkBlue,
+                    color: const Color(0xff12B76A),
                     onTap: () {
-                      Navigator.pushNamed(context, ParentPaymentsView.routeName);
+                      Navigator.pushNamed(
+                        context,
+                        ParentPaymentsView.routeName,
+                      );
                     },
                   ),
                   const SizedBox(height: 32),
-                  _buildSectionTitle('Children'),
-                  const SizedBox(height: 16),
-                  ...data.children.map((child) => ChildCard(
-                        name: child.name,
-                        grade: 'Grade ${child.gradeLevel}',
-                        gpa: child.gpa,
-                        attendance: child.attendance,
-                        subjectsCount: child.subjectsCount,
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, ParentMyKidsView.routeName);
-                        },
-                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSectionTitle('My Children'),
+                      TextButton(
+                        onPressed: onViewAll,
+                        child: Text(
+                          'View All',
+                          style: AppTextStyle.bold14.copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ...data.children
+                      .take(2)
+                      .map(
+                        (child) => ChildCard(
+                          name: child.name,
+                          grade: 'Grade ${child.gradeLevel}',
+                          gpa: child.gpa,
+                          attendance: child.attendance,
+                          subjectsCount: child.subjectsCount,
+                          onTap: null,
+                        ),
+                      ),
                   const SizedBox(height: 32),
-                  _buildSectionTitle('Recent Activity'),
+                  _buildSectionTitle('Recent Updates'),
                   const SizedBox(height: 16),
-                  if (data.recentActivities.isNotEmpty)
-                    ...data.recentActivities.map((activity) => RecentActivityItem.fromActivity(
-                          activity: activity.activity,
-                          timeAgo: activity.timeAgo,
-                          status: activity.status,
-                        ))
-                  else
-                    Text(
-                      'No recent activities',
-                      style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColors.lightGrey.withValues(alpha: 0.3),
+                      ),
                     ),
+                    child: Column(
+                      children: [
+                        if (data.recentActivities.isNotEmpty)
+                          ...data.recentActivities
+                              .take(3)
+                              .map(
+                                (activity) => RecentActivityItem.fromActivity(
+                                  activity: activity.activity,
+                                  timeAgo: activity.timeAgo,
+                                  status: activity.status,
+                                ),
+                              )
+                        else
+                          Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Text(
+                              'No recent activities',
+                              style: AppTextStyle.medium14.copyWith(
+                                color: AppColors.grey,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   _buildSectionTitle('Upcoming Events'),
                   const SizedBox(height: 16),
                   if (data.upcomingEvents.isNotEmpty)
-                    ...data.upcomingEvents.map((event) => UpcomingEventCard.fromEvent(
-                          title: event.title,
-                          date: event.date,
-                          type: event.type,
-                        ))
+                    ...data.upcomingEvents.map(
+                      (event) => UpcomingEventCard.fromEvent(
+                        title: event.title,
+                        date: event.date,
+                        type: event.type,
+                      ),
+                    )
                   else
                     Text(
                       'No upcoming events',
-                      style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
+                      style: AppTextStyle.medium14.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -217,6 +268,73 @@ class _ParentHomeViewBodyContent extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyle.bold20.copyWith(color: AppColors.darkBlue),
+    );
+  }
+}
+
+class _ActionGridItem extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionGridItem({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyle.bold14.copyWith(
+                    color: AppColors.darkBlue,
+                    height: 1.2,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: AppColors.grey.withValues(alpha: 0.5),
+                  size: 14,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
