@@ -7,10 +7,25 @@ import 'package:school_system/features/parent/data/models/parent_grades_model.da
 import 'package:school_system/features/parent/data/models/parent_homework_model.dart';
 import 'package:school_system/features/parent/data/models/parent_weekly_schedule_model.dart';
 
+import 'package:school_system/features/parent/data/models/payment_summary_model.dart';
+
 class ParentDashboardRepo {
   final ApiService apiService;
 
   ParentDashboardRepo(this.apiService);
+
+  Future<Either<ApiErrors, PaymentSummaryModel>> getPaymentSummary() async {
+    try {
+      final response = await apiService.get('/api/parent/payments/summary');
+      // Use the root response if 'data' is null, as seen in the CURL provided
+      final dataJson = response['data'] ?? response;
+      final data = PaymentSummaryModel.fromJson(dataJson);
+      return Right(data);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
 
   Future<Either<ApiErrors, ParentDashboardModel>> getDashboard() async {
     try {

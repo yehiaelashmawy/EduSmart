@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
@@ -15,7 +16,9 @@ class ParentChildrenListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ParentDashboardCubit(ParentDashboardRepo(ApiService()))..fetchChildren(),
+      create: (context) =>
+          ParentDashboardCubit(ParentDashboardRepo(ApiService()))
+            ..fetchChildren(),
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
@@ -29,11 +32,30 @@ class ParentChildrenListView extends StatelessWidget {
         ),
         body: BlocBuilder<ParentDashboardCubit, ParentDashboardState>(
           builder: (context, state) {
-            if (state is ParentDashboardLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ParentDashboardFailure) {
+            if (state is ParentDashboardFailure) {
               return Center(child: Text(state.error.errorMessage));
-            } else if (state is ParentChildrenSuccess) {
+            }
+
+            final bool isLoading = state is ParentDashboardLoading;
+
+            if (isLoading) {
+              return Skeletonizer(
+                enabled: true,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(24),
+                  itemCount: 4,
+                  itemBuilder: (context, index) => const ChildCard(
+                    name: 'Child Full Name Placeholder',
+                    grade: 'Grade 10',
+                    gpa: 3.8,
+                    attendance: 95,
+                    subjectsCount: 6,
+                  ),
+                ),
+              );
+            }
+
+            if (state is ParentChildrenSuccess) {
               return RefreshIndicator(
                 onRefresh: () async {
                   await context.read<ParentDashboardCubit>().fetchChildren();
@@ -61,6 +83,7 @@ class ParentChildrenListView extends StatelessWidget {
                 ),
               );
             }
+
             return const SizedBox.shrink();
           },
         ),

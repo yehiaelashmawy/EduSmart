@@ -3,7 +3,13 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
 class PaymentOverdueBanner extends StatelessWidget {
-  const PaymentOverdueBanner({super.key});
+  final int overdueCount;
+  final double overdueAmount;
+  const PaymentOverdueBanner({
+    super.key,
+    required this.overdueCount,
+    required this.overdueAmount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +40,16 @@ class PaymentOverdueBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Overdue payments detected',
+                  overdueCount > 1
+                      ? '$overdueCount overdue payments detected'
+                      : 'Overdue payment detected',
                   style: AppTextStyle.bold14.copyWith(
                     color: const Color(0xFFC62828),
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Settle outstanding fees to avoid late charges.',
+                  'Settle \$${overdueAmount.toStringAsFixed(0)} to avoid late charges.',
                   style: AppTextStyle.regular12.copyWith(
                     color: const Color(0xFFC62828),
                   ),

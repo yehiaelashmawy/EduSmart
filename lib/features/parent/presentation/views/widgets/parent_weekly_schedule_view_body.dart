@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_cubit.dart';
@@ -16,28 +17,33 @@ class ParentWeeklyScheduleViewBody extends StatefulWidget {
 
 class _ParentWeeklyScheduleViewBodyState
     extends State<ParentWeeklyScheduleViewBody> {
-  int _selectedDayIndex = 0; // Sunday
+  int _selectedDayIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChildWeeklyScheduleCubit, ChildWeeklyScheduleState>(
       builder: (context, state) {
-        if (state is ChildWeeklyScheduleLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is ChildWeeklyScheduleFailure) {
+        if (state is ChildWeeklyScheduleFailure) {
           return Center(child: Text(state.error.errorMessage));
-        } else if (state is ChildWeeklyScheduleSuccess) {
-          final schedule = state.schedule;
-          if (schedule.weeklySchedule.isEmpty) {
-            return const Center(child: Text('No schedule available'));
-          }
+        }
 
-          // Ensure selected index is within bounds
-          if (_selectedDayIndex >= schedule.weeklySchedule.length) {
-            _selectedDayIndex = 0;
-          }
+        final bool isLoading = state is ChildWeeklyScheduleLoading;
+        final schedule = state is ChildWeeklyScheduleSuccess
+            ? state.schedule
+            : _getMockSchedule();
 
-          return SingleChildScrollView(
+        if (state is ChildWeeklyScheduleSuccess &&
+            schedule.weeklySchedule.isEmpty) {
+          return const Center(child: Text('No schedule available'));
+        }
+
+        if (_selectedDayIndex >= schedule.weeklySchedule.length) {
+          _selectedDayIndex = 0;
+        }
+
+        return Skeletonizer(
+          enabled: isLoading,
+          child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,10 +71,37 @@ class _ParentWeeklyScheduleViewBodyState
                 const SizedBox(height: 32),
               ],
             ),
-          );
-        }
-        return const SizedBox.shrink();
+          ),
+        );
       },
+    );
+  }
+
+  ParentWeeklyScheduleModel _getMockSchedule() {
+    return ParentWeeklyScheduleModel(
+      childId: '123',
+      childName: 'Child Name Placeholder',
+      weeklySchedule: List.generate(
+        5,
+        (index) => ParentWeeklyScheduleDay(
+          dayName: 'Monday',
+          dayNameAr: 'الاثنين',
+          classes: List.generate(
+            4,
+            (i) => ParentClassModel(
+              subjectName: 'Subject Name',
+              subjectNameAr: 'اسم المادة',
+              teacherName: 'Teacher Name Here',
+              startTime: '08:00 AM',
+              endTime: '09:00 AM',
+              roomNumber: 'Room 101',
+              period: '${i + 1}',
+            ),
+          ),
+        ),
+      ),
+      todayClasses: [],
+      tomorrowClasses: [],
     );
   }
 
@@ -111,14 +144,16 @@ class _ParentWeeklyScheduleViewBodyState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    day.dayName.toUpperCase().substring(0, 3),
+                    day.dayName.length >= 3
+                        ? day.dayName.toUpperCase().substring(0, 3)
+                        : day.dayName,
                     style: AppTextStyle.bold12.copyWith(
                       color: isSelected ? Colors.white : AppColors.grey,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${index + 1}', // Placeholder for day number if not available, or just use day name
+                    '${index + 1}',
                     style: AppTextStyle.bold18.copyWith(
                       color: isSelected ? Colors.white : AppColors.darkBlue,
                     ),
@@ -180,10 +215,12 @@ class _ParentWeeklyScheduleViewBodyState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      cls.subjectName,
-                      style: AppTextStyle.bold16.copyWith(
-                        color: AppColors.darkBlue,
+                    Expanded(
+                      child: Text(
+                        cls.subjectName,
+                        style: AppTextStyle.bold16.copyWith(
+                          color: AppColors.darkBlue,
+                        ),
                       ),
                     ),
                     Container(
@@ -251,12 +288,10 @@ class _ParentWeeklyScheduleViewBodyState
         subjectName.contains('chemist') ||
         subjectName.contains('biolog') ||
         subjectName.contains('physic'))
-      // ignore: curly_braces_in_flow_control_structures
       return Icons.science_outlined;
     if (subjectName.contains('english') ||
         subjectName.contains('arabic') ||
         subjectName.contains('literat'))
-      // ignore: curly_braces_in_flow_control_structures
       return Icons.menu_book_outlined;
     if (subjectName.contains('art')) return Icons.palette_outlined;
     if (subjectName.contains('history')) return Icons.history_edu_outlined;
