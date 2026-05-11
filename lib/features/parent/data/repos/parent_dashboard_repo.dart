@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:school_system/core/api/api_errors.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
+import 'package:school_system/features/parent/data/models/parent_attendance_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
@@ -25,6 +26,16 @@ class ParentDashboardRepo {
       final List childrenJson = response['data']['children'] ?? [];
       final children = childrenJson.map((e) => ParentChildModel.fromJson(e)).toList();
       return Right(children);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+  Future<Either<ApiErrors, ChildrenAttendanceModel>> getChildrenAttendance() async {
+    try {
+      final response = await apiService.get('/api/Parents/Children-Attendance');
+      final data = ChildrenAttendanceModel.fromJson(response['data']);
+      return Right(data);
     } catch (e) {
       if (e is ApiErrors) return Left(e);
       return Left(ApiErrors(errorMessage: e.toString()));

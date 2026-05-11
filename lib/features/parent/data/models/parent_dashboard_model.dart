@@ -36,6 +36,7 @@ class ParentDashboardModel {
 }
 
 class ParentChildModel {
+  final String childId;
   final String name;
   final String gradeLevel;
   final double gpa;
@@ -43,6 +44,7 @@ class ParentChildModel {
   final int subjectsCount;
 
   ParentChildModel({
+    required this.childId,
     required this.name,
     required this.gradeLevel,
     required this.gpa,
@@ -52,7 +54,8 @@ class ParentChildModel {
 
   factory ParentChildModel.fromJson(Map<String, dynamic> json) {
     return ParentChildModel(
-      name: json['name'] ?? '',
+      childId: json['childId'] ?? json['studentOid'] ?? '',
+      name: json['name'] ?? json['studentName'] ?? '',
       gradeLevel: json['gradeLevel'] ?? '',
       gpa: (json['gpa'] as num?)?.toDouble() ?? 0,
       attendance: (json['attendance'] as num?)?.toDouble() ?? 0,
