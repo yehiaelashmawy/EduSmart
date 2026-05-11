@@ -50,7 +50,7 @@ class UpcomingExamsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Upcoming Exams', style: AppTextStyle.bold20),
+        Text('Upcoming Exams', style: AppTextStyle.bold20),
         const SizedBox(height: 16),
         BlocBuilder<TeacherExamsCubit, TeacherExamsState>(
           builder: (context, state) {
@@ -113,18 +113,29 @@ class UpcomingExamsSection extends StatelessWidget {
                     day = date.day.toString();
                   } catch (_) {}
 
-                  final classesState = context.watch<TeacherClassesCubit>().state;
+                  final classesState = context
+                      .watch<TeacherClassesCubit>()
+                      .state;
                   List<TeacherStudentModel> classStudents = [];
                   if (classesState is TeacherClassesSuccess) {
                     // Try exact match first
-                    var matchedClass = classesState.classes.where((c) => c.name == exam.className).toList();
-                    
+                    var matchedClass = classesState.classes
+                        .where((c) => c.name == exam.className)
+                        .toList();
+
                     // Fallback: contains or startsWith
                     if (matchedClass.isEmpty) {
-                      matchedClass = classesState.classes.where((c) => 
-                        c.name.toLowerCase().contains(exam.className.toLowerCase()) || 
-                        exam.className.toLowerCase().contains(c.name.toLowerCase())
-                      ).toList();
+                      matchedClass = classesState.classes
+                          .where(
+                            (c) =>
+                                c.name.toLowerCase().contains(
+                                  exam.className.toLowerCase(),
+                                ) ||
+                                exam.className.toLowerCase().contains(
+                                  c.name.toLowerCase(),
+                                ),
+                          )
+                          .toList();
                     }
 
                     if (matchedClass.isNotEmpty) {
@@ -137,10 +148,7 @@ class UpcomingExamsSection extends StatelessWidget {
                       if (i > 0) const SizedBox(height: 16),
                       InkWell(
                         onTap: () async {
-                          Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).pushNamed(
+                          Navigator.of(context, rootNavigator: true).pushNamed(
                             ExamReviewSubmissionsView.routeName,
                             arguments: {
                               'exam': exam,

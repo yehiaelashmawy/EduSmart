@@ -44,7 +44,11 @@ class PaymentHistoryList extends StatelessWidget {
           },
           onReceiptPressed: item.receiptNumber != null
               ? () {
-                  Navigator.pushNamed(context, ParentReceiptView.routeName);
+                  Navigator.pushNamed(
+                    context,
+                    ParentReceiptView.routeName,
+                    arguments: item.receiptNumber,
+                  );
                 }
               : null,
         );

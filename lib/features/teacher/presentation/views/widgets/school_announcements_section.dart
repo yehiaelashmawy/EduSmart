@@ -28,7 +28,7 @@ class SchoolAnnouncementsSection extends StatelessWidget {
                 size: 24,
               ),
               const SizedBox(width: 12),
-              const Text('School Announcements', style: AppTextStyle.bold18),
+              Text('School Announcements', style: AppTextStyle.bold18),
             ],
           ),
           const SizedBox(height: 20),

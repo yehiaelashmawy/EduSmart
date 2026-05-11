@@ -17,7 +17,7 @@ class TeacherClassesAppBar extends StatelessWidget {
         children: [
           SvgPicture.asset('assets/images/my_classes_icon.svg'),
           const SizedBox(width: 12),
-          const Text('My Classes', style: AppTextStyle.bold20),
+          Text('My Classes', style: AppTextStyle.bold20),
           const Spacer(),
           InkWell(
             onTap: onFilterTap,

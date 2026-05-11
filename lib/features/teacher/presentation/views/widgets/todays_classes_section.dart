@@ -20,7 +20,7 @@ class TodaysClassesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Today\'s Classes', style: AppTextStyle.bold20),
+            Text('Today\'s Classes', style: AppTextStyle.bold20),
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(

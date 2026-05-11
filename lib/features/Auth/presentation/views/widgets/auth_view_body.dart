@@ -27,7 +27,7 @@ class AuthViewBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 31),
-                const Text('Choose Your Role', style: AppTextStyle.bold30),
+                 Text('Choose Your Role', style: AppTextStyle.bold30),
                 const SizedBox(height: 8),
                 Text(
                   'Select how you want to use the platform today',

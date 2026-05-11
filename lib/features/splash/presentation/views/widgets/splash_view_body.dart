@@ -31,7 +31,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
         children: [
           SvgPicture.asset(Assets.imagesAppLogo),
           const SizedBox(height: 32),
-          const Text('EduSmart', style: AppTextStyle.bold32),
+          Text('EduSmart', style: AppTextStyle.bold32),
           const SizedBox(height: 8),
           Text(
             'Your Intelligent Learning Companion',

@@ -212,7 +212,7 @@ class _ClassActionRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-          child: const Text('View Class', style: AppTextStyle.semiBold14),
+          child: Text('View Class', style: AppTextStyle.semiBold14),
         ),
       ],
     );

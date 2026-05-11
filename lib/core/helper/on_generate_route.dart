@@ -175,7 +175,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => const ParentSecurePaymentView(),
       );
     case ParentReceiptView.routeName:
-      return MaterialPageRoute(builder: (context) => const ParentReceiptView());
+      final receiptNumber = settings.arguments as String?;
+      return MaterialPageRoute(
+        builder: (context) => ParentReceiptView(receiptNumber: receiptNumber),
+      );
     case ParentWeeklyScheduleView.routeName:
       return MaterialPageRoute(
         builder: (context) => const ParentWeeklyScheduleView(),
