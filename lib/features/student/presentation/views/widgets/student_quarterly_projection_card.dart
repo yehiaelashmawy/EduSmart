@@ -5,7 +5,7 @@ import 'package:school_system/core/utils/app_text_style.dart';
 class StudentQuarterlyProjectionCard extends StatelessWidget {
   final int examsCount;
   final int tasksCount;
-  final int averagePercentage;
+  final num averagePercentage;
   final String statusMessage;
 
   const StudentQuarterlyProjectionCard({

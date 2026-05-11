@@ -6,7 +6,8 @@ import 'student_submit_homework_state.dart';
 class StudentSubmitHomeworkCubit extends Cubit<StudentSubmitHomeworkState> {
   final StudentSubmitHomeworkRepo _repo;
 
-  StudentSubmitHomeworkCubit(this._repo) : super(StudentSubmitHomeworkInitial());
+  StudentSubmitHomeworkCubit(this._repo)
+    : super(StudentSubmitHomeworkInitial());
 
   Future<void> submit({
     required String homeworkId,
@@ -16,7 +17,7 @@ class StudentSubmitHomeworkCubit extends Cubit<StudentSubmitHomeworkState> {
     emit(StudentSubmitHomeworkLoading());
 
     String attachmentUrl = '';
-    
+
     // 1. Upload attachment if exists
     if (file != null) {
       final uploadResult = await _repo.uploadAttachment(
@@ -32,7 +33,7 @@ class StudentSubmitHomeworkCubit extends Cubit<StudentSubmitHomeworkState> {
           attachmentUrl = url;
         },
       );
-      
+
       // If upload failed, stop here
       if (state is StudentSubmitHomeworkFailure) return;
     }

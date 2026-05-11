@@ -137,10 +137,10 @@ class _StudentExamSubmissionBoxState extends State<StudentExamSubmissionBox> {
     }
 
     context.read<StudentSubmitExamCubit>().submit(
-          examId: widget.examId,
-          file: _selectedFile,
-          answerText: _textController.text.trim(),
-        );
+      examId: widget.examId,
+      file: _selectedFile,
+      answerText: _textController.text.trim(),
+    );
   }
 
   @override
@@ -171,7 +171,9 @@ class _StudentExamSubmissionBoxState extends State<StudentExamSubmissionBox> {
                 const SizedBox(width: 8),
                 Text(
                   'Your Submission',
-                  style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
+                  style: AppTextStyle.bold16.copyWith(
+                    color: AppColors.darkBlue,
+                  ),
                 ),
               ],
             ),
@@ -327,8 +329,11 @@ class _StudentExamSubmissionBoxState extends State<StudentExamSubmissionBox> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.send_rounded,
-                              color: Colors.white, size: 20),
+                          const Icon(
+                            Icons.send_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ],
                       ),
               ),

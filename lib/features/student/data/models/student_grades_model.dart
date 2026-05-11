@@ -43,7 +43,7 @@ class StudentGradesDataModel {
 
 class OverallGPA {
   final double gpa;
-  final int overallGrade;
+  final num overallGrade;
 
   OverallGPA({required this.gpa, required this.overallGrade});
 

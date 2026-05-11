@@ -29,7 +29,9 @@ class StudentSubmitHomeworkRepo {
       if (response['success'] == true) {
         return Right(response['data']['attachmentUrl']);
       } else {
-        return Left(ApiErrors(errorMessage: response['message'] ?? 'Upload failed'));
+        return Left(
+          ApiErrors(errorMessage: response['message'] ?? 'Upload failed'),
+        );
       }
     } catch (e) {
       if (e is ApiErrors) return Left(e);
@@ -54,7 +56,9 @@ class StudentSubmitHomeworkRepo {
       if (response['success'] == true) {
         return const Right(true);
       } else {
-        return Left(ApiErrors(errorMessage: response['message'] ?? 'Submission failed'));
+        return Left(
+          ApiErrors(errorMessage: response['message'] ?? 'Submission failed'),
+        );
       }
     } catch (e) {
       if (e is ApiErrors) return Left(e);

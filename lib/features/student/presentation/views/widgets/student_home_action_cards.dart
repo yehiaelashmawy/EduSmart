@@ -62,7 +62,8 @@ class StudentHomeActionCards extends StatelessWidget {
 
                   if (state is StudentGradesSuccess) {
                     final gpa = state.data.overallGPA?.gpa ?? 0.0;
-                    subtitle = 'GPA: ${gpa.toStringAsFixed(1)} / 4.0';
+                    final grade = state.data.overallGPA?.overallGrade ?? 0.0;
+                    subtitle = 'GPA: ${gpa.toStringAsFixed(1)} | Grade: ${grade.toStringAsFixed(0)}%';
                   } else if (state is StudentGradesFailure) {
                     subtitle = 'Failed to load';
                   }
