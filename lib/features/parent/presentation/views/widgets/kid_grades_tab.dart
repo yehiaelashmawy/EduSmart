@@ -1,57 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/features/parent/data/repos/parent_dashboard_repo.dart';
+import 'package:school_system/features/parent/presentation/manager/child_grades_cubit/child_grades_cubit.dart';
+import 'package:school_system/features/parent/presentation/manager/child_grades_cubit/child_grades_state.dart';
+import 'package:school_system/features/parent/data/models/parent_grades_model.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/kid_subject_grade_card.dart';
 
 class KidGradesTab extends StatelessWidget {
-  const KidGradesTab({super.key});
+  final String? childId;
+  const KidGradesTab({super.key, this.childId});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ChildGradesCubit(
+        ParentDashboardRepo(ApiService()),
+        childId: childId ?? '',
+      )..fetchGrades(),
+      child: const _KidGradesTabContent(),
+    );
+  }
+}
+
+class _KidGradesTabContent extends StatelessWidget {
+  const _KidGradesTabContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChildGradesCubit, ChildGradesState>(
+      builder: (context, state) {
+        if (state is ChildGradesLoading) {
+          return _buildLoadingState();
+        } else if (state is ChildGradesFailure) {
+          return Center(child: Text(state.error.errorMessage));
+        } else if (state is ChildGradesSuccess) {
+          return _buildContent(state.data);
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Skeletonizer(
+      enabled: true,
+      child: _buildContent(
+        ParentGradesModel(
+          studentOid: '',
+          studentName: 'Student Name',
+          summary: GradeSummaryModel(
+            gpa: 0,
+            overallGrade: 0,
+            letterGrade: 'A',
+            classRank: 0,
+            totalStudentsInClass: 0,
+          ),
+          gradeTrend: [],
+          subjectPerformance: List.generate(
+            2,
+            (index) => SubjectPerformanceModel(
+              subjectName: 'Subject Name',
+              subjectAverage: 90,
+              letterGrade: 'A',
+              exams: [
+                ExamGradeModel(examName: 'Exam Name', score: 90, maxScore: 100),
+              ],
+              assignments: [
+                AssignmentGradeModel(
+                  assignmentName: 'Assignment Name',
+                  score: 95,
+                  maxScore: 100,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(ParentGradesModel data) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
-          KidSubjectGradeCard(
-            subject: 'Mathematics',
-            percent: '94%',
-            letterGrade: 'A',
-            quizzes: const [
-              {'title': 'Mid-term Exam', 'date': 'Oct 15, 2023', 'percent': 92},
-              {
-                'title': 'Chapter 4 Quiz',
-                'date': 'Oct 02, 2023',
-                'percent': 96,
-              },
-            ],
-            assignments: const [
-              {'title': 'Problem Set 5', 'date': 'Oct 20, 2023', 'percent': 95},
-              {
-                'title': 'Problem Set 4',
-                'date': 'Oct 10, 2023',
-                'percent': 100,
-              },
-            ],
-          ),
-          const SizedBox(height: 20),
-          KidSubjectGradeCard(
-            subject: 'Physics',
-            percent: '88%',
-            letterGrade: 'B+',
-            quizzes: const [
-              {'title': 'Mid-term Exam', 'date': 'Oct 18, 2023', 'percent': 85},
-              {
-                'title': 'Kinematics Quiz',
-                'date': 'Sep 25, 2023',
-                'percent': 90,
-              },
-            ],
-            assignments: const [
-              {
-                'title': 'Lab Report: Free Fall',
-                'date': 'Oct 22, 2023',
-                'percent': 92,
-              },
-              {'title': 'Homework 3', 'date': 'Oct 12, 2023', 'percent': 88},
-            ],
+          ...data.subjectPerformance.map(
+            (subject) => Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: KidSubjectGradeCard(
+                subject: subject.subjectName,
+                percent: '${subject.subjectAverage.toInt()}%',
+                letterGrade: subject.letterGrade,
+                quizzes: subject.exams
+                    .map(
+                      (e) => {
+                        'title': e.examName,
+                        'date': 'Final Exam',
+                        'percent': e.score.toInt(),
+                      },
+                    )
+                    .toList(),
+                assignments: subject.assignments
+                    .map(
+                      (a) => {
+                        'title': a.assignmentName,
+                        'date': 'Assignment',
+                        'percent': a.score.toInt(),
+                      },
+                    )
+                    .toList(),
+              ),
+            ),
           ),
           const SizedBox(height: 32),
         ],
