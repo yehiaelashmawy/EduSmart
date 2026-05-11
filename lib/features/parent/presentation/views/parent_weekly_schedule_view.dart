@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
-import 'package:school_system/features/student/data/repos/student_weekly_schedule_repo.dart';
-import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_cubit.dart';
+import 'package:school_system/features/parent/data/repos/parent_dashboard_repo.dart';
+import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_cubit.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_weekly_schedule_view_body.dart';
 
 class ParentWeeklyScheduleView extends StatelessWidget {
@@ -13,10 +13,11 @@ class ParentWeeklyScheduleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String childId = (ModalRoute.of(context)!.settings.arguments as String?) ?? '';
     return BlocProvider(
-      create: (context) => StudentWeeklyScheduleCubit(
-        StudentWeeklyScheduleRepo(ApiService()),
-      )..fetchWeeklySchedule(),
+      create: (context) => ChildWeeklyScheduleCubit(
+        ParentDashboardRepo(ApiService()),
+      )..fetchChildWeeklySchedule(childId),
       child: Scaffold(
         backgroundColor: const Color(0xFFF8F9FE),
         appBar: AppBar(

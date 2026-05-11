@@ -179,6 +179,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ParentWeeklyScheduleView.routeName:
       return MaterialPageRoute(
         builder: (context) => const ParentWeeklyScheduleView(),
+        settings: settings,
       );
     case StudentList.routeName:
       final args = settings.arguments;

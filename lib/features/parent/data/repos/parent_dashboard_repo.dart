@@ -5,6 +5,7 @@ import 'package:school_system/features/parent/data/models/parent_dashboard_model
 import 'package:school_system/features/parent/data/models/parent_attendance_model.dart';
 import 'package:school_system/features/parent/data/models/parent_grades_model.dart';
 import 'package:school_system/features/parent/data/models/parent_homework_model.dart';
+import 'package:school_system/features/parent/data/models/parent_weekly_schedule_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
@@ -26,14 +27,18 @@ class ParentDashboardRepo {
     try {
       final response = await apiService.get('/api/Parents/my-children');
       final List childrenJson = response['data']['children'] ?? [];
-      final children = childrenJson.map((e) => ParentChildModel.fromJson(e)).toList();
+      final children = childrenJson
+          .map((e) => ParentChildModel.fromJson(e))
+          .toList();
       return Right(children);
     } catch (e) {
       if (e is ApiErrors) return Left(e);
       return Left(ApiErrors(errorMessage: e.toString()));
     }
   }
-  Future<Either<ApiErrors, ChildrenAttendanceModel>> getChildrenAttendance() async {
+
+  Future<Either<ApiErrors, ChildrenAttendanceModel>>
+  getChildrenAttendance() async {
     try {
       final response = await apiService.get('/api/Parents/Children-Attendance');
       final data = ChildrenAttendanceModel.fromJson(response['data']);
@@ -55,11 +60,28 @@ class ParentDashboardRepo {
       return Left(ApiErrors(errorMessage: e.toString()));
     }
   }
-  Future<Either<ApiErrors, List<ParentHomeworkModel>>> getChildrenHomework() async {
+
+  Future<Either<ApiErrors, List<ParentHomeworkModel>>>
+  getChildrenHomework() async {
     try {
       final response = await apiService.get('/api/Parents/children-homework');
       final List dataJson = response['data'] ?? [];
-      final data = dataJson.map((e) => ParentHomeworkModel.fromJson(e)).toList();
+      final data = dataJson
+          .map((e) => ParentHomeworkModel.fromJson(e))
+          .toList();
+      return Right(data);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, ParentWeeklyScheduleModel>> getChildWeeklySchedule(
+    String childId,
+  ) async {
+    try {
+      final response = await apiService.get('/api/Parents/$childId/schedule');
+      final data = ParentWeeklyScheduleModel.fromJson(response['data']);
       return Right(data);
     } catch (e) {
       if (e is ApiErrors) return Left(e);

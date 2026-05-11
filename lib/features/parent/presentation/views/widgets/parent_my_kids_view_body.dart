@@ -21,7 +21,7 @@ class _ParentMyKidsViewBodyState extends State<ParentMyKidsViewBody> {
 
   Widget _buildTabContent() {
     switch (_selectedTabIndex) {
-      case 0: return const KidOverviewTab();
+      case 0: return KidOverviewTab(childId: widget.child?.childId);
       case 1: return KidAttendanceTab(childId: widget.child?.childId);
       case 2: return KidGradesTab(childId: widget.child?.childId);
       case 3: return KidHomeworkTab(childId: widget.child?.childId);

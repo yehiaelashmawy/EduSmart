@@ -4,13 +4,18 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/views/parent_weekly_schedule_view.dart';
 
 class ViewScheduleButton extends StatelessWidget {
-  const ViewScheduleButton({super.key});
+  final String? childId;
+  const ViewScheduleButton({super.key, this.childId});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, ParentWeeklyScheduleView.routeName);
+        Navigator.pushNamed(
+          context,
+          ParentWeeklyScheduleView.routeName,
+          arguments: childId,
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),

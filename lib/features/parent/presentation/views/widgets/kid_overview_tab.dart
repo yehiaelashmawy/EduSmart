@@ -6,16 +6,17 @@ import 'package:school_system/features/parent/presentation/views/widgets/upcomin
 import 'package:school_system/features/parent/presentation/views/widgets/view_schedule_button.dart';
 
 class KidOverviewTab extends StatelessWidget {
-  const KidOverviewTab({super.key});
+  final String? childId;
+  const KidOverviewTab({super.key, this.childId});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: ViewScheduleButton(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ViewScheduleButton(childId: childId),
         ),
         const SizedBox(height: 32),
         Padding(

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
-import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_cubit.dart';
-import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_state.dart';
+import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_cubit.dart';
+import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_state.dart';
+import 'package:school_system/features/parent/data/models/parent_weekly_schedule_model.dart';
 
 class ParentWeeklyScheduleViewBody extends StatefulWidget {
   const ParentWeeklyScheduleViewBody({super.key});
@@ -19,50 +20,59 @@ class _ParentWeeklyScheduleViewBodyState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StudentWeeklyScheduleCubit, StudentWeeklyScheduleState>(
+    return BlocBuilder<ChildWeeklyScheduleCubit, ChildWeeklyScheduleState>(
       builder: (context, state) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              Text(
-                'WEEKLY SCHEDULE',
-                style: AppTextStyle.bold12.copyWith(
-                  color: AppColors.grey.withValues(alpha: 0.6),
-                  letterSpacing: 1.2,
+        if (state is ChildWeeklyScheduleLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is ChildWeeklyScheduleFailure) {
+          return Center(child: Text(state.error.errorMessage));
+        } else if (state is ChildWeeklyScheduleSuccess) {
+          final schedule = state.schedule;
+          if (schedule.weeklySchedule.isEmpty) {
+            return const Center(child: Text('No schedule available'));
+          }
+
+          // Ensure selected index is within bounds
+          if (_selectedDayIndex >= schedule.weeklySchedule.length) {
+            _selectedDayIndex = 0;
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                Text(
+                  'WEEKLY SCHEDULE',
+                  style: AppTextStyle.bold12.copyWith(
+                    color: AppColors.grey.withValues(alpha: 0.6),
+                    letterSpacing: 1.2,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Oct 22 - Oct 27',
-                style: AppTextStyle.bold24.copyWith(
-                  color: AppColors.darkBlue,
-                  fontSize: 20,
+                const SizedBox(height: 8),
+                Text(
+                  schedule.childName,
+                  style: AppTextStyle.bold24.copyWith(
+                    color: AppColors.darkBlue,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              _buildDaySelector(),
-              const SizedBox(height: 32),
-              _buildScheduleList(),
-              const SizedBox(height: 32),
-            ],
-          ),
-        );
+                const SizedBox(height: 32),
+                _buildDaySelector(schedule.weeklySchedule),
+                const SizedBox(height: 32),
+                _buildScheduleList(schedule.weeklySchedule[_selectedDayIndex]),
+                const SizedBox(height: 32),
+              ],
+            ),
+          );
+        }
+        return const SizedBox.shrink();
       },
     );
   }
 
-  Widget _buildDaySelector() {
-    final days = [
-      {'name': 'SUN', 'day': '22'},
-      {'name': 'MON', 'day': '23'},
-      {'name': 'TUE', 'day': '24'},
-      {'name': 'WED', 'day': '25'},
-      {'name': 'THU', 'day': '26'},
-    ];
-
+  Widget _buildDaySelector(List<ParentWeeklyScheduleDay> days) {
     return SizedBox(
       height: 80,
       child: ListView.separated(
@@ -101,14 +111,14 @@ class _ParentWeeklyScheduleViewBodyState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    day['name']!,
+                    day.dayName.toUpperCase().substring(0, 3),
                     style: AppTextStyle.bold12.copyWith(
                       color: isSelected ? Colors.white : AppColors.grey,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    day['day']!,
+                    '${index + 1}', // Placeholder for day number if not available, or just use day name
                     style: AppTextStyle.bold18.copyWith(
                       color: isSelected ? Colors.white : AppColors.darkBlue,
                     ),
@@ -122,62 +132,22 @@ class _ParentWeeklyScheduleViewBodyState
     );
   }
 
-  Widget _buildScheduleList() {
+  Widget _buildScheduleList(ParentWeeklyScheduleDay day) {
+    if (day.classes.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: 40),
+          child: Text('No classes scheduled for this day'),
+        ),
+      );
+    }
     return Column(
-      children: [
-        _buildClassCard(
-          title: 'Advanced Mathematics',
-          teacher: 'Dr. Eleanor Vance',
-          time: '08:30 AM',
-          range: '08:30 AM - 09:30 AM',
-          icon: Icons.calculate_outlined,
-        ),
-        _buildBreakCard(
-          title: 'MORNING BREAK',
-          duration: '15 MIN',
-          icon: Icons.coffee_outlined,
-          bgColor: AppColors.primaryColor.withValues(alpha: 0.05),
-          iconColor: Colors.brown,
-        ),
-        _buildClassCard(
-          title: 'Physics Laboratory',
-          teacher: 'Prof. Marcus Thorne',
-          time: '09:45 AM',
-          range: '09:45 AM - 11:15 AM',
-          icon: Icons.science_outlined,
-        ),
-        _buildClassCard(
-          title: 'English Literature',
-          teacher: 'Ms. Sarah Jenkins',
-          time: '11:30 AM',
-          range: '11:30 AM - 12:30 PM',
-          icon: Icons.menu_book_outlined,
-        ),
-        _buildBreakCard(
-          title: 'LUNCH PERIOD',
-          duration: '45 MIN',
-          icon: Icons.restaurant_outlined,
-          bgColor: Colors.orange.withValues(alpha: 0.1),
-          iconColor: Colors.orange,
-        ),
-        _buildClassCard(
-          title: 'Visual Arts',
-          teacher: 'Mr. Julian Grey',
-          time: '01:15 PM',
-          range: '01:15 PM - 02:45 PM',
-          icon: Icons.palette_outlined,
-        ),
-      ],
+      children: day.classes.map((cls) => _buildClassCard(cls)).toList(),
     );
   }
 
-  Widget _buildClassCard({
-    required String title,
-    required String teacher,
-    required String time,
-    required String range,
-    required IconData icon,
-  }) {
+  Widget _buildClassCard(ParentClassModel cls) {
+    final icon = _getIconForSubject(cls.subjectName);
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
@@ -211,7 +181,7 @@ class _ParentWeeklyScheduleViewBodyState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
+                      cls.subjectName,
                       style: AppTextStyle.bold16.copyWith(
                         color: AppColors.darkBlue,
                       ),
@@ -226,7 +196,7 @@ class _ParentWeeklyScheduleViewBodyState
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        time,
+                        cls.startTime,
                         style: AppTextStyle.bold12.copyWith(
                           color: AppColors.primaryColor,
                           fontSize: 10,
@@ -237,7 +207,7 @@ class _ParentWeeklyScheduleViewBodyState
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  teacher,
+                  cls.teacherName,
                   style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
                 ),
                 const SizedBox(height: 8),
@@ -246,7 +216,20 @@ class _ParentWeeklyScheduleViewBodyState
                     Icon(Icons.access_time, size: 14, color: AppColors.grey),
                     const SizedBox(width: 6),
                     Text(
-                      range,
+                      '${cls.startTime} - ${cls.endTime}',
+                      style: AppTextStyle.regular12.copyWith(
+                        color: AppColors.grey,
+                      ),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: AppColors.grey,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      cls.roomNumber,
                       style: AppTextStyle.regular12.copyWith(
                         color: AppColors.grey,
                       ),
@@ -261,38 +244,22 @@ class _ParentWeeklyScheduleViewBodyState
     );
   }
 
-  Widget _buildBreakCard({
-    required String title,
-    required String duration,
-    required IconData icon,
-    required Color bgColor,
-    required Color iconColor,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: iconColor),
-          const SizedBox(width: 16),
-          Text(
-            title,
-            style: AppTextStyle.bold12.copyWith(
-              color: iconColor,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const Spacer(),
-          Text(
-            duration,
-            style: AppTextStyle.bold12.copyWith(color: iconColor, fontSize: 10),
-          ),
-        ],
-      ),
-    );
+  IconData _getIconForSubject(String subjectName) {
+    subjectName = subjectName.toLowerCase();
+    if (subjectName.contains('math')) return Icons.calculate_outlined;
+    if (subjectName.contains('science') ||
+        subjectName.contains('chemist') ||
+        subjectName.contains('biolog') ||
+        subjectName.contains('physic'))
+      // ignore: curly_braces_in_flow_control_structures
+      return Icons.science_outlined;
+    if (subjectName.contains('english') ||
+        subjectName.contains('arabic') ||
+        subjectName.contains('literat'))
+      // ignore: curly_braces_in_flow_control_structures
+      return Icons.menu_book_outlined;
+    if (subjectName.contains('art')) return Icons.palette_outlined;
+    if (subjectName.contains('history')) return Icons.history_edu_outlined;
+    return Icons.school_outlined;
   }
 }
