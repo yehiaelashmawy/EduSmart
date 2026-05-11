@@ -1,39 +1,99 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/data/models/payment_history_model.dart';
+import 'package:school_system/features/parent/data/models/payment_request_model.dart';
+import 'package:school_system/features/parent/presentation/manager/parent_pay_cubit/parent_pay_cubit.dart';
+import 'package:school_system/features/parent/presentation/manager/parent_pay_cubit/parent_pay_state.dart';
+import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
 
-class ParentSecurePaymentViewBody extends StatelessWidget {
-  const ParentSecurePaymentViewBody({super.key});
+class ParentSecurePaymentViewBody extends StatefulWidget {
+  final PaymentHistoryItemModel? paymentItem;
+  const ParentSecurePaymentViewBody({super.key, this.paymentItem});
+
+  @override
+  State<ParentSecurePaymentViewBody> createState() => _ParentSecurePaymentViewBodyState();
+}
+
+class _ParentSecurePaymentViewBodyState extends State<ParentSecurePaymentViewBody> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _cardNumberController = TextEditingController();
+  final TextEditingController _expiryDateController = TextEditingController();
+  final TextEditingController _cvvController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _cardNumberController.dispose();
+    _expiryDateController.dispose();
+    _cvvController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Secure Payment',
-            style: AppTextStyle.bold24.copyWith(
-              color: const Color(0xFF1A1D1E),
+    if (widget.paymentItem == null) {
+      return const Center(child: Text('No payment information available.'));
+    }
+
+    return BlocListener<ParentPayCubit, ParentPayState>(
+      listener: (context, state) {
+        if (state is ParentPaySuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.response.message),
+              backgroundColor: Colors.green,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Complete your transaction securely using our encrypted gateway.',
-            style: AppTextStyle.medium12.copyWith(
-              color: Colors.grey.shade700,
+          );
+          Navigator.pushReplacementNamed(
+            context,
+            ParentReceiptView.routeName,
+            arguments: state.response.receiptNumber,
+          );
+        } else if (state is ParentPayFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error.errorMessage),
+              backgroundColor: Colors.red,
             ),
-          ),
-          const SizedBox(height: 24),
-          _buildPaymentForm(),
-          const SizedBox(height: 24),
-          _buildTotalAmountCard(),
-          const SizedBox(height: 24),
-          _buildActionButtons(context),
-          const SizedBox(height: 32),
-          _buildFooterIcons(),
-        ],
+          );
+        }
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Secure Payment',
+              style: AppTextStyle.bold24.copyWith(
+                color: const Color(0xFF1A1D1E),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Complete your transaction securely using our encrypted gateway.',
+              style: AppTextStyle.medium12.copyWith(
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildPaymentForm(),
+            const SizedBox(height: 24),
+            _buildContactForm(),
+            const SizedBox(height: 24),
+            _buildTotalAmountCard(),
+            const SizedBox(height: 24),
+            _buildActionButtons(context),
+            const SizedBox(height: 32),
+            _buildFooterIcons(),
+          ],
+        ),
       ),
     );
   }
@@ -61,10 +121,14 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildInputLabel('CARDHOLDER NAME'),
-              _buildTextField(hint: 'e.g. Sarah Jenkins'),
+              _buildTextField(
+                controller: _nameController,
+                hint: 'e.g. Sarah Jenkins',
+              ),
               const SizedBox(height: 16),
               _buildInputLabel('CARD NUMBER'),
               _buildTextField(
+                controller: _cardNumberController,
                 hint: '0000 0000 0000 0000',
                 suffixIcon: Icons.credit_card,
                 keyboardType: TextInputType.number,
@@ -77,7 +141,10 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildInputLabel('EXPIRY DATE'),
-                        _buildTextField(hint: 'MM / YY'),
+                        _buildTextField(
+                          controller: _expiryDateController,
+                          hint: 'MM / YY',
+                        ),
                       ],
                     ),
                   ),
@@ -88,6 +155,7 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
                       children: [
                         _buildInputLabel('CVV'),
                         _buildTextField(
+                          controller: _cvvController,
                           hint: '***',
                           keyboardType: TextInputType.number,
                           obscureText: true,
@@ -98,6 +166,35 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
                 ],
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactForm() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInputLabel('EMAIL ADDRESS'),
+          _buildTextField(
+            controller: _emailController,
+            hint: 'e.g. sarah.jenkins@example.com',
+            keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 16),
+          _buildInputLabel('PHONE NUMBER'),
+          _buildTextField(
+            controller: _phoneController,
+            hint: 'e.g. 01063977686',
+            keyboardType: TextInputType.phone,
           ),
         ],
       ),
@@ -119,6 +216,7 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
 
   Widget _buildTextField({
     required String hint,
+    TextEditingController? controller,
     IconData? suffixIcon,
     TextInputType? keyboardType,
     bool obscureText = false,
@@ -129,6 +227,7 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
+        controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -171,7 +270,7 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '\$450.00',
+                '\$${widget.paymentItem?.remainingAmount.toStringAsFixed(2) ?? '0.00'}',
                 style: AppTextStyle.bold36.copyWith(
                   color: AppColors.secondaryColor,
                 ),
@@ -232,34 +331,76 @@ class ParentSecurePaymentViewBody extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: 50,
-          child: ElevatedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment processing...')),
+          child: BlocBuilder<ParentPayCubit, ParentPayState>(
+            builder: (context, state) {
+              return ElevatedButton(
+                onPressed: state is ParentPayLoading
+                    ? null
+                    : () {
+                        if (_validateInputs()) {
+                          context.read<ParentPayCubit>().processPayment(
+                                PaymentRequestModel(
+                                  invoiceId: widget.paymentItem!.invoiceId,
+                                  studentId: widget.paymentItem!.studentId,
+                                  amount: widget.paymentItem!.remainingAmount,
+                                  cardNumber: _cardNumberController.text,
+                                  expiryDate: _expiryDateController.text,
+                                  cvv: _cvvController.text,
+                                  cardholderName: _nameController.text,
+                                  email: _emailController.text,
+                                  phone: _phoneController.text,
+                                ),
+                              );
+                        }
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: state is ParentPayLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Pay Now',
+                            style: AppTextStyle.bold16.copyWith(color: Colors.white),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward, color: Colors.white, size: 20),
+                        ],
+                      ),
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Pay Now',
-                  style: AppTextStyle.bold16.copyWith(color: Colors.white),
-                ),
-                const SizedBox(width: 8),
-                const Icon(Icons.arrow_forward, color: Colors.white, size: 20),
-              ],
-            ),
           ),
         ),
       ],
     );
+  }
+
+  bool _validateInputs() {
+    if (_nameController.text.isEmpty ||
+        _cardNumberController.text.isEmpty ||
+        _expiryDateController.text.isEmpty ||
+        _cvvController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
+      return false;
+    }
+    return true;
   }
 
   Widget _buildFooterIcons() {

@@ -9,6 +9,8 @@ import 'package:school_system/features/parent/data/models/parent_weekly_schedule
 import 'package:school_system/features/parent/data/models/receipt_model.dart';
 import 'package:school_system/features/parent/data/models/payment_history_model.dart';
 import 'package:school_system/features/parent/data/models/payment_summary_model.dart';
+import 'package:school_system/features/parent/data/models/payment_request_model.dart';
+import 'package:school_system/features/parent/data/models/payment_response_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
@@ -132,6 +134,23 @@ class ParentDashboardRepo {
     try {
       final response = await apiService.get('/api/Parents/$childId/schedule');
       final data = ParentWeeklyScheduleModel.fromJson(response['data']);
+      return Right(data);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, PaymentResponseModel>> pay(
+    PaymentRequestModel request,
+  ) async {
+    try {
+      final response = await apiService.post(
+        '/api/parent/payments/pay',
+        data: request.toJson(),
+      );
+      final dataJson = response['data'] ?? response;
+      final data = PaymentResponseModel.fromJson(dataJson);
       return Right(data);
     } catch (e) {
       if (e is ApiErrors) return Left(e);

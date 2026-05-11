@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/features/parent/data/models/payment_history_model.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
 class PaymentOverdueBanner extends StatelessWidget {
   final int overdueCount;
   final double overdueAmount;
+  final PaymentHistoryItemModel? paymentItem;
+
   const PaymentOverdueBanner({
     super.key,
     required this.overdueCount,
     required this.overdueAmount,
+    this.paymentItem,
   });
 
   @override
@@ -60,7 +64,11 @@ class PaymentOverdueBanner extends StatelessWidget {
           const SizedBox(width: 12),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, ParentSecurePaymentView.routeName);
+              Navigator.pushNamed(
+                context,
+                ParentSecurePaymentView.routeName,
+                arguments: paymentItem,
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFC62828),

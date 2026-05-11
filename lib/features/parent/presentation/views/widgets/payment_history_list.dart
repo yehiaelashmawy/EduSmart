@@ -40,7 +40,11 @@ class PaymentHistoryList extends StatelessWidget {
           isPayNow: item.status.toLowerCase() == 'overdue' || item.canPay,
           isHighlighted: item.status.toLowerCase() == 'overdue',
           onPayPressed: () {
-            Navigator.pushNamed(context, ParentSecurePaymentView.routeName);
+            Navigator.pushNamed(
+              context,
+              ParentSecurePaymentView.routeName,
+              arguments: item,
+            );
           },
           onReceiptPressed: item.receiptNumber != null
               ? () {

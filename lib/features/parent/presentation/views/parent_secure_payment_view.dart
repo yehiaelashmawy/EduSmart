@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/features/parent/data/models/payment_history_model.dart';
+import 'package:school_system/features/parent/data/repos/parent_dashboard_repo.dart';
+import 'package:school_system/features/parent/presentation/manager/parent_pay_cubit/parent_pay_cubit.dart';
 import 'package:school_system/features/parent/presentation/views/widgets/parent_secure_payment_view_body.dart';
 
 class ParentSecurePaymentView extends StatelessWidget {
   static const routeName = 'parent_secure_payment_view';
 
-  const ParentSecurePaymentView({super.key});
+  final PaymentHistoryItemModel? paymentItem;
+
+  const ParentSecurePaymentView({super.key, this.paymentItem});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,10 @@ class ParentSecurePaymentView extends StatelessWidget {
         elevation: 0,
         iconTheme: IconThemeData(color: AppColors.primaryColor),
       ),
-      body: const ParentSecurePaymentViewBody(),
+      body: BlocProvider(
+        create: (context) => ParentPayCubit(ParentDashboardRepo(ApiService())),
+        child: ParentSecurePaymentViewBody(paymentItem: paymentItem),
+      ),
     );
   }
 }

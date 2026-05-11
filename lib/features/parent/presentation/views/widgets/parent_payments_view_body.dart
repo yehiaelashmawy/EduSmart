@@ -53,6 +53,12 @@ class _ParentPaymentsViewBodyState extends State<ParentPaymentsViewBody> {
                   PaymentOverdueBanner(
                     overdueCount: summary.overdueCount,
                     overdueAmount: summary.overdueAmount,
+                    paymentItem: state is ParentPaymentsSuccess
+                        ? state.history.firstWhere(
+                            (e) => e.status.toLowerCase() == 'overdue',
+                            orElse: () => state.history.first,
+                          )
+                        : null,
                   ),
                 const SizedBox(height: 24),
                 Row(
