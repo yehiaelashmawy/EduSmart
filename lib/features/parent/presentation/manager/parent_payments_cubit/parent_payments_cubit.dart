@@ -9,10 +9,17 @@ class ParentPaymentsCubit extends Cubit<ParentPaymentsState> {
 
   Future<void> fetchPaymentSummary() async {
     emit(ParentPaymentsLoading());
-    final result = await parentDashboardRepo.getPaymentSummary();
-    result.fold(
+    final summaryResult = await parentDashboardRepo.getPaymentSummary();
+    final historyResult = await parentDashboardRepo.getPaymentHistory();
+
+    summaryResult.fold(
       (error) => emit(ParentPaymentsFailure(error)),
-      (summary) => emit(ParentPaymentsSuccess(summary)),
+      (summary) {
+        historyResult.fold(
+          (error) => emit(ParentPaymentsFailure(error)),
+          (historyResponse) => emit(ParentPaymentsSuccess(summary, historyResponse.items)),
+        );
+      },
     );
   }
 }

@@ -6,13 +6,30 @@ import 'package:school_system/features/parent/data/models/parent_attendance_mode
 import 'package:school_system/features/parent/data/models/parent_grades_model.dart';
 import 'package:school_system/features/parent/data/models/parent_homework_model.dart';
 import 'package:school_system/features/parent/data/models/parent_weekly_schedule_model.dart';
-
+import 'package:school_system/features/parent/data/models/payment_history_model.dart';
 import 'package:school_system/features/parent/data/models/payment_summary_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
 
   ParentDashboardRepo(this.apiService);
+
+  Future<Either<ApiErrors, PaymentHistoryResponseModel>> getPaymentHistory({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    try {
+      final response = await apiService.get(
+        '/api/parent/payments/history?page=$page&pageSize=$pageSize',
+      );
+      final dataJson = response['data'] ?? response;
+      final data = PaymentHistoryResponseModel.fromJson(dataJson);
+      return Right(data);
+    } catch (e) {
+      if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
 
   Future<Either<ApiErrors, PaymentSummaryModel>> getPaymentSummary() async {
     try {

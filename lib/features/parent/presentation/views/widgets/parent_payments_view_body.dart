@@ -80,7 +80,10 @@ class _ParentPaymentsViewBodyState extends State<ParentPaymentsViewBody> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                PaymentHistoryList(showAllHistory: _showAllHistory),
+                PaymentHistoryList(
+                  showAllHistory: _showAllHistory,
+                  history: state is ParentPaymentsSuccess ? state.history : [],
+                ),
               ],
             ),
           ),
