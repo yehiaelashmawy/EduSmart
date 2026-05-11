@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/data/models/payment_history_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/features/parent/presentation/manager/parent_payments_cubit/parent_payments_cubit.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
 
 class PaymentOverdueBanner extends StatelessWidget {
@@ -68,7 +70,11 @@ class PaymentOverdueBanner extends StatelessWidget {
                 context,
                 ParentSecurePaymentView.routeName,
                 arguments: paymentItem,
-              );
+              ).then((_) {
+                if (context.mounted) {
+                  context.read<ParentPaymentsCubit>().fetchPaymentSummary();
+                }
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFC62828),

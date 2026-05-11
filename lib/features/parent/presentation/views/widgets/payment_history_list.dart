@@ -3,6 +3,8 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/parent/data/models/payment_history_model.dart';
 import 'package:school_system/features/parent/presentation/views/parent_receipt_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_secure_payment_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/features/parent/presentation/manager/parent_payments_cubit/parent_payments_cubit.dart';
 import 'payment_history_card.dart';
 
 class PaymentHistoryList extends StatelessWidget {
@@ -44,7 +46,11 @@ class PaymentHistoryList extends StatelessWidget {
               context,
               ParentSecurePaymentView.routeName,
               arguments: item,
-            );
+            ).then((_) {
+              if (context.mounted) {
+                context.read<ParentPaymentsCubit>().fetchPaymentSummary();
+              }
+            });
           },
           onReceiptPressed: item.receiptNumber != null
               ? () {
