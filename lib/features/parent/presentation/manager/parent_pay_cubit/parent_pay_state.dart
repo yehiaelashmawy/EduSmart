@@ -1,5 +1,6 @@
 import 'package:school_system/core/api/api_errors.dart';
 import 'package:school_system/features/parent/data/models/payment_response_model.dart';
+import 'package:school_system/features/parent/data/models/fawaterk_payment_response_model.dart';
 
 abstract class ParentPayState {}
 
@@ -10,6 +11,11 @@ class ParentPayLoading extends ParentPayState {}
 class ParentPaySuccess extends ParentPayState {
   final PaymentResponseModel response;
   ParentPaySuccess(this.response);
+}
+
+class ParentFawaterkPaySuccess extends ParentPayState {
+  final FawaterkPaymentResponseModel response;
+  ParentFawaterkPaySuccess(this.response);
 }
 
 class ParentPayFailure extends ParentPayState {

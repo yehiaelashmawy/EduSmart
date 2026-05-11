@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:school_system/core/api/api_errors.dart';
+import 'package:school_system/core/utils/app_constants.dart';
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/parent/data/models/parent_dashboard_model.dart';
 import 'package:school_system/features/parent/data/models/parent_attendance_model.dart';
@@ -11,6 +13,8 @@ import 'package:school_system/features/parent/data/models/payment_history_model.
 import 'package:school_system/features/parent/data/models/payment_summary_model.dart';
 import 'package:school_system/features/parent/data/models/payment_request_model.dart';
 import 'package:school_system/features/parent/data/models/payment_response_model.dart';
+import 'package:school_system/features/parent/data/models/fawaterk_payment_method_model.dart';
+import 'package:school_system/features/parent/data/models/fawaterk_payment_response_model.dart';
 
 class ParentDashboardRepo {
   final ApiService apiService;
@@ -154,6 +158,87 @@ class ParentDashboardRepo {
       return Right(data);
     } catch (e) {
       if (e is ApiErrors) return Left(e);
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, List<FawaterkPaymentMethodModel>>>
+  getFawaterkPaymentMethods() async {
+    try {
+      final response = await Dio().get(
+        'https://staging.fawaterk.com/api/v2/getPaymentmethods',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.fawaterkToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      final List dataJson = response.data['data'] ?? [];
+      final data = dataJson
+          .map((e) => FawaterkPaymentMethodModel.fromJson(e))
+          .toList();
+      return Right(data);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ApiErrors(errorMessage: e.message ?? 'Unknown error'));
+      }
+      return Left(ApiErrors(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Either<ApiErrors, FawaterkPaymentResponseModel>> payFawry(
+    PaymentRequestModel request,
+  ) async {
+    try {
+      final paymentMethodId =
+          int.tryParse(request.cardNumber) ??
+          3; // Dynamically retrieve payment method id from the quick hack
+
+      final response = await Dio().post(
+        'https://staging.fawaterk.com/api/v2/invoiceInitPay',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.fawaterkToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: {
+          "payment_method_id": paymentMethodId, // Dynamic
+          "cartTotal": request.amount.toString(),
+          "currency": "EGP",
+          "customer": {
+            "first_name": request.cardholderName,
+            "last_name": "Name",
+            "email": request.email.isNotEmpty ? request.email : "test@test.com",
+            "phone": request.phone.isNotEmpty ? request.phone : "01000000000",
+            "address": "Egypt",
+          },
+          "redirectionUrls": {
+            "successUrl": "https://schoolsystem.com/success",
+            "failUrl": "https://schoolsystem.com/fail",
+            "pendingUrl": "https://schoolsystem.com/pending",
+          },
+          "cartItems": [
+            {
+              "name": "School Fees",
+              "price": request.amount.toString(),
+              "quantity": "1",
+            },
+          ],
+        },
+      );
+      final data = FawaterkPaymentResponseModel.fromJson(response.data);
+      return Right(data);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(
+          ApiErrors(
+            errorMessage:
+                e.response?.data?['message'] ?? e.message ?? 'Unknown error',
+          ),
+        );
+      }
       return Left(ApiErrors(errorMessage: e.toString()));
     }
   }

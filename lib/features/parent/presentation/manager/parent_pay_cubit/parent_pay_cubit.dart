@@ -17,4 +17,14 @@ class ParentPayCubit extends Cubit<ParentPayState> {
       (response) => emit(ParentPaySuccess(response)),
     );
   }
+
+  Future<void> processFawaterkPayment(PaymentRequestModel request) async {
+    emit(ParentPayLoading());
+    final result = await parentDashboardRepo.payFawry(request);
+
+    result.fold(
+      (error) => emit(ParentPayFailure(error)),
+      (response) => emit(ParentFawaterkPaySuccess(response)),
+    );
+  }
 }
