@@ -150,8 +150,8 @@ class Assessment {
   factory Assessment.fromJson(Map<String, dynamic> json) {
     return Assessment(
       title: json['title'] ?? '',
-      dueDate: json['dueDate'] ?? '',
-      grade: json['grade'] ?? 0,
+      dueDate: (json['dueDate'] ?? json['date'] ?? '').toString(),
+      grade: json['grade'] ?? json['score'] ?? 0,
       totalMarks: json['totalMarks'] ?? 0,
       percentage: json['percentage'] ?? 0,
     );

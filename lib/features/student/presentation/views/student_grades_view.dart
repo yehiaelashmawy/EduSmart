@@ -19,8 +19,9 @@ class StudentGradesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StudentGradesCubit(StudentGradesRepo(ApiService()))
-        ..fetchGradesDashboard(),
+      create: (context) =>
+          StudentGradesCubit(StudentGradesRepo(ApiService()))
+            ..fetchGradesDashboard(),
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
@@ -61,12 +62,16 @@ class StudentGradesView extends StatelessWidget {
                         const SizedBox(height: 12),
                         Text(
                           'Loading detailed breakdown of your progress this term. Current Weighted Average: 90%',
-                          style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
+                          style: AppTextStyle.medium14.copyWith(
+                            color: AppColors.grey,
+                          ),
                         ),
                         const SizedBox(height: 32),
                         Text(
                           'Graded Assessments',
-                          style: AppTextStyle.bold16.copyWith(color: AppColors.black),
+                          style: AppTextStyle.bold16.copyWith(
+                            color: AppColors.black,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         ...List.generate(
@@ -74,7 +79,8 @@ class StudentGradesView extends StatelessWidget {
                           (index) => StudentGradeAssessmentCard(
                             badgeText: 'LOADING',
                             badgeColor: AppColors.darkBlue,
-                            badgeBackgroundColor: AppColors.lightGrey.withValues(alpha: 0.2),
+                            badgeBackgroundColor: AppColors.lightGrey
+                                .withValues(alpha: 0.2),
                             dateString: 'Completed Jan 01',
                             title: 'Loading Assignment Title',
                             grade: '90',
@@ -112,7 +118,7 @@ class StudentGradesView extends StatelessWidget {
                 final data = state.data;
                 final overallGpa = data.overallGPA?.gpa ?? 0.0;
                 final overallGrade = data.overallGPA?.overallGrade ?? 0;
-                
+
                 // Collect all assessments across subjects
                 final allAssessments = <Widget>[];
                 for (var subject in data.subjectDetailedGrades) {
@@ -122,7 +128,9 @@ class StudentGradesView extends StatelessWidget {
                     if (assignment.dueDate.isNotEmpty) {
                       try {
                         dueDate = DateTime.parse(assignment.dueDate);
-                        formattedDate = DateFormat('MMM dd, yyyy').format(dueDate);
+                        formattedDate = DateFormat(
+                          'MMM dd, yyyy',
+                        ).format(dueDate);
                       } catch (e) {
                         // ignore
                       }
@@ -132,7 +140,9 @@ class StudentGradesView extends StatelessWidget {
                       StudentGradeAssessmentCard(
                         badgeText: subject.subjectName.toUpperCase(),
                         badgeColor: AppColors.darkBlue,
-                        badgeBackgroundColor: AppColors.lightGrey.withValues(alpha: 0.2),
+                        badgeBackgroundColor: AppColors.lightGrey.withValues(
+                          alpha: 0.2,
+                        ),
                         dateString: dueDate != null ? 'Due $formattedDate' : '',
                         title: assignment.title,
                         grade: assignment.grade.toString(),
@@ -148,7 +158,9 @@ class StudentGradesView extends StatelessWidget {
                     if (exam.dueDate.isNotEmpty) {
                       try {
                         dueDate = DateTime.parse(exam.dueDate);
-                        formattedDate = DateFormat('MMM dd, yyyy').format(dueDate);
+                        formattedDate = DateFormat(
+                          'MMM dd, yyyy',
+                        ).format(dueDate);
                       } catch (e) {
                         // ignore
                       }
@@ -157,13 +169,17 @@ class StudentGradesView extends StatelessWidget {
                     allAssessments.add(
                       StudentGradeAssessmentCard(
                         badgeText: '${subject.subjectName.toUpperCase()} EXAM',
-                        badgeColor: AppColors.peach,
-                        badgeBackgroundColor: AppColors.peach.withValues(alpha: 0.2),
-                        dateString: dueDate != null ? 'Completed $formattedDate' : '',
+                        badgeColor: Colors.orange,
+                        badgeBackgroundColor: AppColors.white.withValues(
+                          alpha: 0.2,
+                        ),
+                        dateString: dueDate != null
+                            ? 'Completed $formattedDate'
+                            : '',
                         title: exam.title,
                         grade: exam.grade.toString(),
                         totalGrade: exam.totalMarks.toString(),
-                        gradeColor: AppColors.peach,
+                        gradeColor: Colors.orange,
                       ),
                     );
                   }
@@ -199,18 +215,14 @@ class StudentGradesView extends StatelessWidget {
                                 color: AppColors.secondaryColor,
                               ),
                             ),
-                            const TextSpan(
-                              text: ' (GPA: ',
-                            ),
+                            const TextSpan(text: ' (GPA: '),
                             TextSpan(
                               text: '$overallGpa',
                               style: AppTextStyle.bold14.copyWith(
                                 color: AppColors.secondaryColor,
                               ),
                             ),
-                            const TextSpan(
-                              text: ')',
-                            ),
+                            const TextSpan(text: ')'),
                           ],
                         ),
                       ),
@@ -246,4 +258,3 @@ class StudentGradesView extends StatelessWidget {
     );
   }
 }
-

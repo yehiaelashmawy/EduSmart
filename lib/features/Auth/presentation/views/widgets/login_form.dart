@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
@@ -154,7 +155,9 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       builder: (context, state) {
-        return Container(
+        return Skeletonizer(
+          enabled: state is AuthLoading,
+          child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(32),
           child: Column(
@@ -255,9 +258,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
               const SizedBox(height: 32),
-              state is AuthLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : CustomButton(
+              CustomButton(
                       text: 'Login',
                       shadows: [
                         BoxShadow(
@@ -339,8 +340,9 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ],
           ),
-        );
-      },
+        ),
+      );
+    },
     );
   }
 }
