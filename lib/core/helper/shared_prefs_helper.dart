@@ -40,6 +40,27 @@ class SharedPrefsHelper {
   static Future<void> setIsDarkMode(bool value) async =>
       await _prefs.setBool('isDarkMode', value);
 
+  static bool getRememberMe(String role) =>
+      _prefs.getBool('${role}_rememberMe') ?? false;
+  static Future<void> setRememberMe(String role, bool value) async =>
+      await _prefs.setBool('${role}_rememberMe', value);
+
+  static String? getSavedEmail(String role) =>
+      _prefs.getString('${role}_savedEmail');
+  static Future<void> setSavedEmail(String role, String email) async =>
+      await _prefs.setString('${role}_savedEmail', email);
+
+  static String? getSavedPassword(String role) =>
+      _prefs.getString('${role}_savedPassword');
+  static Future<void> setSavedPassword(String role, String password) async =>
+      await _prefs.setString('${role}_savedPassword', password);
+
+  static Future<void> clearSavedCredentials(String role) async {
+    await _prefs.remove('${role}_rememberMe');
+    await _prefs.remove('${role}_savedEmail');
+    await _prefs.remove('${role}_savedPassword');
+  }
+
   static Future<void> clearAuth() async {
     await _prefs.remove('isAuthenticated');
     await _prefs.remove('userRole');

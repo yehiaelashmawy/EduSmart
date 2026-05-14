@@ -4,7 +4,14 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/Auth/presentation/views/forgot_password_view.dart';
 
 class RememberMeAndForgotPassword extends StatefulWidget {
-  const RememberMeAndForgotPassword({super.key});
+  const RememberMeAndForgotPassword({
+    super.key,
+    required this.onChanged,
+    this.initialValue = false,
+  });
+
+  final ValueChanged<bool> onChanged;
+  final bool initialValue;
 
   @override
   State<RememberMeAndForgotPassword> createState() =>
@@ -13,7 +20,13 @@ class RememberMeAndForgotPassword extends StatefulWidget {
 
 class _RememberMeAndForgotPasswordState
     extends State<RememberMeAndForgotPassword> {
-  bool isChecked = false;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +38,7 @@ class _RememberMeAndForgotPasswordState
             setState(() {
               isChecked = !isChecked;
             });
+            widget.onChanged(isChecked);
           },
           borderRadius: BorderRadius.circular(8),
           child: Row(

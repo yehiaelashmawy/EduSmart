@@ -25,6 +25,28 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _rememberMe = false;
+  bool _isInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      final role = ModalRoute.of(context)?.settings.arguments as String?;
+      if (role != null) {
+        _loadSavedCredentials(role);
+      }
+      _isInitialized = true;
+    }
+  }
+
+  void _loadSavedCredentials(String role) {
+    _rememberMe = SharedPrefsHelper.getRememberMe(role);
+    if (_rememberMe) {
+      _emailController.text = SharedPrefsHelper.getSavedEmail(role) ?? '';
+      _passwordController.text = SharedPrefsHelper.getSavedPassword(role) ?? '';
+    }
+  }
 
   @override
   void dispose() {
@@ -100,6 +122,25 @@ class _LoginFormState extends State<LoginForm> {
                 ? state.user.teacherId!.trim()
                 : state.user.userId,
           );
+
+          // Handle Remember Me
+          final roleArg =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          if (roleArg != null) {
+            if (_rememberMe) {
+              await SharedPrefsHelper.setRememberMe(roleArg, true);
+              await SharedPrefsHelper.setSavedEmail(
+                roleArg,
+                _emailController.text.trim(),
+              );
+              await SharedPrefsHelper.setSavedPassword(
+                roleArg,
+                _passwordController.text.trim(),
+              );
+            } else {
+              await SharedPrefsHelper.clearSavedCredentials(roleArg);
+            }
+          }
 
           if (!context.mounted) return;
 
@@ -207,7 +248,12 @@ class _LoginFormState extends State<LoginForm> {
                 ],
               ),
               const SizedBox(height: 16),
-              const RememberMeAndForgotPassword(),
+              RememberMeAndForgotPassword(
+                initialValue: _rememberMe,
+                onChanged: (value) {
+                  _rememberMe = value;
+                },
+              ),
               const SizedBox(height: 32),
               state is AuthLoading
                   ? const Center(child: CircularProgressIndicator())
