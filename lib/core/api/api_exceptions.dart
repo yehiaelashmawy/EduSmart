@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:school_system/core/api/api_errors.dart';
 
@@ -15,27 +16,44 @@ class ApiExceptions {
       case DioExceptionType.badCertificate:
         return ApiErrors(errorMessage: 'Bad certificate');
       case DioExceptionType.badResponse:
-        final responseData = e.response?.data;
+        final rawData = e.response?.data;
         String extractedMsg = 'Request failed';
 
-        if (responseData is Map<String, dynamic>) {
-          final errors = responseData['errors'];
-          if (errors is List && errors.isNotEmpty) {
-            extractedMsg = errors.first.toString();
-          } else if (responseData['messages'] is Map) {
-            final msgs = responseData['messages'] as Map;
-            if (msgs['EN'] != null) {
-              extractedMsg = msgs['EN'].toString();
-            } else if (msgs['error'] != null) {
-              extractedMsg = msgs['error'].toString();
-            } else if (msgs.isNotEmpty) {
-              extractedMsg = msgs.values.first.toString();
+        try {
+          // Convert bytes → String → Map if needed
+          Map? responseMap;
+
+          if (rawData is Map) {
+            responseMap = rawData;
+          } else if (rawData is List) {
+            final decoded = jsonDecode(utf8.decode(rawData as List<int>));
+            if (decoded is Map) {
+              responseMap = decoded;
             }
-          } else if (responseData['message'] != null) {
-            extractedMsg = responseData['message'].toString();
+          } else if (rawData is String) {
+            final decoded = jsonDecode(rawData);
+            if (decoded is Map) {
+              responseMap = decoded;
+            }
           }
-        } else if (responseData is String && responseData.trim().isNotEmpty) {
-          extractedMsg = responseData;
+
+          if (responseMap != null) {
+            // Priority 1: errors[] array
+            final errors = responseMap['errors'];
+            if (errors is List && errors.isNotEmpty) {
+              extractedMsg = errors.first.toString();
+            }
+            // Priority 2: messages.EN
+            else if (responseMap['messages'] is Map) {
+              final messages = responseMap['messages'] as Map;
+              extractedMsg = messages['EN']?.toString()
+                  ?? messages['Error']?.toString()
+                  ?? messages['AR']?.toString()
+                  ?? extractedMsg;
+            }
+          }
+        } catch (_) {
+          // keep fallback 'Request failed'
         }
 
         return ApiErrors(errorMessage: extractedMsg);
