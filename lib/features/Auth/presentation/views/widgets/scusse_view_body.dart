@@ -3,7 +3,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/utils/size_config.dart';
 import 'package:school_system/core/widgets/custom_button.dart';
-import 'package:school_system/features/Auth/presentation/views/login_view.dart';
+import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:svg_flutter/svg.dart';
 
 class ScusseViewBody extends StatelessWidget {
@@ -75,7 +75,7 @@ class ScusseViewBody extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    LoginView.routeName,
+                    AuthView.routeName,
                     (route) => false,
                   );
                 },
