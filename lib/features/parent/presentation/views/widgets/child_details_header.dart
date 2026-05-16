@@ -9,10 +9,10 @@ class ChildDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
-        width: 358,
-        height: 236,
+        width: double.infinity,
         margin: const EdgeInsets.symmetric(vertical: 8),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(

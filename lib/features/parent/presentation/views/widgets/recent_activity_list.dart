@@ -2,39 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
+import 'package:school_system/features/parent/data/models/children_dashboard_model.dart';
+
 class RecentActivityList extends StatelessWidget {
-  const RecentActivityList({super.key});
+  final List<RecentActivity>? activities;
+  const RecentActivityList({super.key, this.activities});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildActivityItem(
-          icon: Icons.star_border,
-          iconColor: Colors.blue,
-          title: 'New Grade Posted',
-          subtitle: 'Advanced Mathematics - Mid-term Quiz',
-          time: '2h ago',
-          tag: 'A- (92%)',
-        ),
-        const SizedBox(height: 16),
-        _buildActivityItem(
-          icon: Icons.assignment_outlined,
-          iconColor: Colors.orange,
-          title: 'Assignment Submitted',
-          subtitle: 'English Literature: Modernism Essay',
-          time: 'Yesterday',
-        ),
-        const SizedBox(height: 16),
-        _buildActivityItem(
-          icon: Icons.chat_bubble_outline,
-          iconColor: Colors.purple,
-          title: 'Teacher Note',
-          subtitle: 'Mr. Henderson left a comment on Physics lab',
-          time: 'Oct 24',
-        ),
-      ],
+    if (activities == null || activities!.isEmpty) {
+      return Column(
+        children: [
+          _buildActivityItem(
+            icon: Icons.star_border,
+            iconColor: Colors.blue,
+            title: 'No recent activities',
+            subtitle: 'Activities will appear here as they happen.',
+            time: '',
+          ),
+        ],
+      );
+    }
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: activities!.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final activity = activities![index];
+        return _buildActivityItem(
+          icon: _getIconForActivity(activity.activity),
+          iconColor: _getColorForActivity(activity.activity),
+          title: activity.activity,
+          subtitle: activity.status,
+          time: activity.timeAgo,
+        );
+      },
     );
+  }
+
+  IconData _getIconForActivity(String activity) {
+    activity = activity.toLowerCase();
+    if (activity.contains('submit')) return Icons.assignment_turned_in_outlined;
+    if (activity.contains('due')) return Icons.timer_outlined;
+    if (activity.contains('grade')) return Icons.star_border;
+    return Icons.notifications_none_outlined;
+  }
+
+  Color _getColorForActivity(String activity) {
+    activity = activity.toLowerCase();
+    if (activity.contains('submit')) return Colors.green;
+    if (activity.contains('due')) return Colors.orange;
+    if (activity.contains('grade')) return Colors.blue;
+    return Colors.purple;
   }
 
   Widget _buildActivityItem({
@@ -71,12 +92,17 @@ class RecentActivityList extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyle.bold14.copyWith(
-                        color: AppColors.darkBlue,
+                    Flexible(
+                      child: Text(
+                        title,
+                        style: AppTextStyle.bold14.copyWith(
+                          color: AppColors.darkBlue,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Text(
                       time,
                       style: AppTextStyle.regular12.copyWith(

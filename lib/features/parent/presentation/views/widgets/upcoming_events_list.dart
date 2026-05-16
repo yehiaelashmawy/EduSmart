@@ -2,37 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
+import 'package:school_system/features/parent/data/models/children_dashboard_model.dart';
+
 class UpcomingEventsList extends StatelessWidget {
-  const UpcomingEventsList({super.key});
+  final List<UpcomingEvent>? events;
+  const UpcomingEventsList({super.key, this.events});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildEventItem(
-          date: 'OCT\n28',
-          title: 'Parent-Teacher Conference',
-          time: '3:30 PM • Room 204 (Block B)',
-          color: Colors.blue,
-          hasAction: true,
-        ),
-        const SizedBox(height: 12),
-        _buildEventItem(
-          date: 'NOV\n02',
-          title: 'Regional Science Fair',
-          time: 'All Day • Campus Auditorium',
-          color: Colors.purple,
-        ),
-        const SizedBox(height: 12),
-        _buildEventItem(
-          date: 'NOV\n05',
-          title: 'Physics Project Deadline',
-          time: 'Due at 11:59 PM',
-          color: Colors.deepOrange,
-          isHighPriority: true,
-        ),
-      ],
+    if (events == null || events!.isEmpty) {
+      return Column(
+        children: [
+          _buildEventItem(
+            date: 'N/A\n--',
+            title: 'No upcoming events',
+            time: 'Stay tuned for updates.',
+            color: Colors.grey,
+          ),
+        ],
+      );
+    }
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: events!.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final event = events![index];
+        final dateFormatted = _formatDate(event.date);
+        return _buildEventItem(
+          date: dateFormatted,
+          title: event.title,
+          time: event.type,
+          color: _getColorForEventType(event.type),
+          isHighPriority: event.type == 'Exams',
+        );
+      },
     );
+  }
+
+  String _formatDate(String date) {
+    // API returns "Month Day" like "يونيو 10"
+    final parts = date.split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0].substring(0, 3).toUpperCase()}\n${parts[1]}';
+    }
+    return 'CAL\n--';
+  }
+
+  Color _getColorForEventType(String type) {
+    switch (type) {
+      case 'Exams': return Colors.red;
+      case 'Homework': return Colors.orange;
+      case 'Events': return Colors.blue;
+      default: return Colors.green;
+    }
   }
 
   Widget _buildEventItem({
