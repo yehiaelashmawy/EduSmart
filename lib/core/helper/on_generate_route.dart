@@ -65,6 +65,9 @@ import 'package:school_system/features/teacher/presentation/manager/exam_grading
 import 'package:school_system/features/teacher/data/repos/exam_grading_repo.dart';
 import 'package:school_system/features/teacher/data/models/exam_submission_model.dart';
 
+import '../../features/Auth/data/auth_repo.dart';
+import '../../features/Auth/presentation/manager/auth_cubit/auth_cubit.dart';
+
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case SplashView.routeName:
@@ -74,7 +77,16 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AuthView.routeName:
       return MaterialPageRoute(builder: (context) => const AuthView());
     case ResetPasswordView.routeName:
-      return MaterialPageRoute(builder: (context) => const ResetPasswordView());
+      final args = settings.arguments as ResetPasswordViewArgs?;
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => AuthCubit(AuthRepo()),
+          child: ResetPasswordView(
+            email: args?.email,
+            otpCode: args?.otpCode,
+          ),
+        ),
+      );
     case LoginView.routeName:
       return MaterialPageRoute(
         builder: (context) => const LoginView(),
@@ -82,12 +94,18 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
     case ForgotPasswordView.routeName:
       return MaterialPageRoute(
-        builder: (context) => const ForgotPasswordView(),
+        builder: (context) => BlocProvider(
+          create: (context) => AuthCubit(AuthRepo()),
+          child: const ForgotPasswordView(),
+        ),
       );
     case TeacherHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const TeacherHomeView());
     case VerificationView.routeName:
-      return MaterialPageRoute(builder: (context) => const VerificationView());
+      final args = settings.arguments as VerificationViewArgs?;
+      return MaterialPageRoute(
+        builder: (context) => VerificationView(email: args?.email),
+      );
     case StudentHomeView.routeName:
       return MaterialPageRoute(builder: (context) => const StudentHomeView());
     case WeeklyScheduleView.routeName:

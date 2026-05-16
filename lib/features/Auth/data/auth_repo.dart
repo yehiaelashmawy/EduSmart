@@ -51,4 +51,90 @@ class AuthRepo {
       rethrow;
     }
   }
+
+  // Forgot Password
+  Future<void> forgotPassword(String email) async {
+    try {
+      final response = await ApiService().post(
+        '/api/Auth/forgot-password',
+        data: {'email': email},
+      );
+
+      if (response['success'] != true) {
+        String errMsg = 'Failed to send reset email';
+        
+        if (response is Map) {
+          final errors = response['errors'];
+          if (errors is List && errors.isNotEmpty) {
+            errMsg = errors.first.toString();
+          } else if (response['messages'] is Map) {
+            final msgs = response['messages'] as Map;
+            if (msgs['EN'] != null) {
+              errMsg = msgs['EN'].toString();
+            } else if (msgs['error'] != null) {
+              errMsg = msgs['error'].toString();
+            } else if (msgs.isNotEmpty) {
+              errMsg = msgs.values.first.toString();
+            }
+          } else if (response['message'] != null) {
+            errMsg = response['message'].toString();
+          }
+        }
+        
+        throw Exception(errMsg);
+      }
+    } on DioException catch (e) {
+      throw ApiExceptions.handleException(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Reset Password
+  Future<void> resetPassword({
+    required String email,
+    required String otpCode,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      final response = await ApiService().post(
+        '/api/Auth/verify-otp-reset',
+        data: {
+          'email': email,
+          'otpCode': otpCode,
+          'newPassword': newPassword,
+          'confirmPassword': confirmPassword,
+        },
+      );
+
+      if (response['success'] != true) {
+        String errMsg = 'Failed to reset password';
+        
+        if (response is Map) {
+          final errors = response['errors'];
+          if (errors is List && errors.isNotEmpty) {
+            errMsg = errors.first.toString();
+          } else if (response['messages'] is Map) {
+            final msgs = response['messages'] as Map;
+            if (msgs['EN'] != null) {
+              errMsg = msgs['EN'].toString();
+            } else if (msgs['error'] != null) {
+              errMsg = msgs['error'].toString();
+            } else if (msgs.isNotEmpty) {
+              errMsg = msgs.values.first.toString();
+            }
+          } else if (response['message'] != null) {
+            errMsg = response['message'].toString();
+          }
+        }
+        
+        throw Exception(errMsg);
+      }
+    } on DioException catch (e) {
+      throw ApiExceptions.handleException(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

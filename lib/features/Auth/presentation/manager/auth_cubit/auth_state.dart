@@ -19,3 +19,7 @@ class AuthFailure extends AuthState {
 
   AuthFailure({required this.errorMessage});
 }
+
+class ForgotPasswordSuccess extends AuthState {}
+
+class ResetPasswordSuccess extends AuthState {}

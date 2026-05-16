@@ -4,12 +4,15 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/widgets/custom_app_bar.dart';
 import 'package:school_system/core/widgets/custom_button.dart';
+import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/Auth/presentation/views/resret_password_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/otp_input_row.dart';
 import 'package:svg_flutter/svg.dart';
 
 class VerificationViewBody extends StatefulWidget {
-  const VerificationViewBody({super.key});
+  final String email;
+
+  const VerificationViewBody({super.key, required this.email});
 
   @override
   State<VerificationViewBody> createState() => _VerificationViewBodyState();
@@ -18,6 +21,7 @@ class VerificationViewBody extends StatefulWidget {
 class _VerificationViewBodyState extends State<VerificationViewBody> {
   Timer? _timer;
   int _start = 179; // 02:59 in seconds
+  String _otpCode = '';
 
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -78,22 +82,37 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Enter the 4-digit code sent to your email or phone to reset your password.',
+                      'Enter the 6-digit code sent to your email or phone to reset your password.',
                       textAlign: TextAlign.center,
                       style: AppTextStyle.regular16.copyWith(
                         color: AppColors.grey,
                       ),
                     ),
                     const SizedBox(height: 32),
-                    const OtpInputRow(),
+                    OtpInputRow(
+                      length: 6,
+                      onCompleted: (value) {
+                        setState(() {
+                          _otpCode = value;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 40),
                     CustomButton(
                       text: 'Verify & Continue',
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          ResetPasswordView.routeName,
-                        );
+                        if (_otpCode.length == 6) {
+                          Navigator.pushNamed(
+                            context,
+                            ResetPasswordView.routeName,
+                            arguments: ResetPasswordViewArgs(
+                              email: widget.email,
+                              otpCode: _otpCode,
+                            ),
+                          );
+                        } else {
+                          CustomSnackBar.showError(context, 'Please enter the 6-digit code');
+                        }
                       },
                     ),
                     const SizedBox(height: 24),
