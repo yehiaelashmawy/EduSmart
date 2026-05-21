@@ -8,6 +8,7 @@ import '../messages/chat/widgets/chat_bubble.dart';
 import '../messages/chat/widgets/chat_input_field.dart';
 import '../messages/chat/widgets/date_separator.dart';
 import 'package:file_picker/file_picker.dart';
+import 'ai_typing_indicator.dart';
 
 class SmartTutorViewBody extends StatefulWidget {
   const SmartTutorViewBody({super.key});
@@ -159,34 +160,13 @@ class _SmartTutorViewBodyState extends State<SmartTutorViewBody> {
               children: [
                 const DateSeparator(dateText: 'TODAY'),
                 const SizedBox(height: 24),
-                ..._messages.map((msg) => ChatBubble(message: msg)),
-                if (_isLoading)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 8,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'AI is typing...',
-                          style: TextStyle(
-                            color: ThemeManager.isDarkMode
-                                ? Colors.grey[400]
-                                : Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+                ..._messages.map(
+                  (msg) => ChatBubble(
+                    message: msg,
+                    isAi: !msg.isSender,
                   ),
+                ),
+                if (_isLoading) const AiTypingIndicator(),
               ],
             ),
           ),

@@ -6,8 +6,14 @@ import 'receiver_chat_bubble.dart';
 class ChatBubble extends StatelessWidget {
   final ChatMessageModel message;
   final VoidCallback? onDoubleTap;
+  final bool isAi;
 
-  const ChatBubble({super.key, required this.message, this.onDoubleTap});
+  const ChatBubble({
+    super.key,
+    required this.message,
+    this.onDoubleTap,
+    this.isAi = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class ChatBubble extends StatelessWidget {
         ),
         child: message.isSender
             ? SenderChatBubble(message: message)
-            : ReceiverChatBubble(message: message),
+            : ReceiverChatBubble(message: message, isAi: isAi),
       ),
     );
   }
