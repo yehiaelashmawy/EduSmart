@@ -3,6 +3,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:intl/intl.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class HomeworkDetailsHeader extends StatelessWidget {
   final TeacherHomeworkModel homework;
@@ -67,7 +68,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '${homework.submittedCount ?? 0}/${homework.totalStudents ?? 0} Submitted',
+                    '${homework.submittedCount ?? 0}/${homework.totalStudents ?? 0} ${'submitted'.tr()}',
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 12,
@@ -112,7 +113,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DUE DATE',
+                      'due_date'.tr().toUpperCase(),
                       style: TextStyle(
                         color: AppColors.grey.withValues(alpha: 0.8),
                         fontSize: 10,
@@ -157,7 +158,7 @@ class HomeworkDetailsHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'TIME',
+                      'time'.tr().toUpperCase(),
                       style: TextStyle(
                         color: AppColors.grey.withValues(alpha: 0.8),
                         fontSize: 10,

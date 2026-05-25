@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class TeacherClassCard extends StatelessWidget {
   final String image;
@@ -163,7 +164,7 @@ class _ClassDetailsRow extends StatelessWidget {
         Icon(Icons.people_outline, size: 18, color: AppColors.grey),
         const SizedBox(width: 8),
         Text(
-          '$numStudents Students',
+          '$numStudents ${'class_students'.tr()}',
           style: AppTextStyle.regular14.copyWith(
             color: AppColors.grey,
             fontSize: 13,
@@ -212,7 +213,7 @@ class _ClassActionRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-          child: Text('View Class', style: AppTextStyle.semiBold14),
+          child: Text('view_class'.tr(), style: AppTextStyle.semiBold14),
         ),
       ],
     );

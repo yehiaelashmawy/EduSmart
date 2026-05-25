@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -59,7 +60,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
         _durationController.text.isEmpty ||
         _totalMarksController.text.isEmpty ||
         _passingMarksController.text.isEmpty) {
-      CustomSnackBar.showError(context, 'Please fill all required fields');
+      CustomSnackBar.showError(context, 'fill_required'.tr());
       return;
     }
 
@@ -82,7 +83,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
 
       context.read<AddExamCubit>().addExam(request, files: _attachedFiles);
     } catch (e) {
-      CustomSnackBar.showError(context, 'Error parsing date/time: $e');
+      CustomSnackBar.showError(context, '${'error_parsing_date'.tr()}: $e');
     }
   }
 
@@ -91,7 +92,10 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
     return BlocConsumer<AddExamCubit, AddExamState>(
       listener: (context, state) {
         if (state is AddExamSuccess) {
-          CustomSnackBar.showSuccess(context, 'Exam scheduled successfully');
+          CustomSnackBar.showSuccess(
+            context,
+            'exam_scheduled_successfully'.tr(),
+          );
           Navigator.pop(context, true);
         } else if (state is AddExamFailure) {
           CustomSnackBar.showError(context, state.errorMessage);
@@ -103,9 +107,9 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionHeader(
+              SectionHeader(
                 icon: Icons.description_outlined,
-                title: 'Exam Details',
+                title: 'exam_details'.tr(),
               ),
               const SizedBox(height: 16),
               ExamDetailsSection(
@@ -115,9 +119,9 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
                 onTypeChanged: (val) => _selectedType = val,
               ),
               const SizedBox(height: 24),
-              const SectionHeader(
+              SectionHeader(
                 icon: Icons.calendar_today_outlined,
-                title: 'Schedule',
+                title: 'schedule'.tr(),
               ),
               const SizedBox(height: 16),
               ExamScheduleSection(
@@ -127,9 +131,9 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
                 roomController: _roomController,
               ),
               const SizedBox(height: 24),
-              const SectionHeader(
+              SectionHeader(
                 icon: Icons.star_outline_rounded,
-                title: 'Grading',
+                title: 'grading'.tr(),
               ),
               const SizedBox(height: 16),
               ExamGradingSection(
@@ -137,20 +141,20 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
                 passingMarksController: _passingMarksController,
               ),
               const SizedBox(height: 24),
-              const SectionHeader(
+              SectionHeader(
                 icon: Icons.info_outline_rounded,
-                title: 'Exam Instructions',
+                title: 'exam_instructions'.tr(),
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                hintText: 'Enter instructions for students...',
+                hintText: 'enter_exam_instructions'.tr(),
                 maxLines: 4,
                 controller: _instructionsController,
               ),
               const SizedBox(height: 24),
-              const SectionHeader(
+              SectionHeader(
                 icon: Icons.attachment_outlined,
-                title: 'Attachments',
+                title: 'attachments'.tr(),
               ),
               const SizedBox(height: 16),
               ExamAttachmentsSection(
@@ -169,7 +173,7 @@ class _AddNewExamViewBodyState extends State<AddNewExamViewBody> {
                       size: 20,
                     ),
                     label: Text(
-                      'Schedule Exam',
+                      'schedule_exam'.tr(),
                       style: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.bold,

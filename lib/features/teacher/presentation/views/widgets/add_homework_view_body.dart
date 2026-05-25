@@ -16,6 +16,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 import 'package:school_system/features/teacher/presentation/manager/teacher_subjects_cubit/teacher_subjects_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_subjects_cubit/teacher_subjects_state.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/homework_file_list.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class AddHomeworkViewBody extends StatefulWidget {
   const AddHomeworkViewBody({super.key});
@@ -68,7 +69,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
         _selectedClassId == null ||
         _selectedSubjectId == null ||
         _dueDate == null) {
-      CustomSnackBar.showError(context, 'Please fill all required fields');
+      CustomSnackBar.showError(context, 'fill_required'.tr());
       return;
     }
 
@@ -108,7 +109,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const FieldLabel(label: 'Select Class'),
+              FieldLabel(label: 'select_class'.tr()),
               const SizedBox(height: 8),
               BlocBuilder<TeacherClassesCubit, TeacherClassesState>(
                 builder: (context, classState) {
@@ -116,7 +117,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
                     return Skeletonizer(
                       enabled: true,
                       child: CustomDropdownField(
-                        hintText: 'Choose a class',
+                        hintText: 'choose_class'.tr(),
                         items: const ['Grade 10 - A'],
                         value: 'Grade 10 - A',
                         onChanged: (_) {},
@@ -140,7 +141,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
                     }
 
                     return CustomDropdownField(
-                      hintText: 'Choose a class',
+                      hintText: 'choose_class'.tr(),
                       items: classNames,
                       value: _selectedClass,
                       onChanged: (val) {
@@ -159,7 +160,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Select Subject'),
+              FieldLabel(label: 'select_subject'.tr()),
               const SizedBox(height: 8),
               BlocBuilder<TeacherSubjectsCubit, TeacherSubjectsState>(
                 builder: (context, subjectState) {
@@ -167,7 +168,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
                     return Skeletonizer(
                       enabled: true,
                       child: CustomDropdownField(
-                        hintText: 'Choose a subject',
+                        hintText: 'choose_subject'.tr(),
                         items: const ['Mathematics'],
                         value: 'Mathematics',
                         onChanged: (_) {},
@@ -190,7 +191,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
                     }
 
                     return CustomDropdownField(
-                      hintText: 'Choose a subject',
+                      hintText: 'choose_subject'.tr(),
                       items: subjectNames,
                       value: _selectedSubject,
                       onChanged: (val) {
@@ -208,29 +209,29 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Homework Title'),
+              FieldLabel(label: 'homework_title'.tr()),
               const SizedBox(height: 8),
               CustomTextField(
                 controller: _titleController,
-                hintText: 'e.g. Quadratic Equations Practice',
+                hintText: 'homework_title_hint'.tr(),
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Description'),
+              FieldLabel(label: 'description'.tr()),
               const SizedBox(height: 8),
               CustomTextField(
                 controller: _descController,
-                hintText: 'Enter a general description of the homework...',
+                hintText: 'description_hint'.tr(),
                 minLines: 3,
                 maxLines: 5,
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Instructions'),
+              FieldLabel(label: 'instructions'.tr()),
               const SizedBox(height: 8),
               CustomTextField(
                 controller: _instController,
-                hintText: 'Enter specific instructions or requirements...',
+                hintText: 'instructions_hint'.tr(),
                 minLines: 4,
                 maxLines: 6,
               ),
@@ -243,7 +244,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Points / Max Grade'),
+              FieldLabel(label: 'points_grade'.tr()),
               const SizedBox(height: 8),
               CustomTextField(
                 controller: _pointsController,
@@ -252,7 +253,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
               ),
               const SizedBox(height: 20),
 
-              const FieldLabel(label: 'Attachments'),
+              FieldLabel(label: 'attachments'.tr()),
               const SizedBox(height: 12),
               HomeworkAttachmentsSection(onTap: _pickFiles),
 
@@ -273,7 +274,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
                             size: 20,
                           ),
                           label: Text(
-                            'Create Homework',
+                            'create_homework'.tr(),
                             style: TextStyle(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,
@@ -307,7 +308,7 @@ class _AddHomeworkViewBodyState extends State<AddHomeworkViewBody> {
         onPressed: _submitHomework,
         icon: Icon(Icons.send_outlined, color: AppColors.white, size: 20),
         label: Text(
-          'Create Homework',
+          'create_homework'.tr(),
           style: TextStyle(
             color: AppColors.white,
             fontWeight: FontWeight.bold,

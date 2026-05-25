@@ -69,4 +69,8 @@ class SharedPrefsHelper {
     await _prefs.remove('userId');
     await _prefs.remove('teacherOid');
   }
+
+  static String get languageCode => _prefs.getString('languageCode') ?? 'en';
+  static Future<void> setLanguageCode(String value) async =>
+      await _prefs.setString('languageCode', value);
 }

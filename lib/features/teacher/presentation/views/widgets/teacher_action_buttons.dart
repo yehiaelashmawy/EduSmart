@@ -11,6 +11,8 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_time
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class TeacherActionButtons extends StatelessWidget {
   const TeacherActionButtons({super.key});
 
@@ -22,7 +24,7 @@ class TeacherActionButtons extends StatelessWidget {
           children: [
             Expanded(
               child: _buildActionButton(
-                title: 'Take Attendance',
+                title: 'take_attendance'.tr(),
                 icon: Icons.how_to_reg,
                 backgroundColor: AppColors.primaryColor,
                 textColor: AppColors.white,
@@ -35,7 +37,7 @@ class TeacherActionButtons extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: _buildActionButton(
-                title: 'Add Lesson',
+                title: 'add_new_lesson'.tr(),
                 icon: Icons.library_books,
                 backgroundColor: AppColors.white,
                 textColor: AppColors.black,
@@ -67,7 +69,7 @@ class TeacherActionButtons extends StatelessWidget {
           children: [
             Expanded(
               child: _buildActionButton(
-                title: 'Add Homework',
+                title: 'add_homework'.tr(),
                 icon: Icons.assignment_add,
                 backgroundColor: AppColors.white,
                 textColor: AppColors.black,
@@ -88,7 +90,7 @@ class TeacherActionButtons extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: _buildActionButton(
-                title: 'SmartTutor AI',
+                title: 'smart_tutor_title'.tr(),
                 icon: Icons.psychology,
                 backgroundColor: ThemeManager.isDarkMode
                     ? AppColors.primaryColor

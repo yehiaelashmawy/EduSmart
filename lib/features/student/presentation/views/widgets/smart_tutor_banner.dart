@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/widgets/smart_tutor/smart_tutor_view.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class SmartTutorBanner extends StatelessWidget {
   const SmartTutorBanner({super.key});
@@ -37,7 +38,7 @@ class SmartTutorBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Smart Tutor AI',
+                    'smart_tutor_title'.tr(),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -45,7 +46,7 @@ class SmartTutorBanner extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Personalized help available',
+                    'smart_tutor_subtitle'.tr(),
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.grey,

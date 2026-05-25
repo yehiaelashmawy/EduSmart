@@ -46,9 +46,19 @@ class WeeklyScheduleHeader extends StatelessWidget {
         ),
         Row(
           children: [
-            _ArrowButton(icon: Icons.chevron_left, onPressed: onPreviousWeek),
+            _ArrowButton(
+              icon: Directionality.of(context) == TextDirection.rtl
+                  ? Icons.chevron_right
+                  : Icons.chevron_left,
+              onPressed: onPreviousWeek,
+            ),
             const SizedBox(width: 8),
-            _ArrowButton(icon: Icons.chevron_right, onPressed: onNextWeek),
+            _ArrowButton(
+              icon: Directionality.of(context) == TextDirection.rtl
+                  ? Icons.chevron_left
+                  : Icons.chevron_right,
+              onPressed: onNextWeek,
+            ),
           ],
         ),
       ],

@@ -5,6 +5,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_state.dart';
 import 'package:school_system/features/student/data/models/student_weekly_schedule_model.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class NextClassCard extends StatelessWidget {
   const NextClassCard({super.key});
@@ -80,7 +81,7 @@ class NextClassCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'All classes completed!',
+            LocalizationHelper.isArabic ? 'اكتملت جميع الحصص!' : 'All classes completed!',
             style: TextStyle(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.bold,
@@ -89,7 +90,9 @@ class NextClassCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'No more scheduled lessons for today. Enjoy your time!',
+            LocalizationHelper.isArabic
+                ? 'لا توجد حصص أخرى مجدولة اليوم. استمتع بوقتك!'
+                : 'No more scheduled lessons for today. Enjoy your time!',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.grey,
@@ -103,12 +106,16 @@ class NextClassCard extends StatelessWidget {
 
   Widget _buildDynamicCard(StudentLesson lesson) {
     final diff = _calculateTimeDiff(lesson.time);
-    String diffText = 'Starting soon';
+    String diffText = LocalizationHelper.isArabic ? 'تبدأ قريباً' : 'Starting soon';
     if (diff != null) {
       if (diff.inMinutes < 60) {
-        diffText = 'In ${diff.inMinutes} mins';
+        diffText = LocalizationHelper.isArabic
+            ? 'خلال ${diff.inMinutes} دقيقة'
+            : 'In ${diff.inMinutes} mins';
       } else {
-        diffText = 'In ${diff.inHours} ${diff.inHours == 1 ? 'hour' : 'hours'}';
+        diffText = LocalizationHelper.isArabic
+            ? 'خلال ${diff.inHours} ساعة'
+            : 'In ${diff.inHours} ${diff.inHours == 1 ? 'hour' : 'hours'}';
       }
     }
 
@@ -141,9 +148,9 @@ class NextClassCard extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
-                  'NEXT CLASS',
-                  style: TextStyle(
+                child: Text(
+                  LocalizationHelper.isArabic ? 'الحصة القادمة' : 'NEXT CLASS',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -178,7 +185,7 @@ class NextClassCard extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.8), size: 14),
               const SizedBox(width: 4),
               Text(
-                'Room ${lesson.room}',
+                LocalizationHelper.isArabic ? 'غرفة ${lesson.room}' : 'Room ${lesson.room}',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,

@@ -4,6 +4,7 @@ import 'package:school_system/features/on_broding/presentation/views/widgets/on_
 import 'package:school_system/features/on_broding/presentation/views/widgets/on_boarding_page_view.dart';
 import 'package:school_system/features/on_broding/presentation/views/widgets/on_bording_footer.dart';
 import 'package:school_system/features/on_broding/presentation/views/widgets/onberding_page_model.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class OnBordingViewBody extends StatefulWidget {
   const OnBordingViewBody({super.key});
@@ -15,31 +16,6 @@ class OnBordingViewBody extends StatefulWidget {
 class _OnBordingViewBodyState extends State<OnBordingViewBody> {
   late PageController pageController;
   int currentIndex = 0;
-
-  final List<OnBoardingPageModel> pages = [
-    OnBoardingPageModel(
-      title: 'Manage school activities easily',
-      description:
-          'Organize your classes, schedules, and student activities in one place.',
-      image: 'assets/images/onboarding_bage_1.png',
-      hasImagePadding: true,
-    ),
-    OnBoardingPageModel(
-      title: 'Track attendance and grades',
-      description:
-          'Monitor student performance with real-time analytics and detailed progress reports at your fingertips.',
-      image: 'assets/images/onboarding_bage_2.png',
-      hasImagePadding: true,
-    ),
-    OnBoardingPageModel(
-      title: 'Learn smarter with SmartTutor AI',
-      description:
-          'Experience the power of personalized learning guided by advanced artificial intelligence designed to adapt to your unique pace.',
-      image: 'assets/images/onboarding_bage_3.png',
-      headerTitle: 'SmartTutor AI',
-      hasImagePadding: false,
-    ),
-  ];
 
   @override
   void initState() {
@@ -55,6 +31,28 @@ class _OnBordingViewBodyState extends State<OnBordingViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final List<OnBoardingPageModel> pages = [
+      OnBoardingPageModel(
+        title: 'onboarding_title_1'.tr(),
+        description: 'onboarding_desc_1'.tr(),
+        image: 'assets/images/onboarding_bage_1.png',
+        hasImagePadding: true,
+      ),
+      OnBoardingPageModel(
+        title: 'onboarding_title_2'.tr(),
+        description: 'onboarding_desc_2'.tr(),
+        image: 'assets/images/onboarding_bage_2.png',
+        hasImagePadding: true,
+      ),
+      OnBoardingPageModel(
+        title: 'onboarding_title_3'.tr(),
+        description: 'onboarding_desc_3'.tr(),
+        image: 'assets/images/onboarding_bage_3.png',
+        headerTitle: 'SmartTutor AI',
+        hasImagePadding: false,
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(

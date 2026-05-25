@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
@@ -20,7 +21,7 @@ class ActiveCourseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Active Course',
+            'active_course'.tr(),
             style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
           ),
           const SizedBox(height: 6),

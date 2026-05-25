@@ -7,18 +7,27 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/repos/profile_repo.dart';
 import 'package:school_system/features/teacher/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/profile_cubit/profile_state.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentHomeHeader extends StatelessWidget {
   const StudentHomeHeader({super.key});
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning,';
-    } else if (hour < 17) {
-      return 'Good Afternoon,';
+    if (LocalizationHelper.isArabic) {
+      if (hour < 12) {
+        return 'صباح الخير،';
+      } else {
+        return 'مساء الخير،';
+      }
     } else {
-      return 'Good Evening,';
+      if (hour < 12) {
+        return 'Good Morning,';
+      } else if (hour < 17) {
+        return 'Good Afternoon,';
+      } else {
+        return 'Good Evening,';
+      }
     }
   }
 
@@ -66,11 +75,11 @@ class StudentHomeHeader extends StatelessWidget {
                       final studentName = state is ProfileSuccess
                           ? (state.profile.fullName?.trim().isNotEmpty ?? false)
                                 ? state.profile.fullName!.trim()
-                                : 'Student'
+                                : 'student'.tr()
                           : (SharedPrefsHelper.fullName?.trim().isNotEmpty ??
                                 false)
                           ? SharedPrefsHelper.fullName!.trim()
-                          : 'Student';
+                          : 'student'.tr();
 
                       return Text(
                         studentName,

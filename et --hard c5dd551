@@ -1,0 +1,222 @@
+[33m5ac805a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m ......
+[33me7bd7b7[m[33m ([m[1;31morigin/devin/1779401896-smart-tutor-ai-response-ui[m[33m)[m feat: enhance SmartTutor AI response UI with markdown rendering
+[33mc5dd551[m forget password navigation flow
+[33m88beaac[m error handeling
+[33m145d560[m forget password send otp & verfication code
+[33md3dd4ef[m parent chiled over view
+[33m9c46d51[m edit
+[33mba92088[m remember me
+[33mb04d489[m animate splash view
+[33me943ca1[m fawery payment
+[33m04e40f2[m paypal payment
+[33mf99e073[m parent payment
+[33mae8b93b[m parent receipt view
+[33m5803bb6[m parent payment history
+[33mf2d781f[m parent payment overview
+[33m77df083[m childe schedual
+[33mbe992c3[m refactor code
+[33mf21a3ee[m childe homework
+[33m5157797[m childe grads
+[33m6a59b51[m childe attentance
+[33mce0d869[m refactor parent my kids view
+[33mfd84541[m parent student profile
+[33mf692b90[m update parent ux
+[33m5b1bc51[m fix student my grads
+[33m80ffb95[m teacher homework fix
+[33me072a3f[m .......
+[33m84dd45e[m finish teacher
+[33maf7131b[m teacher grad exam
+[33mb92d5e6[m attendace card
+[33m5ace4a0[m attendace live traking
+[33m4efca25[m student traking
+[33m3d264a7[m ChildDetailsHeader
+[33m8a5166e[m child-detals
+[33m072661b[m Merge branch 'main' of https://github.com/yehiaelashmawy/EduSmart
+[33m449ce23[m feat: implement parent payment dashboard and initialize feature widgets for teacher and parent modules
+[33mae5135c[m take attendance
+[33m3889c7f[m parent my kids view
+[33m4d7ea21[m refactor code
+[33m6d17ec5[m attendace manual and report attendace
+[33m985f0cc[m get students exma submited
+[33m92bacc8[m finsh grad home work
+[33mdcfaf8a[m get teacher submitions students
+[33mda90c2a[m feat: implement parent payment overview and secure payment interface screens
+[33mfaed78c[m feat: implement parent payment and receipt views with routing configuration
+[33m504be7e[m refactor code
+[33mfb0c8c7[m payments-paynow
+[33mf63c6c7[m feat: add file downloader helper and UI components for parent payments, exam submissions, QR scanning, and teacher settings.
+[33m9bfca73[m payment-screen
+[33m43092dc[m responsev issu
+[33mfc4ef97[m teacher remove exam
+[33mee8376a[m add homework & exam card
+[33m4c343ab[m student next class
+[33m99346a5[m teacher add exam update
+[33m48fd1db[m student submit exqams
+[33m9460752[m get student exam data
+[33ma18e021[m student submit homework
+[33mdda7dbf[m get student homwork data
+[33mc1b1518[m get parent name & avatar
+[33mea218f0[m get parent home view data
+[33mea4b57f[m ...
+[33mf96adfa[m parent_home
+[33m730eafa[m studentlesson get finish
+[33m347106d[m my subject
+[33m79f00ff[m get today student scheduale
+[33mfe51388[m update homework teacher card
+[33m5830b39[m finsh get & post exams
+[33m2da9fcc[m open exam files
+[33mfff73f3[m get exam details
+[33m40b0c0a[m post exam
+[33mdcbb83e[m delet homework
+[33me5062cb[m fix get homework
+[33m5f10109[m get home work
+[33mfc7704b[m post teacher home work
+[33m6280b2f[m get and post lessons
+[33m3293694[m get entry code
+[33ma823433[m use skeltonizer
+[33mb45343e[m generate QR code
+[33m83ff5d9[m trying with manual attendance
+[33m275d62a[m post attendace manual 1
+[33m5842036[m add student list to manual attendance
+[33m900f8ef[m my classes filter
+[33mbe146b9[m fix dark mode
+[33m88cc852[m add dark moode to sherd_perf
+[33mc44600c[m fix error
+[33m0ce365f[m get student grads
+[33m272646b[m get teacher weekly schedule
+[33m6902201[m get student weekly timetable
+[33mf3db7a7[m get student home woks
+[33m83988f1[m add student Avtar add home
+[33md6f9d41[m get student subjects from api
+[33ma62f0d6[m finish get lesson deatils
+[33m0bdbe52[m add lesons name and subject name to hader
+[33m70fac28[m custom snake bar
+[33m90fc8a2[m delet lesson
+[33m51682ef[m get lessons details from api
+[33m7da3e51[m add file to add new home work
+[33mb701ae1[m add files to new lesson
+[33md99e6cc[m add class and subjects to add exams view
+[33m9ce8337[m url helper
+[33m70c2ee1[m Add avtar photo from api
+[33mb7f3bcd[m profile avatar does not work
+[33mac0665b[m add lessons and home work
+[33m1ab61cd[m add attendce model
+[33m74890ab[m add exam teacher model
+[33m14ccd2d[m teacher home work model
+[33m19917d2[m add lessons from api
+[33m482796f[m add student list
+[33mfa3beef[m use masseging api
+[33md905395[m add skeltonizer packege
+[33mf8bd1d9[m add masseges for chat
+[33m04ea92a[m teacher time table api
+[33me949f56[m add name teacher & student to appbar
+[33m882ba91[m upcoming exam teacher api
+[33md4504e3[m teacher annoncement api
+[33m5f6ec4d[m show class name
+[33m6283a3e[m add lessons api
+[33m43e8920[m add same subject of teacher
+[33ma226ec3[m add homework api
+[33md5dcab2[m view teacher classes
+[33mbfccc66[m message conversation api
+[33m1bbe78b[m update notification
+[33m2f9d0b1[m delet notification
+[33m33e1d4f[m notificatin api
+[33m6892d43[m logout after change password
+[33md9ae0a2[m changer password api
+[33me4d22a6[m persomal information done
+[33m164b382[m solve login  pug
+[33m39e0382[m profile data
+[33mf3ef00d[m update profile data
+[33m48c6ded[m view profile data from api
+[33m9317f09[m login with api
+[33mcc99541[m create api importan files
+[33m1429bd7[m student take attendance done
+[33me8fdd48[m scan qr code view
+[33m4482647[m student choose attendace
+[33m15a9e41[m my grades view
+[33m20fa254[m student homework view
+[33m1d5f719[m stydent exam details view
+[33mdd9a90d[m creat exam item
+[33m5c6ff80[m assignments details view
+[33mb9af54f[m student assignments view
+[33mdd52ae9[m create lesson over view & solve withopacty
+[33ma0574be[m subjects lessons
+[33med893ff[m change app name and icon
+[33m110ac67[m manual attendance fix
+[33m4698311[m parent profiel
+[33ma27d039[m parent nav bar
+[33m4095c39[m use shared prefs
+[33m122ac49[m student subject view
+[33md0ab454[m schedule view done
+[33md9e6286[m student home view
+[33m287ab2a[m student nav bar
+[33me5e1e8b[m finish teacher ui 😡
+[33mcaac49a[m exam downlode results
+[33md0a9a55[m exam details
+[33m786679e[m exam result view
+[33m4191a2e[m add exam view
+[33m2b4352c[m exams list body
+[33m85d5f68[m change app name and icon
+[33m0923e72[m tack attendace feather done
+[33m6190e5d[m attendance report view
+[33mb96373b[m generate code done
+[33mf81f880[m generate qr code
+[33ma4a69e5[m manual attendace
+[33m0b2443a[m select attendace method view
+[33m5a10b08[m take attendace view body
+[33m20ca56a[m messaing chat done
+[33m75e08eb[m update massing
+[33m8782619[m smart tutor ai chat bot done
+[33m1a835f1[m remove sensitive files
+[33m12bcc5b[m messaging view done
+[33md6c3311[m chat view
+[33mf905dee[m messaging view
+[33mdc43d7a[m notification view done
+[33mf0835e0[m solve some problem
+[33ma1bb071[m grad homework
+[33mc1c4278[m  Implement teacher UI for reviewing homework submissions, including list body, submission view, and related widgets.
+[33m9684974[m homework details done
+[33m24ef441[m homework list
+[33m6890d8d[m refactor
+[33mcff4f2c[m add homework view done
+[33mb49b286[m logout done
+[33m0183a26[m handel dark mode
+[33m4bac881[m settings view done
+[33m256e8c0[m change password view done
+[33m1ab1a45[m refactor code
+[33m82f8d91[m personal info done
+[33mc14889d[m profile view done
+[33m119370a[m add lesson view done
+[33m12ca6b9[m lesson details done
+[33mc742021[m lessons view done
+[33m4ae4990[m student list view done
+[33m67d5bb9[m my classes view body
+[33mfecee7d[m  Implement Teacher Classes View and update route generation to include it.
+[33maf2e601[m teacher home view done
+[33m6370a92[m add initial home views and their body widgets for teacher, parent, and student roles.
+[33m4acde8c[m feat: Implement initial role-based navigation and home views for teacher, student, and parent, along with centralized route generation.
+[33m946f4fb[m Auth feather done
+[33m7eb20a1[m success view done
+[33mc733c5c[m create scusse view
+[33mf481b6a[m resret password done
+[33m6e64bfd[m some changes
+[33m6480084[m create reset password view
+[33m206f802[m verification code view done
+[33m665f0d5[m create verification view
+[33mbda6ba7[m forgot password done
+[33m2668331[m forgot password appbar
+[33m571d275[m responsev on bording
+[33m3dff34d[m done
+[33m78064f2[m login view done
+[33m4c6319a[m create logine view 2
+[33m5d9e92e[m create login view
+[33m61b7f4f[m choose your role done
+[33mbcaf0dd[m create auth view
+[33m34a1963[m refactor the code
+[33m282aa06[m onbording view done
+[33mf54e8a5[m make onbording
+[33m99f1d85[m spalsh view done
+[33mcfcb2db[m splash view ui
+[33m4bc1d83[m create on generate routes
+[33mb9a73bb[m create splash view
+[33m97cbb4e[m first commit

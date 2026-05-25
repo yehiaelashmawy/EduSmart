@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_state.dart';
@@ -82,7 +83,7 @@ class _TakeAttendanceViewBodyState extends State<TakeAttendanceViewBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Your Classes Today',
+                'your_classes_today'.tr(),
                 style: AppTextStyle.bold24.copyWith(color: AppColors.black),
               ),
               const SizedBox(height: 4),
@@ -98,8 +99,9 @@ class _TakeAttendanceViewBodyState extends State<TakeAttendanceViewBody> {
           final todayStr = DateTime.now().toIso8601String().split('T')[0];
           bool hasTakenToday = false;
           for (final student in c.students) {
-            if (student.details.attendance.recentRecords
-                .any((r) => r.date.startsWith(todayStr))) {
+            if (student.details.attendance.recentRecords.any(
+              (r) => r.date.startsWith(todayStr),
+            )) {
               hasTakenToday = true;
               break;
             }
@@ -107,9 +109,12 @@ class _TakeAttendanceViewBodyState extends State<TakeAttendanceViewBody> {
 
           return TakeAttendanceCard(
             imagePath: 'assets/images/lesson1.png',
-            statusText: hasTakenToday ? 'ATTENDANCE TAKEN' : 'WITHOUT MARK',
-            statusColor:
-                hasTakenToday ? AppColors.secondaryColor : AppColors.grey,
+            statusText: hasTakenToday
+                ? 'attendance_taken'.tr()
+                : 'without_mark'.tr(),
+            statusColor: hasTakenToday
+                ? AppColors.secondaryColor
+                : AppColors.grey,
             grade: c.level,
             subject: c.name,
             studentsCount: c.studentsCount,
@@ -120,23 +125,20 @@ class _TakeAttendanceViewBodyState extends State<TakeAttendanceViewBody> {
               ).pushNamed(AttendanceReportView.routeName, arguments: c);
             },
             onTakeAttendance: () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).pushNamed(
-                AttendanceMethodView.routeName,
-                arguments: AttendanceMethodViewArgs(
-                  teacherClass: c,
-                  teacherClassesCubit: context.read<TeacherClassesCubit>(),
-                ),
-              ).then(
-                (value) {
-                  if (!context.mounted) return;
-                  if (value == true) {
-                    context.read<TeacherClassesCubit>().fetchClasses();
-                  }
-                },
-              );
+              Navigator.of(context, rootNavigator: true)
+                  .pushNamed(
+                    AttendanceMethodView.routeName,
+                    arguments: AttendanceMethodViewArgs(
+                      teacherClass: c,
+                      teacherClassesCubit: context.read<TeacherClassesCubit>(),
+                    ),
+                  )
+                  .then((value) {
+                    if (!context.mounted) return;
+                    if (value == true) {
+                      context.read<TeacherClassesCubit>().fetchClasses();
+                    }
+                  });
             },
           );
         }),

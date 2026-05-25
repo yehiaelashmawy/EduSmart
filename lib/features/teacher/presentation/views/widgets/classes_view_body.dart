@@ -9,6 +9,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 import 'package:school_system/features/teacher/presentation/views/student_list.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_class_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/teacher_classes_app_bar.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class ClassesViewBody extends StatefulWidget {
   const ClassesViewBody({super.key});
@@ -21,7 +22,6 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
   String? _selectedFilter;
 
   void _showFilterSheet(List<TeacherClassModel> allClasses) {
-    // Get unique levels from fetched classes and sort them
     final levels =
         allClasses
             .map((c) => c.level)
@@ -43,10 +43,13 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Filter Classes', style: AppTextStyle.bold18),
+              Text(
+                LocalizationHelper.isArabic ? 'تصفية الفصول' : 'Filter Classes',
+                style: AppTextStyle.bold18,
+              ),
               const SizedBox(height: 16),
               ListTile(
-                title: const Text('All Classes'),
+                title: Text(LocalizationHelper.isArabic ? 'جميع الفصول' : 'All Classes'),
                 trailing: _selectedFilter == null
                     ? Icon(Icons.check, color: AppColors.primaryColor)
                     : null,
@@ -57,7 +60,9 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
               ),
               ...levels.map(
                 (level) => ListTile(
-                  title: Text('Grade $level Only'),
+                  title: Text(
+                    LocalizationHelper.isArabic ? 'الصف $level فقط' : 'Grade $level Only',
+                  ),
                   trailing: _selectedFilter == level
                       ? Icon(Icons.check, color: AppColors.primaryColor)
                       : null,
@@ -127,10 +132,10 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
                     unselectedLabelStyle: AppTextStyle.medium18,
                     indicatorWeight: 3,
                     indicatorSize: TabBarIndicatorSize.tab,
-                    tabs: const [
-                      Tab(text: 'Active'),
-                      Tab(text: 'Archived'),
-                      Tab(text: 'Upcoming'),
+                    tabs: [
+                      Tab(text: LocalizationHelper.isArabic ? 'نشط' : 'Active'),
+                      Tab(text: LocalizationHelper.isArabic ? 'مؤرشف' : 'Archived'),
+                      Tab(text: LocalizationHelper.isArabic ? 'قادم' : 'Upcoming'),
                     ],
                   ),
                 ),
@@ -140,8 +145,8 @@ class _ClassesViewBodyState extends State<ClassesViewBody> {
                     child: TabBarView(
                       children: [
                         _ActiveClassesTab(classes: filtered),
-                        const Center(child: Text('Archived Classes')),
-                        const Center(child: Text('Upcoming Classes')),
+                        Center(child: Text(LocalizationHelper.isArabic ? 'الفصول المؤرشفة' : 'Archived Classes')),
+                        Center(child: Text(LocalizationHelper.isArabic ? 'الفصول القادمة' : 'Upcoming Classes')),
                       ],
                     ),
                   ),
@@ -165,7 +170,7 @@ class _ActiveClassesTab extends StatelessWidget {
     if (classes.isEmpty) {
       return Center(
         child: Text(
-          'No classes found.',
+          LocalizationHelper.isArabic ? 'لم يتم العثور على فصول.' : 'No classes found.',
           style: AppTextStyle.medium18.copyWith(color: AppColors.grey),
         ),
       );
@@ -184,11 +189,11 @@ class _ActiveClassesTab extends StatelessWidget {
 
         return TeacherClassCard(
           image: 'assets/images/class_image.png',
-          badgeText: 'Level ${c.level}',
+          badgeText: LocalizationHelper.isArabic ? 'الصف ${c.level}' : 'Level ${c.level}',
           title: c.name,
-          subtitle: 'Level ${c.level}',
+          subtitle: LocalizationHelper.isArabic ? 'الصف ${c.level}' : 'Level ${c.level}',
           numStudents: c.studentsCount.toString(),
-          schedule: 'Sections: ${c.sectionsCount}',
+          schedule: LocalizationHelper.isArabic ? 'الأقسام: ${c.sectionsCount}' : 'Sections: ${c.sectionsCount}',
           extraStudentsCount: extraCount,
           studentAvatars: studentAvatars,
           onViewClass: () async {

@@ -7,6 +7,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 import 'package:school_system/features/teacher/presentation/views/attendance_method_view.dart';
 import 'package:school_system/features/teacher/presentation/views/attendance_report_view.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/take_attendance_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 /// One row: a student's attendance record from [TeacherAttendanceRecordModel].
 class TeacherAttendanceListEntry {
@@ -97,8 +98,9 @@ class AttendanceListBody extends StatelessWidget {
           statusText: statusText,
           statusColor: statusColor,
           grade: className,
-          subject:
-              'Present: ${summary.presentCount} • Absent: ${summary.absentCount} • Late: ${summary.lateCount}',
+          subject: LocalizationHelper.isArabic
+              ? 'حاضر: ${summary.presentCount} • غائب: ${summary.absentCount} • متأخر: ${summary.lateCount}'
+              : 'Present: ${summary.presentCount} • Absent: ${summary.absentCount} • Late: ${summary.lateCount}',
           studentsCount: studentCount,
           onViewReports: () {
             Navigator.of(
@@ -126,7 +128,7 @@ class AttendanceListBody extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          'Recent attendance',
+          LocalizationHelper.isArabic ? 'سجل الحضور الأخير' : 'Recent attendance',
           style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 12),
@@ -135,7 +137,7 @@ class AttendanceListBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: Text(
-                'No attendance records yet for this class.',
+                LocalizationHelper.isArabic ? 'لا توجد سجلات حضور بعد لهذا الفصل.' : 'No attendance records yet for this class.',
                 style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -197,7 +199,7 @@ class AttendanceListBody extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    r.status.isNotEmpty ? r.status : 'WITHOUT MARK',
+                    r.status.isNotEmpty ? r.status : (LocalizationHelper.isArabic ? 'بدون تسجيل' : 'WITHOUT MARK'),
                     style: AppTextStyle.bold12.copyWith(
                       color: _statusTextColor(r.status),
                     ),

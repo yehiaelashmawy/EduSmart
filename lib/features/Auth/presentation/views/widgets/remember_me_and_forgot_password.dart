@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/Auth/presentation/views/forgot_password_view.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class RememberMeAndForgotPassword extends StatefulWidget {
   const RememberMeAndForgotPassword({
@@ -64,7 +65,7 @@ class _RememberMeAndForgotPasswordState
               ),
               const SizedBox(width: 8),
               Text(
-                'Remember me',
+                'remember_me'.tr(),
                 style: AppTextStyle.regular14.copyWith(
                   color: AppColors.grey,
                 ),
@@ -77,7 +78,7 @@ class _RememberMeAndForgotPasswordState
             Navigator.pushNamed(context, ForgotPasswordView.routeName);
           },
           child: Text(
-            'Forgot Password?',
+            'forgot_password'.tr(),
             style: AppTextStyle.semiBold14.copyWith(
               color: AppColors.secondaryColor,
             ),

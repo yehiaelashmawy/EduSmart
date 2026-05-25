@@ -4,6 +4,7 @@ import 'package:school_system/features/teacher/data/models/teacher_class_model.d
 import 'package:school_system/features/teacher/data/models/teacher_exam_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/exam_item_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/exams_toggle_bar.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class ExamsListBody extends StatefulWidget {
   final List<TeacherExamModel> exams;
@@ -38,7 +39,7 @@ class _ExamsListBodyState extends State<ExamsListBody> {
 
   String _formatDate(String rawDate) {
     final parsed = DateTime.tryParse(rawDate);
-    if (parsed == null) return 'Date unavailable';
+    if (parsed == null) return LocalizationHelper.isArabic ? 'تاريخ غير متاح' : 'Date unavailable';
     const months = [
       'Jan',
       'Feb',
@@ -103,8 +104,8 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                 ? Center(
                     child: Text(
                       _isUpcomingExams
-                          ? 'No upcoming exams.'
-                          : 'No past exams.',
+                          ? (LocalizationHelper.isArabic ? 'لا توجد اختبارات قادمة.' : 'No upcoming exams.')
+                          : (LocalizationHelper.isArabic ? 'لا توجد اختبارات سابقة.' : 'No past exams.'),
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
@@ -130,18 +131,22 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                         examId: exam.oid,
                         title: exam.name.isNotEmpty
                             ? exam.name
-                            : 'Untitled Exam',
+                            : (LocalizationHelper.isArabic ? 'اختبار بدون عنوان' : 'Untitled Exam'),
                         date: _formatDate(exam.date),
                         time: _formatTime(exam.date, exam.startTime),
                         subject: exam.subjectName.isNotEmpty
                             ? '${exam.subjectName} - ${exam.className}'
-                            : 'Class Exam',
+                            : (LocalizationHelper.isArabic ? 'اختبار دراسي' : 'Class Exam'),
                         grade: exam.maxScore > 0
-                            ? 'Max Score: ${exam.maxScore}'
-                            : 'Pending score',
+                            ? (LocalizationHelper.isArabic
+                                ? 'أقصى درجة: ${exam.maxScore}'
+                                : 'Max Score: ${exam.maxScore}')
+                            : (LocalizationHelper.isArabic ? 'درجة معلقة' : 'Pending score'),
                         status: exam.status.isNotEmpty
                             ? exam.status
-                            : (_isUpcomingExams ? 'CONFIRMED' : 'COMPLETED'),
+                            : (_isUpcomingExams
+                                ? (LocalizationHelper.isArabic ? 'مؤكد' : 'CONFIRMED')
+                                : (LocalizationHelper.isArabic ? 'مكتمل' : 'COMPLETED')),
                         statusColor: _isUpcomingExams
                             ? AppColors.secondaryColor
                             : AppColors.grey,

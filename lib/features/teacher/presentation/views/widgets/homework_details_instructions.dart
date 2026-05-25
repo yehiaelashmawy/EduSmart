@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class HomeworkDetailsInstructions extends StatelessWidget {
   final String instructions;
 
@@ -17,7 +19,7 @@ class HomeworkDetailsInstructions extends StatelessWidget {
             Icon(Icons.list_alt, color: AppColors.primaryColor, size: 20),
             const SizedBox(width: 8),
             Text(
-              'Instructions',
+              'instructions'.tr(),
               style: AppTextStyle.bold16.copyWith(color: AppColors.black),
             ),
           ],

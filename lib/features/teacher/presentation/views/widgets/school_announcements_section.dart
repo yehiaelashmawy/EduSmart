@@ -6,6 +6,8 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/manager/announcements_cubit/announcements_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/announcements_cubit/announcements_state.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class SchoolAnnouncementsSection extends StatelessWidget {
   const SchoolAnnouncementsSection({super.key});
 
@@ -28,7 +30,10 @@ class SchoolAnnouncementsSection extends StatelessWidget {
                 size: 24,
               ),
               const SizedBox(width: 12),
-              Text('School Announcements', style: AppTextStyle.bold18),
+              Text(
+                LocalizationHelper.isArabic ? 'إعلانات المدرسة' : 'School Announcements',
+                style: AppTextStyle.bold18,
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -60,7 +65,9 @@ class SchoolAnnouncementsSection extends StatelessWidget {
               } else if (state is AnnouncementsSuccess) {
                 if (state.announcements.isEmpty) {
                   return Text(
-                    'No announcements at this time.',
+                    LocalizationHelper.isArabic
+                        ? 'لا توجد إعلانات في هذا الوقت.'
+                        : 'No announcements at this time.',
                     style: AppTextStyle.regular14.copyWith(
                       color: AppColors.grey,
                     ),
@@ -75,7 +82,9 @@ class SchoolAnnouncementsSection extends StatelessWidget {
                         if (i > 0) const SizedBox(height: 16),
                         _buildAnnouncementItem(
                           title: announcement.title,
-                          subtitle: announcement.contentEn,
+                          subtitle: LocalizationHelper.isArabic
+                              ? announcement.contentAr
+                              : announcement.contentEn,
                           timeAgo: announcement.timeAgo,
                         ),
                       ],

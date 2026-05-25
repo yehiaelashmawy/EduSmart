@@ -4,6 +4,7 @@ import 'package:school_system/core/utils/app_images.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/Auth/presentation/views/login_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/role_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class AuthViewBody extends StatelessWidget {
   const AuthViewBody({super.key});
@@ -27,18 +28,17 @@ class AuthViewBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 31),
-                 Text('Choose Your Role', style: AppTextStyle.bold30),
+                Text('select_role'.tr(), style: AppTextStyle.bold30, textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 Text(
-                  'Select how you want to use the platform today',
+                  'select_role_desc'.tr(),
                   textAlign: TextAlign.center,
                   style: AppTextStyle.regular16.copyWith(color: AppColors.grey),
                 ),
                 const SizedBox(height: 61),
                 RoleCard(
-                  title: 'Teacher',
-                  description:
-                      'Manage your classes, track student progress, and share learning resources effortlessly with your students.',
+                  title: 'teacher'.tr(),
+                  description: 'teacher_desc'.tr(),
                   imagePath: Assets.imagesTeatherAuth,
                   icon: Icons.school,
                   onContinue: () {
@@ -46,9 +46,8 @@ class AuthViewBody extends StatelessWidget {
                   },
                 ),
                 RoleCard(
-                  title: 'Student',
-                  description:
-                      'Access your assignments, join interactive live classes, and visualize your personal learning journey.',
+                  title: 'student'.tr(),
+                  description: 'student_desc'.tr(),
                   imagePath: Assets.imagesStudentAuth,
                   icon: Icons.laptop_chromebook,
                   onContinue: () {
@@ -56,9 +55,8 @@ class AuthViewBody extends StatelessWidget {
                   },
                 ),
                 RoleCard(
-                  title: 'Parent',
-                  description:
-                      'Stay updated with your child\'s academic performance, daily attendance, and school-wide announcements.',
+                  title: 'parent'.tr(),
+                  description: 'parent_desc'.tr(),
                   imagePath: Assets.imagesParentAuth,
                   icon: Icons.people,
                   onContinue: () {
@@ -70,7 +68,7 @@ class AuthViewBody extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Need help? ',
+                      'need_help'.tr(),
                       style: AppTextStyle.regular16.copyWith(
                         color: AppColors.grey,
                       ),
@@ -83,7 +81,7 @@ class AuthViewBody extends StatelessWidget {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Contact Support',
+                        'contact_support'.tr(),
                         style: AppTextStyle.regular16.copyWith(
                           color: AppColors.secondaryColor,
                         ),

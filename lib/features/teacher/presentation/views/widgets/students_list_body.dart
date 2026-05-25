@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/student_list_item.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentsListBody extends StatelessWidget {
   final List<TeacherStudentModel> students;
@@ -22,7 +23,9 @@ class StudentsListBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'ENROLLED STUDENTS (${students.length})',
+                  LocalizationHelper.isArabic
+                      ? 'الطلاب المسجلون (${students.length})'
+                      : 'ENROLLED STUDENTS (${students.length})',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -38,7 +41,7 @@ class StudentsListBody extends StatelessWidget {
                     color: AppColors.primaryColor,
                   ),
                   label: Text(
-                    'Filter',
+                    LocalizationHelper.isArabic ? 'تصفية' : 'Filter',
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 14,
@@ -69,7 +72,7 @@ class StudentsListBody extends StatelessWidget {
                   )
                 : Center(
                     child: Text(
-                      'No students found for this class.',
+                      LocalizationHelper.isArabic ? 'لا يوجد طلاب لهذا الفصل.' : 'No students found for this class.',
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,

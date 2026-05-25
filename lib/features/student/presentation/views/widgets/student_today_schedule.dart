@@ -5,6 +5,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/models/student_weekly_schedule_model.dart';
 import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_weekly_schedule_cubit/student_weekly_schedule_state.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentTodaySchedule extends StatelessWidget {
   const StudentTodaySchedule({super.key});
@@ -66,7 +67,7 @@ class StudentTodaySchedule extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Center(
                   child: Text(
-                    'No classes today 🎉',
+                    LocalizationHelper.isArabic ? 'لا توجد فصول اليوم 🎉' : 'No classes today 🎉',
                     style: TextStyle(color: AppColors.grey),
                   ),
                 ),
@@ -87,7 +88,9 @@ class StudentTodaySchedule extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Center(
                   child: Text(
-                    'No classes scheduled for today.',
+                    LocalizationHelper.isArabic
+                        ? 'لا توجد فصول مجدولة لليوم.'
+                        : 'No classes scheduled for today.',
                     style: TextStyle(color: AppColors.grey),
                   ),
                 ),
@@ -163,7 +166,7 @@ class StudentTodaySchedule extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Today's",
+                  LocalizationHelper.isArabic ? "جدول" : "Today's",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -172,7 +175,7 @@ class StudentTodaySchedule extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Schedule',
+                  LocalizationHelper.isArabic ? "اليوم" : 'Schedule',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -200,7 +203,7 @@ class StudentTodaySchedule extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'VIEW WEEK\nSCHEDULE',
+                LocalizationHelper.isArabic ? 'عرض جدول\nالأسبوع' : 'VIEW WEEK\nSCHEDULE',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 10,

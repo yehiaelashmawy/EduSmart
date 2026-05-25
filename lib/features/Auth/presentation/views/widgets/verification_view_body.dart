@@ -8,6 +8,7 @@ import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/Auth/presentation/views/resret_password_view.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/otp_input_row.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class VerificationViewBody extends StatefulWidget {
   final String email;
@@ -63,7 +64,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const CustomAppBar(title: 'Verification'),
+              CustomAppBar(title: 'verification_title'.tr()),
               const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -76,13 +77,13 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                     ),
                     const SizedBox(height: 40),
                     Text(
-                      'Verification Code',
+                      'verification_title'.tr(),
                       textAlign: TextAlign.center,
                       style: AppTextStyle.bold24,
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Enter the 6-digit code sent to your email or phone to reset your password.',
+                      'verification_subtitle'.tr(),
                       textAlign: TextAlign.center,
                       style: AppTextStyle.regular16.copyWith(
                         color: AppColors.grey,
@@ -99,7 +100,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                     ),
                     const SizedBox(height: 40),
                     CustomButton(
-                      text: 'Verify & Continue',
+                      text: 'verify_and_proceed'.tr(),
                       onPressed: () {
                         if (_otpCode.length == 6) {
                           Navigator.pushNamed(
@@ -111,7 +112,12 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                             ),
                           );
                         } else {
-                          CustomSnackBar.showError(context, 'Please enter the 6-digit code');
+                          CustomSnackBar.showError(
+                            context,
+                            LocalizationHelper.isArabic
+                                ? 'الرجاء إدخال الرمز المكون من 6 أرقام'
+                                : 'Please enter the 6-digit code',
+                          );
                         }
                       },
                     ),
@@ -120,7 +126,9 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Didn't receive the code? ",
+                          LocalizationHelper.isArabic
+                              ? 'لم تصلك الرسالة؟ '
+                              : "Didn't receive the code? ",
                           style: AppTextStyle.regular14.copyWith(
                             color: AppColors.grey,
                           ),
@@ -135,7 +143,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                             }
                           },
                           child: Text(
-                            'Resend Code',
+                            'resend_code'.tr(),
                             style: AppTextStyle.bold14.copyWith(
                               color: AppColors.primaryColor,
                             ),

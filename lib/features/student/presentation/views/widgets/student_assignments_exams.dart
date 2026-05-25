@@ -7,6 +7,7 @@ import 'package:school_system/features/student/presentation/manager/student_exam
 import 'package:school_system/features/student/presentation/manager/student_exams_cubit/student_exams_state.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_state.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentAssignmentsExams extends StatelessWidget {
   const StudentAssignmentsExams({super.key});
@@ -38,8 +39,8 @@ class StudentAssignmentsExams extends StatelessWidget {
   }
 
   Widget _buildAssignmentCard(StudentHomeworkState state) {
-    String task = 'No assignments';
-    String date = 'ALL CLEAR';
+    String task = LocalizationHelper.isArabic ? 'لا توجد واجبات' : 'No assignments';
+    String date = LocalizationHelper.isArabic ? 'مكتمل الكل' : 'ALL CLEAR';
     Color color = AppColors.grey;
 
     if (state is StudentHomeworkSuccess) {
@@ -58,17 +59,17 @@ class StudentAssignmentsExams extends StatelessWidget {
         });
 
         final next = pendingHomeworks.first;
-        task = next.title ?? 'Assignment';
+        task = next.title ?? (LocalizationHelper.isArabic ? 'واجب منزلي' : 'Assignment');
         date = _formatDate(next.dueDate);
         color = Colors.red;
       }
     } else if (state is StudentHomeworkLoading) {
-      task = 'Loading task...';
-      date = 'DATE';
+      task = LocalizationHelper.isArabic ? 'جاري تحميل الواجب...' : 'Loading task...';
+      date = LocalizationHelper.isArabic ? 'التاريخ' : 'DATE';
     }
 
     return _TaskCard(
-      title: 'ASSIGNMENTS',
+      title: LocalizationHelper.isArabic ? 'الواجبات' : 'ASSIGNMENTS',
       date: date.toUpperCase(),
       task: task,
       dotColor: color,
@@ -76,8 +77,8 @@ class StudentAssignmentsExams extends StatelessWidget {
   }
 
   Widget _buildExamCard(StudentExamsState state) {
-    String task = 'No exams';
-    String date = 'ALL CLEAR';
+    String task = LocalizationHelper.isArabic ? 'لا توجد اختبارات' : 'No exams';
+    String date = LocalizationHelper.isArabic ? 'مكتمل الكل' : 'ALL CLEAR';
     Color color = AppColors.grey;
 
     if (state is StudentExamsSuccess) {
@@ -94,17 +95,17 @@ class StudentAssignmentsExams extends StatelessWidget {
         });
 
         final next = upcomingExams.first;
-        task = next.name ?? 'Exam';
+        task = next.name ?? (LocalizationHelper.isArabic ? 'اختبار' : 'Exam');
         date = _formatDate(next.date);
         color = AppColors.primaryColor;
       }
     } else if (state is StudentExamsLoading) {
-      task = 'Loading exam...';
-      date = 'DATE';
+      task = LocalizationHelper.isArabic ? 'جاري تحميل الاختبار...' : 'Loading exam...';
+      date = LocalizationHelper.isArabic ? 'التاريخ' : 'DATE';
     }
 
     return _TaskCard(
-      title: 'EXAMS',
+      title: LocalizationHelper.isArabic ? 'الاختبارات' : 'EXAMS',
       date: date.toUpperCase(),
       task: task,
       dotColor: color,
@@ -119,9 +120,23 @@ class StudentAssignmentsExams extends StatelessWidget {
       final today = DateTime(now.year, now.month, now.day);
       final diff = date.difference(today).inDays;
 
-      if (diff == 0) return 'TODAY';
-      if (diff == 1) return 'TOMORROW';
-      if (diff > 1 && diff < 7) return DateFormat('EEEE').format(date);
+      if (diff == 0) return LocalizationHelper.isArabic ? 'اليوم' : 'TODAY';
+      if (diff == 1) return LocalizationHelper.isArabic ? 'غداً' : 'TOMORROW';
+      if (diff > 1 && diff < 7) {
+        final dayName = DateFormat('EEEE').format(date);
+        if (LocalizationHelper.isArabic) {
+          switch (dayName.toLowerCase()) {
+            case 'monday': return 'الإثنين';
+            case 'tuesday': return 'الثلاثاء';
+            case 'wednesday': return 'الأربعاء';
+            case 'thursday': return 'الخميس';
+            case 'friday': return 'الجمعة';
+            case 'saturday': return 'السبت';
+            case 'sunday': return 'الأحد';
+          }
+        }
+        return dayName;
+      }
       return DateFormat('MMM dd').format(date);
     } catch (e) {
       return dateStr;

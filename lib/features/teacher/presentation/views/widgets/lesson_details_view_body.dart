@@ -10,6 +10,7 @@ import 'package:school_system/core/widgets/custom_snack_bar.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/learning_objectives_section.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_details_header.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_file_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class LessonDetailsViewBody extends StatelessWidget {
   const LessonDetailsViewBody({super.key, this.lessonId});
@@ -142,7 +143,7 @@ class LessonDetailsViewBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DESCRIPTION',
+                      'description'.tr().toUpperCase(),
                       style: AppTextStyle.bold16.copyWith(
                         color: AppColors.primaryColor,
                         letterSpacing: 1.5,
@@ -167,7 +168,7 @@ class LessonDetailsViewBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Lesson Files',
+                          'reference_files'.tr(),
                           style: TextStyle(
                             color: AppColors.darkBlue,
                             fontSize: 16,
@@ -175,7 +176,7 @@ class LessonDetailsViewBody extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${materials.length} Files',
+                          '${materials.length} ${'attachments'.tr()}',
                           style: TextStyle(
                             color: Color(0xff0F52BD),
                             fontSize: 13,

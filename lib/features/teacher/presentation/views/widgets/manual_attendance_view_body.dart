@@ -6,6 +6,7 @@ import 'package:school_system/features/teacher/data/models/attendance_session_mo
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/attendance_stats_row.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/student_attendance_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentData {
   final String studentOid;
@@ -77,7 +78,9 @@ class ManualAttendanceViewBodyState extends State<ManualAttendanceViewBody> {
         return StudentData(
           studentOid: s.studentOid,
           name: s.studentName,
-          subtitle: 'Roll No. ${(index + 1).toString().padLeft(3, '0')}',
+          subtitle: LocalizationHelper.isArabic
+              ? 'رقم الدور ${(index + 1).toString().padLeft(3, '0')}'
+              : 'Roll No. ${(index + 1).toString().padLeft(3, '0')}',
           imagePath: classStudent?.avatar ?? '',
           status: AttendanceStatus.none,
         );
@@ -90,7 +93,9 @@ class ManualAttendanceViewBodyState extends State<ManualAttendanceViewBody> {
         return StudentData(
           studentOid: s.oid,
           name: s.fullName,
-          subtitle: 'Roll No. ${(index + 1).toString().padLeft(3, '0')}',
+          subtitle: LocalizationHelper.isArabic
+              ? 'رقم الدور ${(index + 1).toString().padLeft(3, '0')}'
+              : 'Roll No. ${(index + 1).toString().padLeft(3, '0')}',
           imagePath: s.avatar,
           status: AttendanceStatus.none,
         );
@@ -124,7 +129,7 @@ class ManualAttendanceViewBodyState extends State<ManualAttendanceViewBody> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Attendance Check',
+                  LocalizationHelper.isArabic ? 'سجل الحضور' : 'Attendance Check',
                   style: AppTextStyle.bold24.copyWith(
                     color: AppColors.black,
                     fontSize: 32,
@@ -132,7 +137,9 @@ class ManualAttendanceViewBodyState extends State<ManualAttendanceViewBody> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '$enrolledCount Students Enrolled',
+                  LocalizationHelper.isArabic
+                      ? '$enrolledCount طالب مسجل'
+                      : '$enrolledCount Students Enrolled',
                   style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
                 ),
               ],
@@ -175,7 +182,7 @@ class ManualAttendanceViewBodyState extends State<ManualAttendanceViewBody> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'ACTIVE SESSION',
+                          LocalizationHelper.isArabic ? 'جلسة نشطة' : 'ACTIVE SESSION',
                           style: AppTextStyle.bold12.copyWith(
                             color: AppColors.grey,
                             letterSpacing: 1.0,

@@ -6,6 +6,7 @@ import 'package:school_system/features/parent/presentation/views/parent_secure_p
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/features/parent/presentation/manager/parent_payments_cubit/parent_payments_cubit.dart';
 import 'payment_history_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class PaymentHistoryList extends StatelessWidget {
   final bool showAllHistory;
@@ -19,10 +20,14 @@ class PaymentHistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (history.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text('No payment history found'),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Text(
+            LocalizationHelper.isArabic
+                ? 'لم يتم العثور على سجل مدفوعات'
+                : 'No payment history found',
+          ),
         ),
       );
     }
@@ -35,7 +40,7 @@ class PaymentHistoryList extends StatelessWidget {
         return PaymentHistoryCard(
           icon: iconData.$1,
           iconColor: iconData.$2,
-          iconBgColor: iconData.$2.withOpacity(0.1),
+          iconBgColor: iconData.$2.withValues(alpha: 0.1),
           title: item.title,
           subtitle: _getSubtitle(item),
           amount: '\$${item.amount.toStringAsFixed(2)}',
@@ -80,15 +85,24 @@ class PaymentHistoryList extends StatelessWidget {
   }
 
   String _getSubtitle(PaymentHistoryItemModel item) {
-    final dateStr = item.status.toLowerCase() == 'paid'
-        ? 'Paid ${_formatDate(item.paidDate ?? item.dueDate)}'
-        : 'Due ${_formatDate(item.dueDate)}';
+    final isPaid = item.status.toLowerCase() == 'paid';
+    final dateFormatted = _formatDate(isPaid ? (item.paidDate ?? item.dueDate) : item.dueDate);
+    final dateStr = isPaid
+        ? (LocalizationHelper.isArabic ? 'تم الدفع $dateFormatted' : 'Paid $dateFormatted')
+        : (LocalizationHelper.isArabic ? 'مستحق $dateFormatted' : 'Due $dateFormatted');
     return '$dateStr • ${item.studentName}';
   }
 
   String _formatDate(String date) {
     try {
       final dateTime = DateTime.parse(date);
+      if (LocalizationHelper.isArabic) {
+        final months = [
+          'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+          'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+        ];
+        return '${dateTime.day} ${months[dateTime.month - 1]}، ${dateTime.year}';
+      }
       final months = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'

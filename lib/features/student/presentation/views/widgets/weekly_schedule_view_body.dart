@@ -7,6 +7,7 @@ import 'package:school_system/features/student/presentation/manager/student_week
 import 'package:school_system/features/student/presentation/views/widgets/weekly_schedule_header.dart';
 import 'package:school_system/features/student/presentation/views/widgets/weekly_days_selector.dart';
 import 'package:school_system/features/student/presentation/views/widgets/daily_curriculum_section.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class WeeklyScheduleViewBody extends StatefulWidget {
   const WeeklyScheduleViewBody({super.key});
@@ -52,6 +53,12 @@ class _WeeklyScheduleViewBodyState extends State<WeeklyScheduleViewBody> {
   }
 
   String _getMonthName(int month) {
+    if (LocalizationHelper.isArabic) {
+      const months = [
+        'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      ];
+      return months[month - 1];
+    }
     const months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
@@ -96,7 +103,9 @@ class _WeeklyScheduleViewBodyState extends State<WeeklyScheduleViewBody> {
                 children: [
                   WeeklyScheduleHeader(
                     dateRangeText: 'Apr 14 - Apr 18,\n2026',
-                    weekText: 'Spring Semester • Week 12',
+                    weekText: LocalizationHelper.isArabic
+                        ? 'الفصل الدراسي الربيعي • الأسبوع 12'
+                        : 'Spring Semester • Week 12',
                     onPreviousWeek: () {},
                     onNextWeek: () {},
                   ),
@@ -135,8 +144,20 @@ class _WeeklyScheduleViewBodyState extends State<WeeklyScheduleViewBody> {
           
           // Generate days from API 'calendar'
           final generatedDays = data.calendar.map((cal) {
+            String dayNameTranslated = cal.dayName.toUpperCase();
+            if (LocalizationHelper.isArabic) {
+              switch (dayNameTranslated) {
+                case 'MON': dayNameTranslated = 'إثنين'; break;
+                case 'TUE': dayNameTranslated = 'ثلاثاء'; break;
+                case 'WED': dayNameTranslated = 'أربعاء'; break;
+                case 'THU': dayNameTranslated = 'خميس'; break;
+                case 'FRI': dayNameTranslated = 'جمعة'; break;
+                case 'SAT': dayNameTranslated = 'سبت'; break;
+                case 'SUN': dayNameTranslated = 'أحد'; break;
+              }
+            }
             return ScheduleDay(
-              dayName: cal.dayName.toUpperCase(),
+              dayName: dayNameTranslated,
               dayNumber: cal.dayNumber.toString(),
               classCount: cal.classesCount,
             );
@@ -153,13 +174,15 @@ class _WeeklyScheduleViewBodyState extends State<WeeklyScheduleViewBody> {
 
           if (data.weeklyTimetable.isNotEmpty && _selectedDayIndex < data.weeklyTimetable.length && _selectedDayIndex >= 0) {
             final dayData = data.weeklyTimetable[_selectedDayIndex];
-            selectedDateString = dayData.date; // e.g. "أبريل 20"
+            selectedDateString = dayData.date; // e.g. "أبريل 20" or "April 20"
             curriculumItems = dayData.lessons.map((lesson) {
               return CurriculumItem(
                 startTime: lesson.time,
                 endTime: '', // Missing in API response
                 title: lesson.subjectName,
-                subtitle: '${lesson.room} • ${lesson.teacherName}',
+                subtitle: LocalizationHelper.isArabic
+                    ? 'غرفة ${lesson.room} • ${lesson.teacherName}'
+                    : '${lesson.room} • ${lesson.teacherName}',
                 type: 'REQUIRED',
               );
             }).toList();
@@ -172,7 +195,9 @@ class _WeeklyScheduleViewBodyState extends State<WeeklyScheduleViewBody> {
               children: [
                 WeeklyScheduleHeader(
                   dateRangeText: _getHeaderDateRange(), // or from API if needed
-                  weekText: 'Spring Semester • Week $_currentWeekNumber',
+                  weekText: LocalizationHelper.isArabic
+                      ? 'الفصل الدراسي الربيعي • الأسبوع $_currentWeekNumber'
+                      : 'Spring Semester • Week $_currentWeekNumber',
                   onPreviousWeek: () => _changeWeek(-7),
                   onNextWeek: () => _changeWeek(7),
                 ),

@@ -4,6 +4,8 @@ import 'package:school_system/features/teacher/presentation/views/widgets/settin
 import 'package:school_system/features/teacher/presentation/views/widgets/settings_switch_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class SettingsViewBody extends StatefulWidget {
   const SettingsViewBody({super.key});
@@ -23,9 +25,9 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 24),
-          _buildSectionHeader('NOTIFICATIONS'),
+          _buildSectionHeader('notifications_header'.tr()),
           SettingsSwitchTile(
-            title: 'Push Notifications',
+            title: 'push_notifications'.tr(),
             icon: Icons.notifications_none_outlined,
             value: _pushNotifications,
             onChanged: (value) {
@@ -35,7 +37,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
             },
           ),
           SettingsSwitchTile(
-            title: 'Email Alerts',
+            title: 'email_alerts'.tr(),
             icon: Icons.mail_outline,
             value: _emailAlerts,
             onChanged: (value) {
@@ -46,9 +48,9 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
           ),
 
           const SizedBox(height: 32),
-          _buildSectionHeader('PREFERENCES'),
+          _buildSectionHeader('preferences_header'.tr()),
           SettingsSwitchTile(
-            title: 'Dark Mode',
+            title: 'dark_mode'.tr(),
             icon: Icons.nightlight_round,
             value: ThemeManager.isDarkMode,
             onChanged: (value) async {
@@ -70,21 +72,67 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
             },
           ),
           SettingsLinkTile(
-            title: 'Language Selection',
+            title: 'language_selection'.tr(),
             icon: Icons.language_outlined,
-            subtitle: 'English / Arabic',
-            onTap: () {},
+            subtitle: LocalizationHelper.isArabic ? 'العربية' : 'English',
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: AppColors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                builder: (modalContext) {
+                  return SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'select_language'.tr(),
+                            style: AppTextStyle.bold18.copyWith(color: AppColors.darkBlue),
+                          ),
+                          const SizedBox(height: 16),
+                          ListTile(
+                            leading: const Text('🇺🇸', style: TextStyle(fontSize: 24)),
+                            title: Text('english'.tr(), style: AppTextStyle.medium16),
+                            trailing: !LocalizationHelper.isArabic ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                            onTap: () {
+                              LocalizationHelper.setLanguage('en');
+                              Navigator.pop(modalContext);
+                              ThemeManager.forceAppRebuild(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: const Text('🇪🇬', style: TextStyle(fontSize: 24)),
+                            title: Text('arabic'.tr(), style: AppTextStyle.medium16),
+                            trailing: LocalizationHelper.isArabic ? Icon(Icons.check, color: AppColors.primaryColor) : null,
+                            onTap: () {
+                              LocalizationHelper.setLanguage('ar');
+                              Navigator.pop(modalContext);
+                              ThemeManager.forceAppRebuild(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
 
           const SizedBox(height: 32),
-          _buildSectionHeader('MORE'),
+          _buildSectionHeader('more_header'.tr()),
           SettingsLinkTile(
-            title: 'Terms of Service',
+            title: 'terms_of_service'.tr(),
             icon: Icons.description_outlined,
             onTap: () {},
           ),
           SettingsLinkTile(
-            title: 'Help & Support',
+            title: 'help_support'.tr(),
             icon: Icons.help_outline,
             onTap: () {},
           ),
@@ -96,7 +144,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Text(
         title,
         style: AppTextStyle.bold16.copyWith(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
@@ -129,7 +130,9 @@ class TakeAttendanceCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '$studentsCount Students',
+                            LocalizationHelper.tr(
+                              'students_count',
+                            ).replaceFirst('{count}', studentsCount.toString()),
                             style: AppTextStyle.semiBold12.copyWith(
                               color: AppColors.primaryColor,
                             ),
@@ -153,7 +156,7 @@ class TakeAttendanceCard extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          'View Reports',
+                          'view_reports'.tr(),
                           style: AppTextStyle.semiBold14.copyWith(
                             color: AppColors.primaryColor,
                           ),
@@ -173,7 +176,7 @@ class TakeAttendanceCard extends StatelessWidget {
                           elevation: 0,
                         ),
                         child: Text(
-                          'Take Attendance',
+                          'take_attendance'.tr(),
                           style: AppTextStyle.semiBold14.copyWith(
                             color: Colors.white,
                           ),

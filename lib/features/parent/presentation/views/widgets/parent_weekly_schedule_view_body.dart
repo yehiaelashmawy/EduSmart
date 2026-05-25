@@ -6,6 +6,7 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_cubit.dart';
 import 'package:school_system/features/parent/presentation/manager/child_weekly_schedule_cubit/child_weekly_schedule_state.dart';
 import 'package:school_system/features/parent/data/models/parent_weekly_schedule_model.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class ParentWeeklyScheduleViewBody extends StatefulWidget {
   const ParentWeeklyScheduleViewBody({super.key});
@@ -34,7 +35,13 @@ class _ParentWeeklyScheduleViewBodyState
 
         if (state is ChildWeeklyScheduleSuccess &&
             schedule.weeklySchedule.isEmpty) {
-          return const Center(child: Text('No schedule available'));
+          return Center(
+            child: Text(
+              LocalizationHelper.isArabic
+                  ? 'لا يوجد جدول متاح'
+                  : 'No schedule available',
+            ),
+          );
         }
 
         if (_selectedDayIndex >= schedule.weeklySchedule.length) {
@@ -50,7 +57,7 @@ class _ParentWeeklyScheduleViewBodyState
               children: [
                 const SizedBox(height: 24),
                 Text(
-                  'WEEKLY SCHEDULE',
+                  LocalizationHelper.isArabic ? 'الجدول الأسبوعي' : 'WEEKLY SCHEDULE',
                   style: AppTextStyle.bold12.copyWith(
                     color: AppColors.grey.withValues(alpha: 0.6),
                     letterSpacing: 1.2,
@@ -117,6 +124,12 @@ class _ParentWeeklyScheduleViewBodyState
           final day = days[index];
           final isSelected = _selectedDayIndex == index;
 
+          final displayName = LocalizationHelper.isArabic
+              ? day.dayNameAr
+              : (day.dayName.length >= 3
+                  ? day.dayName.toUpperCase().substring(0, 3)
+                  : day.dayName);
+
           return GestureDetector(
             onTap: () => setState(() => _selectedDayIndex = index),
             child: Container(
@@ -144,9 +157,7 @@ class _ParentWeeklyScheduleViewBodyState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    day.dayName.length >= 3
-                        ? day.dayName.toUpperCase().substring(0, 3)
-                        : day.dayName,
+                    displayName,
                     style: AppTextStyle.bold12.copyWith(
                       color: isSelected ? Colors.white : AppColors.grey,
                     ),
@@ -169,10 +180,14 @@ class _ParentWeeklyScheduleViewBodyState
 
   Widget _buildScheduleList(ParentWeeklyScheduleDay day) {
     if (day.classes.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.only(top: 40),
-          child: Text('No classes scheduled for this day'),
+          padding: const EdgeInsets.only(top: 40),
+          child: Text(
+            LocalizationHelper.isArabic
+                ? 'لا توجد حصص مجدولة لهذا اليوم'
+                : 'No classes scheduled for this day',
+          ),
         ),
       );
     }
@@ -182,6 +197,7 @@ class _ParentWeeklyScheduleViewBodyState
   }
 
   Widget _buildClassCard(ParentClassModel cls) {
+    final subjectName = LocalizationHelper.isArabic ? cls.subjectNameAr : cls.subjectName;
     final icon = _getIconForSubject(cls.subjectName);
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -217,7 +233,7 @@ class _ParentWeeklyScheduleViewBodyState
                   children: [
                     Expanded(
                       child: Text(
-                        cls.subjectName,
+                        subjectName,
                         style: AppTextStyle.bold16.copyWith(
                           color: AppColors.darkBlue,
                         ),
@@ -266,7 +282,7 @@ class _ParentWeeklyScheduleViewBodyState
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      cls.roomNumber,
+                      LocalizationHelper.isArabic ? 'غرفة ${cls.roomNumber}' : cls.roomNumber,
                       style: AppTextStyle.regular12.copyWith(
                         color: AppColors.grey,
                       ),
@@ -283,18 +299,26 @@ class _ParentWeeklyScheduleViewBodyState
 
   IconData _getIconForSubject(String subjectName) {
     subjectName = subjectName.toLowerCase();
-    if (subjectName.contains('math')) return Icons.calculate_outlined;
+    if (subjectName.contains('math')) {
+      return Icons.calculate_outlined;
+    }
     if (subjectName.contains('science') ||
         subjectName.contains('chemist') ||
         subjectName.contains('biolog') ||
-        subjectName.contains('physic'))
+        subjectName.contains('physic')) {
       return Icons.science_outlined;
+    }
     if (subjectName.contains('english') ||
         subjectName.contains('arabic') ||
-        subjectName.contains('literat'))
+        subjectName.contains('literat')) {
       return Icons.menu_book_outlined;
-    if (subjectName.contains('art')) return Icons.palette_outlined;
-    if (subjectName.contains('history')) return Icons.history_edu_outlined;
+    }
+    if (subjectName.contains('art')) {
+      return Icons.palette_outlined;
+    }
+    if (subjectName.contains('history')) {
+      return Icons.history_edu_outlined;
+    }
     return Icons.school_outlined;
   }
 }

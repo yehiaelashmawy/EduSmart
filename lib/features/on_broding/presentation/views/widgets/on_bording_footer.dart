@@ -4,6 +4,8 @@ import 'package:school_system/features/on_broding/presentation/views/widgets/cus
 import 'package:school_system/features/on_broding/presentation/views/widgets/on_boarding_button.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class OnBoardingFooter extends StatelessWidget {
   const OnBoardingFooter({
     super.key,
@@ -46,7 +48,7 @@ class OnBoardingFooter extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, AuthView.routeName);
                   }
                 },
-                text: currentIndex == 2 ? 'Get started' : 'Next',
+                text: currentIndex == 2 ? 'get_started'.tr() : 'next'.tr(),
                 showArrow: currentIndex != 2,
               ),
               const SizedBox(height: 32),

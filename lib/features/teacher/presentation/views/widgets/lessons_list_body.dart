@@ -2,6 +2,7 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_list_item.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class LessonsListBody extends StatelessWidget {
   final List<TeacherLessonModel> lessons;
@@ -54,7 +55,7 @@ class LessonsListBody extends StatelessWidget {
             child: lessons.isEmpty
                 ? Center(
                     child: Text(
-                      'No lessons found for this class.',
+                      LocalizationHelper.isArabic ? 'لا توجد دروس لهذا الفصل.' : 'No lessons found for this class.',
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
@@ -71,7 +72,7 @@ class LessonsListBody extends StatelessWidget {
                       return LessonListItem(
                         title: lesson.title.isNotEmpty
                             ? lesson.title
-                            : 'Untitled Lesson',
+                            : (LocalizationHelper.isArabic ? 'درس بدون عنوان' : 'Untitled Lesson'),
                         dateInfo: _formatDateInfo(lesson.date),
                         image: 'assets/images/lesson1.png',
                         lessonId: lesson.oid,

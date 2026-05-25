@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
@@ -39,14 +41,29 @@ class SchoolSystemApp extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeManager.themeNotifier,
       builder: (_, themeMode, _) {
-        return MaterialApp(
-          key: ValueKey(themeMode),
-          themeMode: themeMode,
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          onGenerateRoute: onGenerateRoute,
-          initialRoute: SplashView.routeName,
-          debugShowCheckedModeBanner: false,
+        return ValueListenableBuilder<Locale>(
+          valueListenable: LocalizationHelper.localeNotifier,
+          builder: (_, locale, _) {
+            return MaterialApp(
+              key: const ValueKey('school_system_app'),
+              themeMode: themeMode,
+              theme: ThemeData.light(),
+              darkTheme: ThemeData.dark(),
+              locale: locale,
+              supportedLocales: const [
+                Locale('en'),
+                Locale('ar'),
+              ],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              onGenerateRoute: onGenerateRoute,
+              initialRoute: SplashView.routeName,
+              debugShowCheckedModeBanner: false,
+            );
+          },
         );
       },
     );

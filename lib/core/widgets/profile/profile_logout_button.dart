@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class ProfileLogoutButton extends StatelessWidget {
   const ProfileLogoutButton({
     super.key,
@@ -35,7 +37,7 @@ class ProfileLogoutButton extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Logout',
+              'logout'.tr(),
               style: AppTextStyle.semiBold14.copyWith(
                 color: const Color(0xffDC2626),
               ),

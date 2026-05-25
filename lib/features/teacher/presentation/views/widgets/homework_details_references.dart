@@ -9,6 +9,8 @@ import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/data/models/teacher_class_model.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_file_card.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class HomeworkDetailsReferences extends StatelessWidget {
   final List<LessonMaterialModel> materials;
 
@@ -61,7 +63,7 @@ class HomeworkDetailsReferences extends StatelessWidget {
             Icon(Icons.link, color: AppColors.primaryColor, size: 20),
             const SizedBox(width: 8),
             Text(
-              'Reference Files',
+              'reference_files'.tr(),
               style: AppTextStyle.bold16.copyWith(color: AppColors.black),
             ),
           ],

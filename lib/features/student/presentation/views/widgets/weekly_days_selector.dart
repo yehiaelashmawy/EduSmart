@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/features/student/data/models/weekly_schedule_models.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class WeeklyDaysSelector extends StatelessWidget {
   final List<ScheduleDay> days;
@@ -64,7 +65,9 @@ class WeeklyDaysSelector extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${day.classCount} classes',
+                    LocalizationHelper.isArabic
+                        ? '${day.classCount} فصول'
+                        : '${day.classCount} classes',
                     style: TextStyle(
                       fontSize: 10,
                       color: isSelected ? Colors.white.withValues(alpha: 0.8) : AppColors.grey,

@@ -8,6 +8,8 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_time
 import 'package:school_system/features/teacher/presentation/manager/teacher_timetable_cubit/teacher_timetable_state.dart';
 import 'package:school_system/features/teacher/presentation/views/teacher_weekly_schedule_view.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class TodaysClassesSection extends StatelessWidget {
   const TodaysClassesSection({super.key});
 
@@ -20,7 +22,7 @@ class TodaysClassesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Today\'s Classes', style: AppTextStyle.bold20),
+            Text('today_lessons'.tr(), style: AppTextStyle.bold20),
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -34,7 +36,7 @@ class TodaysClassesSection extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                'View Schedule',
+                'view_schedule'.tr(),
                 style: AppTextStyle.semiBold14.copyWith(
                   color: AppColors.primaryColor,
                 ),
@@ -100,7 +102,9 @@ class TodaysClassesSection extends StatelessWidget {
                   height: 160,
                   child: Center(
                     child: Text(
-                      'No classes scheduled for today.',
+                      LocalizationHelper.isArabic
+                          ? 'لا توجد فصول مجدولة لليوم.'
+                          : 'No classes scheduled for today.',
                       style: AppTextStyle.regular14.copyWith(
                         color: AppColors.grey,
                       ),

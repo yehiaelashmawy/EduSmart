@@ -8,6 +8,7 @@ import 'package:school_system/features/student/presentation/manager/student_grad
 import 'package:school_system/features/student/presentation/manager/student_grades_cubit/student_grades_state.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_cubit.dart';
 import 'package:school_system/features/student/presentation/manager/student_homework_cubit/student_homework_state.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class StudentHomeActionCards extends StatelessWidget {
   const StudentHomeActionCards({super.key});
@@ -27,20 +28,22 @@ class StudentHomeActionCards extends StatelessWidget {
               },
               child: BlocBuilder<StudentHomeworkCubit, StudentHomeworkState>(
                 builder: (context, state) {
-                  String subtitle = 'Loading...';
+                  String subtitle = 'loading'.tr();
                   bool isLoading = state is StudentHomeworkLoading || state is StudentHomeworkInitial;
 
                   if (state is StudentHomeworkSuccess) {
                     final pending = state.data.stats?.pending ?? 0;
-                    subtitle = '$pending Pending Tasks';
+                    subtitle = LocalizationHelper.isArabic
+                        ? '$pending مهام معلقة'
+                        : '$pending Pending Tasks';
                   } else if (state is StudentHomeworkFailure) {
-                    subtitle = 'Failed to load';
+                    subtitle = LocalizationHelper.isArabic ? 'فشل التحميل' : 'Failed to load';
                   }
 
                   return Skeletonizer(
                     enabled: isLoading,
                     child: _ActionCard(
-                      title: 'Homework',
+                      title: 'homework_tab'.tr(),
                       subtitle: subtitle,
                       icon: Icons.assignment,
                     ),
@@ -57,21 +60,23 @@ class StudentHomeActionCards extends StatelessWidget {
               },
               child: BlocBuilder<StudentGradesCubit, StudentGradesState>(
                 builder: (context, state) {
-                  String subtitle = 'Loading...';
+                  String subtitle = 'loading'.tr();
                   bool isLoading = state is StudentGradesLoading || state is StudentGradesInitial;
 
                   if (state is StudentGradesSuccess) {
                     final gpa = state.data.overallGPA?.gpa ?? 0.0;
                     final grade = state.data.overallGPA?.overallGrade ?? 0.0;
-                    subtitle = 'GPA: ${gpa.toStringAsFixed(1)} | Grade: ${grade.toStringAsFixed(0)}%';
+                    subtitle = LocalizationHelper.isArabic
+                        ? 'المعدل: ${gpa.toStringAsFixed(1)} | النسبة: ${grade.toStringAsFixed(0)}%'
+                        : 'GPA: ${gpa.toStringAsFixed(1)} | Grade: ${grade.toStringAsFixed(0)}%';
                   } else if (state is StudentGradesFailure) {
-                    subtitle = 'Failed to load';
+                    subtitle = LocalizationHelper.isArabic ? 'فشل التحميل' : 'Failed to load';
                   }
 
                   return Skeletonizer(
                     enabled: isLoading,
                     child: _ActionCard(
-                      title: 'My Grades',
+                      title: 'my_grades'.tr(),
                       subtitle: subtitle,
                       icon: Icons.bar_chart,
                     ),

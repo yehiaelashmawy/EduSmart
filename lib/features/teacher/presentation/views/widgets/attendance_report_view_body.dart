@@ -8,6 +8,7 @@ import 'package:school_system/features/teacher/presentation/manager/attendance_r
 import 'package:school_system/features/teacher/presentation/manager/attendance_report_cubit/attendance_report_state.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/attendance_report_summary_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/student_report_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class AttendanceReportViewBody extends StatefulWidget {
   final TeacherClassModel teacherClass;
@@ -57,7 +58,7 @@ class _AttendanceReportViewBodyState extends State<AttendanceReportViewBody> {
               const SizedBox(height: 32),
 
               Text(
-                'Student Breakdown',
+                LocalizationHelper.isArabic ? 'تفصيل الطلاب' : 'Student Breakdown',
                 style: AppTextStyle.bold18.copyWith(color: AppColors.black),
               ),
               const SizedBox(height: 16),

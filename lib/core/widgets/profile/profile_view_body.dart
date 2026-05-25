@@ -10,6 +10,7 @@ import 'package:school_system/core/widgets/profile/profile_menu_tile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/widgets/profile/profile_avatar.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 import 'package:school_system/features/teacher/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:school_system/features/teacher/presentation/manager/profile_cubit/profile_state.dart';
@@ -35,7 +36,7 @@ class ProfileViewBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Center(
               child: Text(
-                'Profile',
+                'profile'.tr(),
                 style: AppTextStyle.bold16.copyWith(
                   color: AppColors.darkBlue,
                   fontSize: 18,
@@ -63,8 +64,8 @@ class ProfileViewBody extends StatelessWidget {
                             String? avatarUrl;
 
                             if (state is ProfileLoading) {
-                              displayAvatarName = 'Loading...';
-                              displayAvatarTitle = 'Loading...';
+                              displayAvatarName = 'loading'.tr();
+                              displayAvatarTitle = 'loading'.tr();
                             } else if (state is ProfileSuccess) {
                               displayAvatarName = state.profile.fullName ?? name;
                               displayAvatarTitle =
@@ -92,7 +93,7 @@ class ProfileViewBody extends StatelessWidget {
                         const SizedBox(height: 40),
 
                         ProfileMenuTile(
-                          title: 'Personal Information',
+                          title: 'personal_information'.tr(),
                           icon: Icons.person_outline,
                           onTap: () {
                             Navigator.pushNamed(
@@ -106,7 +107,7 @@ class ProfileViewBody extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         ProfileMenuTile(
-                          title: 'Settings',
+                          title: 'settings'.tr(),
                           icon: Icons.settings_outlined,
                           onTap: () {
                             Navigator.pushNamed(context, SettingsView.routeName);
@@ -114,7 +115,7 @@ class ProfileViewBody extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         ProfileMenuTile(
-                          title: 'Change Password',
+                          title: 'change_password_title'.tr(),
                           icon: Icons.lock_outline,
                           onTap: () {
                             Navigator.pushNamed(
@@ -128,15 +129,38 @@ class ProfileViewBody extends StatelessWidget {
 
                         ProfileLogoutButton(
                           onTap: () async {
-                            await SharedPrefsHelper.clearAuth();
-                            if (!context.mounted) return;
-                            Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).pushNamedAndRemoveUntil(
-                              AuthView.routeName,
-                              (route) => false,
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (dialogContext) {
+                                return AlertDialog(
+                                  backgroundColor: AppColors.white,
+                                  title: Text('logout'.tr(), style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue)),
+                                  content: Text('logout_confirm'.tr(), style: AppTextStyle.regular14),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(dialogContext, false),
+                                      child: Text('no'.tr(), style: AppTextStyle.medium14.copyWith(color: AppColors.grey)),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(dialogContext, true),
+                                      child: Text('yes'.tr(), style: AppTextStyle.bold14.copyWith(color: Colors.red)),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
+
+                            if (confirm == true) {
+                              await SharedPrefsHelper.clearAuth();
+                              if (!context.mounted) return;
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).pushNamedAndRemoveUntil(
+                                AuthView.routeName,
+                                (route) => false,
+                              );
+                            }
                           },
                         ),
 

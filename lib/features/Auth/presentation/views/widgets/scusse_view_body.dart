@@ -5,6 +5,7 @@ import 'package:school_system/core/utils/size_config.dart';
 import 'package:school_system/core/widgets/custom_button.dart';
 import 'package:school_system/features/Auth/presentation/views/auth_view.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class ScusseViewBody extends StatelessWidget {
   const ScusseViewBody({super.key});
@@ -20,7 +21,7 @@ class ScusseViewBody extends StatelessWidget {
             children: [
               const Spacer(flex: 3),
               Text(
-                'Success',
+                'success'.tr(),
                 style: AppTextStyle.bold24.copyWith(
                   color: AppColors.darkBlue,
                   fontSize: SizeConfig.getResponsiveFontSize(
@@ -47,7 +48,7 @@ class ScusseViewBody extends StatelessWidget {
               ),
               const Spacer(flex: 1),
               Text(
-                'Password Reset Successful!',
+                'success'.tr(),
                 textAlign: TextAlign.center,
                 style: AppTextStyle.bold24.copyWith(
                   color: AppColors.darkBlue,
@@ -59,7 +60,7 @@ class ScusseViewBody extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Your password has been updated. You can now log in with your new credentials.',
+                'success_msg'.tr(),
                 textAlign: TextAlign.center,
                 style: AppTextStyle.regular16.copyWith(
                   color: AppColors.grey,
@@ -71,7 +72,7 @@ class ScusseViewBody extends StatelessWidget {
               ),
               const SizedBox(height: 50),
               CustomButton(
-                text: 'Back to Login',
+                text: 'go_to_login'.tr(),
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                     context,

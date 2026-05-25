@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class TeacherBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -11,66 +12,66 @@ class TeacherBottomNavBar extends StatelessWidget {
     required this.onTap,
   });
 
-  static const List<BottomNavigationBarItem> _items = [
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.home_outlined),
-      ),
-      activeIcon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.home),
-      ),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.school_outlined),
-      ),
-      activeIcon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.school),
-      ),
-      label: 'Classes',
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.chat_bubble_outline),
-      ),
-      activeIcon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.chat_bubble),
-      ),
-      label: 'Messages',
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.notifications_none),
-      ),
-      activeIcon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.notifications),
-      ),
-      label: 'Alerts',
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.person_outline),
-      ),
-      activeIcon: Padding(
-        padding: EdgeInsets.only(bottom: 4),
-        child: Icon(Icons.person),
-      ),
-      label: 'Profile',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<BottomNavigationBarItem> items = [
+      BottomNavigationBarItem(
+        icon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.home_outlined),
+        ),
+        activeIcon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.home),
+        ),
+        label: 'nav_home'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.school_outlined),
+        ),
+        activeIcon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.school),
+        ),
+        label: 'nav_classes'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.chat_bubble_outline),
+        ),
+        activeIcon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.chat_bubble),
+        ),
+        label: 'nav_messages'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.notifications_none),
+        ),
+        activeIcon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.notifications),
+        ),
+        label: 'nav_alerts'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.person_outline),
+        ),
+        activeIcon: const Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Icon(Icons.person),
+        ),
+        label: 'nav_profile'.tr(),
+      ),
+    ];
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -96,7 +97,7 @@ class TeacherBottomNavBar extends StatelessWidget {
           fontWeight: FontWeight.w500,
           fontSize: 11,
         ),
-        items: _items,
+        items: items,
       ),
     );
   }

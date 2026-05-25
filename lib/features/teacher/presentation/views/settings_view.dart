@@ -3,6 +3,8 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/settings_view_body.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
   static const String routeName = 'settings_view';
@@ -19,7 +21,7 @@ class SettingsView extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Settings',
+          'settings'.tr(),
           style: AppTextStyle.bold16.copyWith(
             color: AppColors.darkBlue,
             fontSize: 20,

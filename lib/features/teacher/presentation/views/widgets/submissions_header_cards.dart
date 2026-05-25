@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
@@ -31,7 +32,7 @@ class SubmissionsHeaderCards extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'AVG SCORE',
+                      'avg_score'.tr(),
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 10,
@@ -86,11 +87,11 @@ class SubmissionsHeaderCards extends StatelessWidget {
                       Icons.inventory_2_outlined,
                       size: 16,
                       color: Color(0xFFF97316),
-                    ), // Orange
+                    ),
                     const SizedBox(width: 6),
-                    const Text(
-                      'TO GRADE',
-                      style: TextStyle(
+                    Text(
+                      'to_grade'.tr(),
+                      style: const TextStyle(
                         color: Color(0xFFF97316),
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -112,7 +113,7 @@ class SubmissionsHeaderCards extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, left: 4),
                       child: Text(
-                        'students',
+                        'students'.tr(),
                         style: AppTextStyle.regular14.copyWith(
                           color: AppColors.grey,
                         ),

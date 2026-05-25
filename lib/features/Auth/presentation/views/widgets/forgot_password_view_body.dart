@@ -9,6 +9,7 @@ import 'package:school_system/features/Auth/presentation/views/verification_view
 import 'package:school_system/features/Auth/presentation/views/widgets/custom_back_to_login.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/custom_buttom_logo.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/features/Auth/presentation/manager/auth_cubit/auth_cubit.dart';
@@ -36,7 +37,12 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is ForgotPasswordSuccess) {
-          CustomSnackBar.showSuccess(context, 'Reset link sent to your email!');
+          CustomSnackBar.showSuccess(
+            context,
+            LocalizationHelper.isArabic
+                ? 'تم إرسال رابط إعادة التعيين لبريدك الإلكتروني!'
+                : 'Reset link sent to your email!',
+          );
           Navigator.pushNamed(
             context,
             VerificationView.routeName,
@@ -55,7 +61,7 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const CustomAppBar(title: 'Forgot Password'),
+                    CustomAppBar(title: 'forgot_password_title'.tr()),
                     const SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -76,21 +82,21 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
                             SvgPicture.asset('assets/images/reset_password.svg'),
                             const SizedBox(height: 56),
                             Text(
-                              'Reset your password',
+                              'reset_password_title'.tr(),
                               textAlign: TextAlign.center,
                               style: AppTextStyle.bold24,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Enter your email or phone number to receive a reset link',
+                              'forgot_password_subtitle'.tr(),
                               textAlign: TextAlign.center,
                               style: AppTextStyle.regular16,
                             ),
                             const SizedBox(height: 32),
                             Align(
-                              alignment: Alignment.centerLeft,
+                              alignment: AlignmentDirectional.centerStart,
                               child: Text(
-                                'Email or Phone',
+                                'email'.tr(),
                                 style: AppTextStyle.semiBold16,
                               ),
                             ),
@@ -101,13 +107,18 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
                             ),
                             const SizedBox(height: 24),
                             CustomButton(
-                              text: 'Send Reset Code',
+                              text: 'send_code'.tr(),
                               onPressed: () {
                                 final email = _emailController.text.trim();
                                 if (email.isNotEmpty) {
                                   context.read<AuthCubit>().forgotPassword(email);
                                 } else {
-                                  CustomSnackBar.showError(context, 'Please enter your email');
+                                  CustomSnackBar.showError(
+                                    context,
+                                    LocalizationHelper.isArabic
+                                        ? 'الرجاء إدخال البريد الإلكتروني'
+                                        : 'Please enter your email',
+                                  );
                                 }
                               },
                             ),
@@ -121,7 +132,9 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
                     const CustomButtomLogo(),
                     const SizedBox(height: 8),
                     Text(
-                      'Professional Learning Platform',
+                      LocalizationHelper.isArabic
+                          ? 'منصة تعلم احترافية'
+                          : 'Professional Learning Platform',
                       style: AppTextStyle.regular14,
                     ),
                     const SizedBox(height: 24),

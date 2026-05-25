@@ -11,6 +11,8 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 import 'package:school_system/features/teacher/presentation/manager/teacher_classes_cubit/teacher_classes_state.dart';
 import 'package:school_system/features/teacher/presentation/views/exam_review_submissions_view.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class UpcomingExamsSection extends StatelessWidget {
   const UpcomingExamsSection({super.key});
 
@@ -21,10 +23,10 @@ class UpcomingExamsSection extends StatelessWidget {
       final diff = examDate
           .difference(DateTime(now.year, now.month, now.day))
           .inDays;
-      if (diff < 0) return 'Past';
-      if (diff == 0) return 'Today';
-      if (diff == 1) return 'Tomorrow';
-      return 'In $diff Days';
+      if (diff < 0) return LocalizationHelper.isArabic ? 'سابق' : 'Past';
+      if (diff == 0) return LocalizationHelper.isArabic ? 'اليوم' : 'Today';
+      if (diff == 1) return LocalizationHelper.isArabic ? 'غداً' : 'Tomorrow';
+      return LocalizationHelper.isArabic ? 'خلال $diff أيام' : 'In $diff Days';
     } catch (_) {
       return '';
     }
@@ -50,7 +52,7 @@ class UpcomingExamsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Upcoming Exams', style: AppTextStyle.bold20),
+        Text(LocalizationHelper.isArabic ? 'الاختبارات القادمة' : 'Upcoming Exams', style: AppTextStyle.bold20),
         const SizedBox(height: 16),
         BlocBuilder<TeacherExamsCubit, TeacherExamsState>(
           builder: (context, state) {
@@ -82,7 +84,7 @@ class UpcomingExamsSection extends StatelessWidget {
             } else if (state is TeacherExamsSuccess) {
               if (state.exams.isEmpty) {
                 return Text(
-                  'No upcoming exams.',
+                  LocalizationHelper.isArabic ? 'لا توجد اختبارات قادمة.' : 'No upcoming exams.',
                   style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
                 );
               }
@@ -95,21 +97,39 @@ class UpcomingExamsSection extends StatelessWidget {
                   String day = '';
                   try {
                     final date = DateTime.parse(exam.date);
-                    const months = [
-                      'JAN',
-                      'FEB',
-                      'MAR',
-                      'APR',
-                      'MAY',
-                      'JUN',
-                      'JUL',
-                      'AUG',
-                      'SEP',
-                      'OCT',
-                      'NOV',
-                      'DEC',
-                    ];
-                    month = months[date.month - 1];
+                    if (LocalizationHelper.isArabic) {
+                      const monthsAr = [
+                        'يناير',
+                        'فبراير',
+                        'مارس',
+                        'أبريل',
+                        'مايو',
+                        'يونيو',
+                        'يوليو',
+                        'أغسطس',
+                        'سبتمبر',
+                        'أكتوبر',
+                        'نوفمبر',
+                        'ديسمبر',
+                      ];
+                      month = monthsAr[date.month - 1];
+                    } else {
+                      const months = [
+                        'JAN',
+                        'FEB',
+                        'MAR',
+                        'APR',
+                        'MAY',
+                        'JUN',
+                        'JUL',
+                        'AUG',
+                        'SEP',
+                        'OCT',
+                        'NOV',
+                        'DEC',
+                      ];
+                      month = months[date.month - 1];
+                    }
                     day = date.day.toString();
                   } catch (_) {}
 
@@ -120,8 +140,8 @@ class UpcomingExamsSection extends StatelessWidget {
                   if (classesState is TeacherClassesSuccess) {
                     // Try exact match first
                     var matchedClass = classesState.classes
-                        .where((c) => c.name == exam.className)
-                        .toList();
+                      .where((c) => c.name == exam.className)
+                      .toList();
 
                     // Fallback: contains or startsWith
                     if (matchedClass.isEmpty) {
@@ -161,8 +181,9 @@ class UpcomingExamsSection extends StatelessWidget {
                           month: month,
                           day: day,
                           title: exam.name,
-                          subtitle:
-                              '${exam.className} • ${exam.studentsCount} Students',
+                          subtitle: LocalizationHelper.isArabic
+                              ? '${exam.className} • ${exam.studentsCount} طالب'
+                              : '${exam.className} • ${exam.studentsCount} Students',
                           statusText: _computeStatusText(exam.date),
                           statusColor: _computeStatusColor(exam.date),
                         ),

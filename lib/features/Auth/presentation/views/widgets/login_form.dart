@@ -15,6 +15,7 @@ import 'package:school_system/features/teacher/presentation/views/teacher_home_v
 import 'package:school_system/features/student/presentation/views/student_home_view.dart';
 import 'package:school_system/features/parent/presentation/views/parent_home_view.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -87,7 +88,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
           );
         } else if (state is AuthSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          // Capture context-dependent values before any async gaps
+          final roleArg =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          final messenger = ScaffoldMessenger.of(context);
+
+          messenger.showSnackBar(
             SnackBar(
               content: Row(
                 children: [
@@ -95,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Welcome ${state.user.fullName}',
+                      '${'welcome_back'.tr()} ${state.user.fullName}',
                       style: AppTextStyle.semiBold14.copyWith(
                         color: Colors.white,
                       ),
@@ -125,8 +131,6 @@ class _LoginFormState extends State<LoginForm> {
           );
 
           // Handle Remember Me
-          final roleArg =
-              ModalRoute.of(context)?.settings.arguments as String?;
           if (roleArg != null) {
             if (_rememberMe) {
               await SharedPrefsHelper.setRememberMe(roleArg, true);
@@ -158,191 +162,193 @@ class _LoginFormState extends State<LoginForm> {
         return Skeletonizer(
           enabled: state is AuthLoading,
           child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'Welcome ',
-                      style: AppTextStyle.bold24.copyWith(
-                        color: AppColors.darkBlue,
-                        fontSize: SizeConfig.getResponsiveFontSize(
-                          context,
-                          fontSize: 24,
+            width: double.infinity,
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        'welcome_back'.tr(),
+                        style: AppTextStyle.bold24.copyWith(
+                          color: AppColors.darkBlue,
+                          fontSize: SizeConfig.getResponsiveFontSize(
+                            context,
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Center(
-                    child: Text(
-                      'Log in to continue your learning journey',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.regular14.copyWith(
-                        color: AppColors.grey,
+                    const SizedBox(height: 4),
+                    Center(
+                      child: Text(
+                        'login_subtitle'.tr(),
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.regular14.copyWith(
+                          color: AppColors.grey,
+                          fontSize: SizeConfig.getResponsiveFontSize(
+                            context,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'email'.tr(),
+                      style: AppTextStyle.semiBold14.copyWith(
+                        color: AppColors.darkBlue,
                         fontSize: SizeConfig.getResponsiveFontSize(
                           context,
                           fontSize: 14,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Email Address',
-                    style: AppTextStyle.semiBold14.copyWith(
-                      color: AppColors.darkBlue,
-                      fontSize: SizeConfig.getResponsiveFontSize(
-                        context,
-                        fontSize: 14,
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      controller: _emailController,
+                      hintText: 'student@edusmart.edu',
+                      prefixIcon: Icon(
+                        Icons.mail_outline,
+                        color: AppColors.lightGrey,
+                        size: 20,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: _emailController,
-                    hintText: 'student@edusmart.edu',
-                    prefixIcon: Icon(
-                      Icons.mail_outline,
-                      color: AppColors.lightGrey,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Password',
-                    style: AppTextStyle.semiBold14.copyWith(
-                      color: AppColors.darkBlue,
-                      fontSize: SizeConfig.getResponsiveFontSize(
-                        context,
-                        fontSize: 14,
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'password'.tr(),
+                      style: AppTextStyle.semiBold14.copyWith(
+                        color: AppColors.darkBlue,
+                        fontSize: SizeConfig.getResponsiveFontSize(
+                          context,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: _passwordController,
-                    hintText: '******************',
-                    prefixIcon: Icon(
-                      Icons.lock_outline,
-                      color: AppColors.lightGrey,
-                      size: 20,
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      controller: _passwordController,
+                      hintText: '******************',
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: AppColors.lightGrey,
+                        size: 20,
+                      ),
+                      obscureText: true,
                     ),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
-              const SizedBox(height: 16),
-              RememberMeAndForgotPassword(
-                initialValue: _rememberMe,
-                onChanged: (value) {
-                  _rememberMe = value;
-                },
-              ),
-              const SizedBox(height: 32),
-              CustomButton(
-                      text: 'Login',
-                      shadows: [
-                        BoxShadow(
-                          color: AppColors.secondaryColor.withValues(
-                            alpha: 0.2,
-                          ),
-                          blurRadius: 6,
-                          offset: const Offset(0, 4),
-                          spreadRadius: -4,
-                        ),
-                        BoxShadow(
-                          color: AppColors.secondaryColor.withValues(
-                            alpha: 0.2,
-                          ),
-                          blurRadius: 15,
-                          offset: const Offset(0, 10),
-                          spreadRadius: -3,
-                        ),
-                      ],
-                      onPressed: () {
-                        final email = _emailController.text.trim();
-                        final password = _passwordController.text.trim();
+                    const SizedBox(height: 4),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                RememberMeAndForgotPassword(
+                  initialValue: _rememberMe,
+                  onChanged: (value) {
+                    _rememberMe = value;
+                  },
+                ),
+                const SizedBox(height: 32),
+                CustomButton(
+                  text: 'login_btn'.tr(),
+                  shadows: [
+                    BoxShadow(
+                      color: AppColors.secondaryColor.withValues(
+                        alpha: 0.2,
+                      ),
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                      spreadRadius: -4,
+                    ),
+                    BoxShadow(
+                      color: AppColors.secondaryColor.withValues(
+                        alpha: 0.2,
+                      ),
+                      blurRadius: 15,
+                      offset: const Offset(0, 10),
+                      spreadRadius: -3,
+                    ),
+                  ],
+                  onPressed: () {
+                    final email = _emailController.text.trim();
+                    final password = _passwordController.text.trim();
 
-                        if (email.isEmpty || password.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.warning_amber_rounded,
+                    if (email.isEmpty || password.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              const Icon(
+                                Icons.warning_amber_rounded,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  LocalizationHelper.isArabic
+                                      ? 'يرجى ملء جميع الحقول بشكل صحيح.'
+                                      : 'Please perfectly fill all text fields.',
+                                  style: AppTextStyle.semiBold14.copyWith(
                                     color: Colors.white,
                                   ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      'Please perfectly fill all text fields.',
-                                      style: AppTextStyle.semiBold14.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                              backgroundColor: Colors.orangeAccent.shade700,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              margin: const EdgeInsets.all(24),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                          return;
-                        }
+                            ],
+                          ),
+                          backgroundColor: Colors.orangeAccent.shade700,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          margin: const EdgeInsets.all(24),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
 
-                        final role =
-                            ModalRoute.of(context)?.settings.arguments
-                                as String?;
-                        if (role != null) {
-                          context.read<AuthCubit>().login(
-                            email: email,
-                            password: password,
-                            roleName: role,
-                          );
-                        }
-                      },
-                    ),
-              const SizedBox(height: 16),
-              Divider(color: AppColors.lightGrey),
-              const SizedBox(height: 16),
-              CustomButton(
-                text: 'Back To Role',
-                backgroundColor: AppColors.white,
-                textColor: AppColors.darkBlue,
-                borderColor: AppColors.lightGrey,
-                onPressed: () {
-                  Navigator.pushNamed(context, AuthView.routeName);
-                },
-              ),
-            ],
+                    final role =
+                        ModalRoute.of(context)?.settings.arguments
+                            as String?;
+                    if (role != null) {
+                      context.read<AuthCubit>().login(
+                        email: email,
+                        password: password,
+                        roleName: role,
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                Divider(color: AppColors.lightGrey),
+                const SizedBox(height: 16),
+                CustomButton(
+                  text: 'back'.tr(),
+                  backgroundColor: AppColors.white,
+                  textColor: AppColors.darkBlue,
+                  borderColor: AppColors.lightGrey,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AuthView.routeName);
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
+        );
+      },
     );
   }
 }

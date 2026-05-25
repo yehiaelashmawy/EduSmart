@@ -3,6 +3,8 @@ import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:school_system/core/widgets/custom_app_bar.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class OnBoardingHeader extends StatelessWidget {
   const OnBoardingHeader({
     super.key,
@@ -33,8 +35,8 @@ class OnBoardingHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Positioned(
-            right: 8,
+          PositionedDirectional(
+            end: 8,
             child: TextButton(
               onPressed: () {
                 pageController.animateToPage(
@@ -44,7 +46,7 @@ class OnBoardingHeader extends StatelessWidget {
                 );
               },
               child: Text(
-                'Skip',
+                'skip'.tr(),
                 style: AppTextStyle.bold16.copyWith(
                   color: AppColors.primaryColor,
                 ),

@@ -14,6 +14,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_clas
 
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_info_card.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/no_lesson_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter/services.dart';
 
@@ -69,13 +70,19 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
   }
 
   String get _buttonLabel {
-    if (_selectedMethod == null) return "Select a Method";
-    if (_selectedMethod == 1) return "Start Manual Session";
-    if (_selectedMethod == 2) return "Generate QR Code";
-    if (_selectedMethod == 3 && (_correctNumber == null || _correctNumber! <= 0)) {
-      return "Enter a Code Number";
+    if (_selectedMethod == null) {
+      return LocalizationHelper.isArabic ? 'اختر طريقة' : 'Select a Method';
     }
-    return "Generate Code Session";
+    if (_selectedMethod == 1) {
+      return LocalizationHelper.isArabic ? 'بدء جلسة يدوية' : 'Start Manual Session';
+    }
+    if (_selectedMethod == 2) {
+      return LocalizationHelper.isArabic ? 'إنشاء رمز QR' : 'Generate QR Code';
+    }
+    if (_selectedMethod == 3 && (_correctNumber == null || _correctNumber! <= 0)) {
+      return LocalizationHelper.isArabic ? 'أدخل رقم الكود' : 'Enter a Code Number';
+    }
+    return LocalizationHelper.isArabic ? 'بدء جلسة الكود' : 'Generate Code Session';
   }
 
 
@@ -187,7 +194,7 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                   children: [
                     // ── Header ─────────────────────────────────────────────
                     Text(
-                      'UPCOMING LESSONS',
+                      LocalizationHelper.isArabic ? 'الدروس القادمة' : 'UPCOMING LESSONS',
                       style: AppTextStyle.bold12.copyWith(
                         color: AppColors.grey,
                         letterSpacing: 1.2,
@@ -244,7 +251,9 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                     if (lessons.isNotEmpty) ...[
                       // ── Section heading ─────────────────────────────────
                       Text(
-                        selectedIsTaken ? 'RE-TAKE SESSION' : 'SESSION MANAGEMENT',
+                        selectedIsTaken
+                            ? (LocalizationHelper.isArabic ? 'إعادة الجلسة' : 'RE-TAKE SESSION')
+                            : (LocalizationHelper.isArabic ? 'إدارة الجلسة' : 'SESSION MANAGEMENT'),
                         style: AppTextStyle.bold12.copyWith(
                           color: AppColors.grey,
                           letterSpacing: 1.0,
@@ -252,13 +261,17 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        selectedIsTaken ? 'Re-take Attendance' : 'Take Attendance',
+                        selectedIsTaken
+                            ? (LocalizationHelper.isArabic ? 'إعادة تسجيل الحضور' : 'Re-take Attendance')
+                            : (LocalizationHelper.isArabic ? 'تسجيل الحضور' : 'Take Attendance'),
                         style: AppTextStyle.bold18.copyWith(color: AppColors.black),
                       ),
                       const SizedBox(height: 6),
                       if (selectedIsTaken) ...[
                         Text(
-                          "Re-submitting will overwrite today's existing records.",
+                          LocalizationHelper.isArabic
+                              ? 'ستؤدي إعادة الإرسال إلى استبدال السجلات الموجودة اليوم.'
+                              : "Re-submitting will overwrite today's existing records.",
                           style: AppTextStyle.medium12.copyWith(color: Colors.red),
                         ),
                         const SizedBox(height: 6),
@@ -270,8 +283,10 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                             height: 1.5,
                           ),
                           children: [
-                            const TextSpan(
-                              text: 'Select a method to verify student presence for ',
+                            TextSpan(
+                              text: LocalizationHelper.isArabic
+                                  ? 'اختر طريقة للتحقق من حضور الطلاب لـ '
+                                  : 'Select a method to verify student presence for ',
                             ),
                             TextSpan(
                               text:
@@ -290,20 +305,20 @@ class _AttendanceMethodViewBodyState extends State<AttendanceMethodViewBody> {
                       _buildMethodRow(
                         methodValue: 1,
                         icon: Icons.assignment_rounded,
-                        title: 'Manual',
-                        subtitle: 'Mark each student directly',
+                        title: LocalizationHelper.isArabic ? 'يدوي' : 'Manual',
+                        subtitle: LocalizationHelper.isArabic ? 'وضع علامة على كل طالب مباشرةً' : 'Mark each student directly',
                       ),
                       _buildMethodRow(
                         methodValue: 2,
                         icon: Icons.qr_code_2,
-                        title: 'QR Code',
-                        subtitle: 'Students scan with their phones',
+                        title: LocalizationHelper.isArabic ? 'رمز QR' : 'QR Code',
+                        subtitle: LocalizationHelper.isArabic ? 'يمسح الطلاب الرمز بهواتفهم' : 'Students scan with their phones',
                       ),
                       _buildMethodRow(
                         methodValue: 3,
                         icon: Icons.numbers,
-                        title: 'Random Code',
-                        subtitle: 'Students enter the correct number',
+                        title: LocalizationHelper.isArabic ? 'كود عشوائي' : 'Random Code',
+                        subtitle: LocalizationHelper.isArabic ? 'يُدخل الطلاب الرقم الصحيح' : 'Students enter the correct number',
                       ),
 
                       AnimatedSize(

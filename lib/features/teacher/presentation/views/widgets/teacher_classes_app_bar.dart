@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class TeacherClassesAppBar extends StatelessWidget {
   final VoidCallback? onFilterTap;
@@ -17,7 +18,7 @@ class TeacherClassesAppBar extends StatelessWidget {
         children: [
           SvgPicture.asset('assets/images/my_classes_icon.svg'),
           const SizedBox(width: 12),
-          Text('My Classes', style: AppTextStyle.bold20),
+          Text(LocalizationHelper.isArabic ? 'فصولي' : 'My Classes', style: AppTextStyle.bold20),
           const Spacer(),
           InkWell(
             onTap: onFilterTap,

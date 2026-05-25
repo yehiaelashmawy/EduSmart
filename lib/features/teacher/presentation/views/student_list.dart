@@ -9,6 +9,7 @@ import 'package:school_system/features/teacher/presentation/views/widgets/lesson
 import 'package:school_system/features/teacher/presentation/views/widgets/students_list_body.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/attendance_list_body.dart';
 import 'package:school_system/features/teacher/presentation/views/add_homework_view.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 import '../../data/models/teacher_exam_model.dart';
 
@@ -146,7 +147,8 @@ class _StudentListState extends State<StudentList>
   }
 
   String get _attendanceStatusText {
-    return 'AVG ATTENDANCE: ${_classAttendance.attendancePercentage.toStringAsFixed(1)}%';
+    final pct = _classAttendance.attendancePercentage.toStringAsFixed(1);
+    return LocalizationHelper.isArabic ? 'متوسط الحضور: $pct%' : 'AVG ATTENDANCE: $pct%';
   }
 
   /// Merges [details.attendance.recentRecords] from every student (same API payload).
@@ -311,12 +313,12 @@ class _StudentListState extends State<StudentList>
           indicatorWeight: 3,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
-          tabs: const [
-            Tab(text: 'Students'),
-            Tab(text: 'Lessons'),
-            Tab(text: 'Homework'),
-            Tab(text: 'Exams'),
-            Tab(text: 'Attendance'),
+          tabs: [
+            Tab(text: LocalizationHelper.isArabic ? 'الطلاب' : 'Students'),
+            Tab(text: LocalizationHelper.isArabic ? 'الدروس' : 'Lessons'),
+            Tab(text: LocalizationHelper.isArabic ? 'الواجبات' : 'Homework'),
+            Tab(text: LocalizationHelper.isArabic ? 'الاختبارات' : 'Exams'),
+            Tab(text: LocalizationHelper.isArabic ? 'الحضور' : 'Attendance'),
           ],
         ),
       ),

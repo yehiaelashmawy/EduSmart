@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class ExamsToggleBar extends StatelessWidget {
   const ExamsToggleBar({
@@ -45,7 +46,7 @@ class ExamsToggleBar extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Upcoming Exams',
+                      LocalizationHelper.isArabic ? 'الاختبارات القادمة' : 'Upcoming Exams',
                       style: AppTextStyle.semiBold14.copyWith(
                         color: isUpcomingExams
                             ? AppColors.secondaryColor
@@ -78,7 +79,7 @@ class ExamsToggleBar extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Past Exams',
+                      LocalizationHelper.isArabic ? 'الاختبارات الماضية' : 'Past Exams',
                       style: AppTextStyle.semiBold14.copyWith(
                         color: !isUpcomingExams
                             ? AppColors.secondaryColor

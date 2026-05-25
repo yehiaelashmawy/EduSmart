@@ -7,6 +7,7 @@ import 'package:school_system/features/teacher/presentation/views/review_submiss
 import 'package:school_system/core/api/api_service.dart';
 import 'package:school_system/features/teacher/data/repos/submissions_repo.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/homework_list_item.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class HomeworkListBody extends StatefulWidget {
   final List<TeacherHomeworkModel> homeworks;
@@ -71,7 +72,9 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
   }
 
   String _formatDate(String rawDate) {
-    if (rawDate.trim().isEmpty) return 'Date unavailable';
+    if (rawDate.trim().isEmpty) {
+      return LocalizationHelper.isArabic ? 'التاريخ غير متاح' : 'Date unavailable';
+    }
     final parsed = DateTime.tryParse(rawDate);
     if (parsed == null) return rawDate;
     const months = [
@@ -98,7 +101,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
 
     if (normalized == 'grading') {
       return _HomeworkUiState(
-        label: 'GRADING',
+        label: LocalizationHelper.isArabic ? 'تصحيح' : 'GRADING',
         badgeColor: const Color(0xFFDBEAFE),
         badgeTextColor: const Color(0xFF1E40AF),
         isOverdue: false,
@@ -106,7 +109,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     }
     if (normalized == 'completed') {
       return _HomeworkUiState(
-        label: 'COMPLETED',
+        label: LocalizationHelper.isArabic ? 'مكتمل' : 'COMPLETED',
         badgeColor: const Color(0xFFE2E8F0),
         badgeTextColor: const Color(0xFF334155),
         isOverdue: false,
@@ -114,14 +117,14 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     }
     if (isPastDue) {
       return _HomeworkUiState(
-        label: 'OVERDUE',
+        label: LocalizationHelper.isArabic ? 'متأخر' : 'OVERDUE',
         badgeColor: const Color(0xFFFEE2E2),
         badgeTextColor: const Color(0xFF991B1B),
         isOverdue: true,
       );
     }
     return _HomeworkUiState(
-      label: 'ACTIVE',
+      label: LocalizationHelper.isArabic ? 'نشط' : 'ACTIVE',
       badgeColor: const Color(0xFFD1FAE5),
       badgeTextColor: const Color(0xFF065F46),
       isOverdue: false,
@@ -154,7 +157,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
           homeworkId: homework.oid,
           homeworkTitle: homework.title.isNotEmpty
               ? homework.title
-              : 'Submissions',
+              : (LocalizationHelper.isArabic ? 'التسليمات' : 'Submissions'),
           classStudents: widget.classStudents,
           totalMarks: homework.totalMarks?.toDouble(),
         ),
@@ -176,7 +179,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
             child: TextFormField(
               style: AppTextStyle.regular14.copyWith(color: AppColors.darkBlue),
               decoration: InputDecoration(
-                hintText: 'Search homework tasks...',
+                hintText: LocalizationHelper.isArabic ? 'بحث عن الواجبات...' : 'Search homework tasks...',
                 hintStyle: AppTextStyle.regular14.copyWith(
                   color: AppColors.grey.withValues(alpha: 0.7),
                 ),
@@ -213,7 +216,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
             child: _homeworks.isEmpty
                 ? Center(
                     child: Text(
-                      'No homework found for this class.',
+                      LocalizationHelper.isArabic ? 'لا توجد واجبات لهذا الفصل.' : 'No homework found for this class.',
                       style: AppTextStyle.semiBold16.copyWith(
                         color: AppColors.grey,
                       ),
@@ -232,7 +235,7 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                       return HomeworkItemCard(
                         title: homework.title.isNotEmpty
                             ? homework.title
-                            : 'Untitled Homework',
+                            : (LocalizationHelper.isArabic ? 'واجب بدون عنوان' : 'Untitled Homework'),
                         subtitle: 'Class ${homework.status}',
                         statusText: ui.label,
                         badgeColor: ui.badgeColor,

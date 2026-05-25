@@ -7,17 +7,27 @@ import 'package:school_system/features/teacher/presentation/manager/profile_cubi
 
 import '../../../../../core/helper/url_helper.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class TeacherCustomAppBar extends StatelessWidget {
   const TeacherCustomAppBar({super.key});
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning,';
-    } else if (hour < 17) {
-      return 'Good Afternoon,';
+    if (LocalizationHelper.isArabic) {
+      if (hour < 12) {
+        return 'صباح الخير،';
+      } else {
+        return 'مساء الخير،';
+      }
     } else {
-      return 'Good Evening,';
+      if (hour < 12) {
+        return 'Good Morning,';
+      } else if (hour < 17) {
+        return 'Good Afternoon,';
+      } else {
+        return 'Good Evening,';
+      }
     }
   }
 
@@ -65,8 +75,8 @@ class TeacherCustomAppBar extends StatelessWidget {
                     final teacherName = state is ProfileSuccess
                         ? (state.profile.fullName?.trim().isNotEmpty ?? false)
                               ? state.profile.fullName!.trim()
-                              : 'Teacher'
-                        : 'Teacher';
+                              : 'teacher'.tr()
+                        : 'teacher'.tr();
 
                     return Text(
                       teacherName,

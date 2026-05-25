@@ -15,6 +15,7 @@ import 'package:school_system/features/teacher/presentation/views/widgets/custom
 import 'package:school_system/features/teacher/presentation/views/widgets/dashed_upload_button.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/field_label.dart';
 import 'package:school_system/features/teacher/presentation/views/widgets/lesson_file_card.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class AddNewLessonViewBody extends StatefulWidget {
   const AddNewLessonViewBody({super.key});
@@ -109,7 +110,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
         _selectedClassId == null ||
         _selectedSubjectId == null ||
         _selectedDateIso == null) {
-      CustomSnackBar.showError(context, 'Please fill all required fields');
+      CustomSnackBar.showError(context, 'fill_required'.tr());
       return;
     }
 
@@ -155,17 +156,17 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── Lesson Title ────────────────────────────────────────────
-                const FieldLabel(label: 'Lesson Title'),
+                FieldLabel(label: 'lesson_title'.tr()),
                 const SizedBox(height: 8),
                 CustomTextField(
                   controller: _titleController,
-                  hintText: 'e.g., Introduction to Quadratic Equations',
+                  hintText: 'lesson_title_hint'.tr(),
                 ),
 
                 const SizedBox(height: 20),
 
                 // ── Subject ─────────────────────────────────────────────────
-                const FieldLabel(label: 'Subject'),
+                FieldLabel(label: 'select_subject'.tr()),
                 const SizedBox(height: 8),
                 BlocBuilder<TeacherSubjectsCubit, TeacherSubjectsState>(
                   builder: (context, subjectState) {
@@ -173,7 +174,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                       return Skeletonizer(
                         enabled: true,
                         child: CustomDropdownField(
-                          hintText: 'Choose a subject',
+                          hintText: 'choose_subject'.tr(),
                           items: const ['Mathematics'],
                           value: 'Mathematics',
                           onChanged: (_) {},
@@ -189,7 +190,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                           .map((e) => e.name)
                           .toList();
                       return CustomDropdownField(
-                        hintText: 'Choose a subject',
+                        hintText: 'choose_subject'.tr(),
                         items: subjectNames,
                         value: _selectedSubject,
                         onChanged: isLoading
@@ -211,7 +212,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                 const SizedBox(height: 20),
 
                 // ── Class / Section ─────────────────────────────────────────
-                const FieldLabel(label: 'Class/Section'),
+                FieldLabel(label: 'class_section'.tr()),
                 const SizedBox(height: 8),
                 BlocBuilder<TeacherClassesCubit, TeacherClassesState>(
                   builder: (context, classState) {
@@ -219,7 +220,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                       return Skeletonizer(
                         enabled: true,
                         child: CustomDropdownField(
-                          hintText: 'Choose a class',
+                          hintText: 'choose_class'.tr(),
                           items: const ['Grade 10 - A'],
                           value: 'Grade 10 - A',
                           onChanged: (_) {},
@@ -235,7 +236,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                           .map((e) => e.name)
                           .toList();
                       return CustomDropdownField(
-                        hintText: 'Choose a class',
+                        hintText: 'choose_class'.tr(),
                         items: classNames,
                         value: _selectedClass,
                         onChanged: isLoading
@@ -257,10 +258,10 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                 const SizedBox(height: 20),
 
                 // ── Scheduled Date & Time ────────────────────────────────────
-                const FieldLabel(label: 'Scheduled Date & Time'),
+                FieldLabel(label: 'scheduled_date_time'.tr()),
                 const SizedBox(height: 8),
                 CustomTextField(
-                  hintText: 'Select date & time',
+                  hintText: 'select_date_time'.tr(),
                   controller: _dateTimeController,
                   readOnly: true,
                   onTap: isLoading ? null : _pickDateTime,
@@ -269,24 +270,24 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                 const SizedBox(height: 20),
 
                 // ── Description / Objectives ─────────────────────────────────
-                const FieldLabel(label: 'Description/Objectives'),
+                FieldLabel(label: 'desc_objectives'.tr()),
                 const SizedBox(height: 8),
                 CustomTextField(
                   controller: _descController,
-                  hintText: 'What will students learn?',
+                  hintText: 'learn_hint'.tr(),
                   maxLines: 4,
                 ),
 
                 const SizedBox(height: 20),
 
                 // ── Attachments ──────────────────────────────────────────────
-                const FieldLabel(label: 'Attachments'),
+                FieldLabel(label: 'attachments'.tr()),
                 const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
                       child: DashedUploadButton(
-                        title: 'Upload PDF',
+                        title: 'upload_pdf'.tr(),
                         icon: Icons.picture_as_pdf_outlined,
                         onTap: isLoading ? () {} : _pickPDFs,
                       ),
@@ -294,7 +295,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: DashedUploadButton(
-                        title: 'Add Images',
+                        title: 'add_images'.tr(),
                         icon: Icons.image_outlined,
                         onTap: isLoading ? () {} : _pickImages,
                       ),
@@ -339,7 +340,7 @@ class _AddNewLessonViewBodyState extends State<AddNewLessonViewBody> {
                     onPressed: isLoading ? null : _submitLesson,
                     icon: Icon(Icons.upload, color: AppColors.white, size: 20),
                     label: Text(
-                      'Publish Lesson',
+                      'publish_lesson'.tr(),
                       style: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.bold,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
 
+import 'package:school_system/core/helper/localization_helper.dart';
+
 class HomeworkDetailsDescription extends StatelessWidget {
   final String description;
 
@@ -21,7 +23,7 @@ class HomeworkDetailsDescription extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Description',
+              'description'.tr(),
               style: AppTextStyle.bold16.copyWith(color: AppColors.black),
             ),
           ],

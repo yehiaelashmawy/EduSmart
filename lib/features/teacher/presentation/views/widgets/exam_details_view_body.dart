@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:school_system/core/api/api_service.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 import 'package:school_system/core/helper/url_helper.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/app_text_style.dart';
@@ -15,8 +16,9 @@ import 'package:school_system/features/teacher/presentation/views/widgets/sectio
 
 class ExamDetailsViewBody extends StatelessWidget {
   const ExamDetailsViewBody({super.key, this.examId});
+
   final String? examId;
-  
+
   static final _dummyExam = TeacherExamModel(
     oid: '1',
     name: 'Midterm Examination',
@@ -38,14 +40,16 @@ class ExamDetailsViewBody extends StatelessWidget {
         'name': 'Exam_Manual.pdf',
         'fileSize': 1024 * 500,
         'fileType': 'application/pdf',
-      }
+      },
     ],
   );
 
   Future<TeacherExamModel?> _fetchExamDetails() async {
     if (examId == null || examId!.trim().isEmpty) return null;
+
     final repo = TeacherExamsRepo(ApiService());
     final result = await repo.getExamDetails(examId!);
+
     return result.fold((failure) => null, (exam) => exam);
   }
 
@@ -56,14 +60,16 @@ class ExamDetailsViewBody extends StatelessWidget {
   }) async {
     final fileName = material['name']?.toString() ?? 'exam_file';
     final rawUrl = material['fileUrl']?.toString() ?? '';
+
     if (rawUrl.trim().isEmpty) {
-      CustomSnackBar.showError(context, 'File URL is missing');
+      CustomSnackBar.showError(context, 'file_url_missing'.tr());
       return;
     }
 
     final fileUrl = UrlHelper.getFullImageUrl(rawUrl);
+
     if (fileUrl.trim().isEmpty) {
-      CustomSnackBar.showError(context, 'Invalid file URL');
+      CustomSnackBar.showError(context, 'invalid_file_url'.tr());
       return;
     }
 
@@ -73,14 +79,19 @@ class ExamDetailsViewBody extends StatelessWidget {
 
       await Dio().download(fileUrl, filePath);
       await OpenFilex.open(filePath);
+
       if (!context.mounted) return;
 
       if (showSavedMessage) {
-        CustomSnackBar.showSuccess(context, 'File downloaded successfully');
+        CustomSnackBar.showSuccess(
+          context,
+          'file_downloaded_successfully'.tr(),
+        );
       }
     } catch (_) {
       if (!context.mounted) return;
-      CustomSnackBar.showError(context, 'Failed to open/download file');
+
+      CustomSnackBar.showError(context, 'failed_open_download_file'.tr());
     }
   }
 
@@ -97,10 +108,10 @@ class ExamDetailsViewBody extends StatelessWidget {
         } else if (snapshot.hasError ||
             !snapshot.hasData ||
             snapshot.data == null) {
-          return const Center(
+          return Center(
             child: Text(
-              'Failed to load exam details.',
-              style: TextStyle(color: Colors.red),
+              'failed_load_exam_details'.tr(),
+              style: const TextStyle(color: Colors.red),
             ),
           );
         }
@@ -119,33 +130,44 @@ class ExamDetailsViewBody extends StatelessWidget {
         children: [
           _buildTopCard(exam),
           const SizedBox(height: 24),
-          const SectionHeader(
+
+          SectionHeader(
             icon: Icons.info_outline,
-            title: 'Instructions for Students',
+            title: 'instructions_students'.tr(),
           ),
+
           const SizedBox(height: 16),
+
           _buildInstructionsList(exam.instructions),
+
           const SizedBox(height: 24),
+
           if (exam.materials.isNotEmpty) ...[
-            const SectionHeader(
+            SectionHeader(
               icon: Icons.description_outlined,
-              title: 'Reference Materials',
+              title: 'reference_materials'.tr(),
             ),
+
             const SizedBox(height: 16),
+
             ...exam.materials.map((material) {
               final matMap = material as Map<String, dynamic>;
+
               final isPdf =
                   matMap['fileType']?.toString().contains('pdf') ?? false;
+
               final sizeInKb = ((matMap['fileSize'] as num?) ?? 0) / 1024;
+
               final sizeText = sizeInKb > 1024
                   ? '${(sizeInKb / 1024).toStringAsFixed(1)} MB'
                   : '${sizeInKb.toStringAsFixed(1)} KB';
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _buildReferenceCard(
                   title: matMap['name']?.toString() ?? 'Material',
                   subtitle:
-                      '$sizeText • ${isPdf ? 'PDF Document' : 'Document'}',
+                      '$sizeText • ${isPdf ? 'pdf_document'.tr() : 'document'.tr()}',
                   isPdf: isPdf,
                   onTap: () => _openOrDownloadFile(
                     context: context,
@@ -160,6 +182,7 @@ class ExamDetailsViewBody extends StatelessWidget {
                 ),
               );
             }),
+
             const SizedBox(height: 32),
           ],
         ],
@@ -169,6 +192,7 @@ class ExamDetailsViewBody extends StatelessWidget {
 
   Widget _buildTopCard(TeacherExamModel exam) {
     final parsedDate = DateTime.tryParse(exam.date);
+
     final dateStr = parsedDate != null
         ? DateFormat('MMM dd, yyyy').format(parsedDate)
         : exam.date;
@@ -197,7 +221,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                   color: Color(0xff2563EB),
                 ),
               ),
+
               const SizedBox(width: 16),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +234,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                         color: AppColors.black,
                       ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       '${exam.subjectName} ${exam.className} • ${exam.type}',
                       style: AppTextStyle.regular14.copyWith(
@@ -220,38 +248,50 @@ class ExamDetailsViewBody extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 24),
+
           Row(
             children: [
               Expanded(
                 child: _buildInfoBox(
                   Icons.calendar_today_outlined,
-                  'DATE',
+                  'date_label'.tr(),
                   dateStr,
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
-                child: _buildInfoBox(Icons.access_time, 'TIME', exam.startTime),
+                child: _buildInfoBox(
+                  Icons.access_time,
+                  'time_label'.tr(),
+                  exam.startTime,
+                ),
               ),
             ],
           ),
+
           const SizedBox(height: 12),
+
           Row(
             children: [
               Expanded(
                 child: _buildInfoBox(
                   Icons.hourglass_empty,
-                  'DURATION',
-                  '${exam.duration} Minutes',
+                  'duration_label'.tr(),
+                  '${exam.duration} ${'minutes'.tr()}',
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: _buildInfoBox(
                   Icons.location_on_outlined,
-                  'LOCATION',
-                  exam.room.isNotEmpty ? exam.room : 'N/A',
+                  'location_label'.tr(),
+                  exam.room.isNotEmpty ? exam.room : 'not_available'.tr(),
                 ),
               ),
             ],
@@ -274,7 +314,9 @@ class ExamDetailsViewBody extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 14, color: AppColors.secondaryColor),
+
               const SizedBox(width: 4),
+
               Text(
                 title,
                 style: TextStyle(
@@ -286,7 +328,9 @@ class ExamDetailsViewBody extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 6),
+
           Text(
             value,
             style: AppTextStyle.semiBold14.copyWith(color: AppColors.black),
@@ -303,9 +347,9 @@ class ExamDetailsViewBody extends StatelessWidget {
         .toList();
 
     if (instructions.isEmpty) {
-      return const Text(
-        'No specific instructions provided.',
-        style: TextStyle(color: Colors.grey),
+      return Text(
+        'no_specific_instructions'.tr(),
+        style: const TextStyle(color: Colors.grey),
       );
     }
 
@@ -334,7 +378,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 const SizedBox(width: 12),
+
                 Expanded(
                   child: Text(
                     text.trim(),
@@ -386,7 +432,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                     : const Color(0xff2563EB),
               ),
             ),
+
             const SizedBox(width: 16),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,7 +445,9 @@ class ExamDetailsViewBody extends StatelessWidget {
                       color: AppColors.black,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     subtitle,
                     style: AppTextStyle.regular12.copyWith(
@@ -407,6 +457,7 @@ class ExamDetailsViewBody extends StatelessWidget {
                 ],
               ),
             ),
+
             IconButton(
               icon: Icon(
                 Icons.file_download_outlined,

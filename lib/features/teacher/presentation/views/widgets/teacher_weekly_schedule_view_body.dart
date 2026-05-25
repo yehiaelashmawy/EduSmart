@@ -7,6 +7,7 @@ import 'package:school_system/features/teacher/presentation/manager/teacher_week
 import 'package:school_system/features/student/presentation/views/widgets/weekly_schedule_header.dart';
 import 'package:school_system/features/student/presentation/views/widgets/weekly_days_selector.dart';
 import 'package:school_system/features/student/presentation/views/widgets/daily_curriculum_section.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 class TeacherWeeklyScheduleViewBody extends StatefulWidget {
   const TeacherWeeklyScheduleViewBody({super.key});
@@ -54,19 +55,16 @@ class _TeacherWeeklyScheduleViewBodyState
   }
 
   String _getMonthName(int month) {
+    if (LocalizationHelper.isArabic) {
+      const months = [
+        'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      ];
+      return months[month - 1];
+    }
     const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     ];
     return months[month - 1];
   }
@@ -162,7 +160,9 @@ class _TeacherWeeklyScheduleViewBodyState
                 children: [
                   WeeklyScheduleHeader(
                     dateRangeText: 'Apr 14 - Apr 18,\n2026',
-                    weekText: 'Spring Semester • Week 12',
+                    weekText: LocalizationHelper.isArabic
+                        ? 'الفصل الدراسي الربيعي • الأسبوع 12'
+                        : 'Spring Semester • Week 12',
                     onPreviousWeek: () {},
                     onNextWeek: () {},
                   ),
@@ -235,7 +235,9 @@ class _TeacherWeeklyScheduleViewBodyState
               children: [
                 WeeklyScheduleHeader(
                   dateRangeText: _getHeaderDateRange(),
-                  weekText: 'Spring Semester • Week $_currentWeekNumber',
+                  weekText: LocalizationHelper.isArabic
+                      ? 'الفصل الدراسي الربيعي • الأسبوع $_currentWeekNumber'
+                      : 'Spring Semester • Week $_currentWeekNumber',
                   onPreviousWeek: () => _changeWeek(-7),
                   onNextWeek: () => _changeWeek(7),
                 ),

@@ -10,6 +10,7 @@ import 'package:school_system/features/Auth/presentation/views/scusse_view.dart'
 import 'package:school_system/features/Auth/presentation/views/widgets/custom_back_to_login.dart';
 import 'package:school_system/features/Auth/presentation/views/widgets/password_requirements_box.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:school_system/core/helper/localization_helper.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/features/Auth/presentation/manager/auth_cubit/auth_cubit.dart';
@@ -64,7 +65,12 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is ResetPasswordSuccess) {
-          CustomSnackBar.showSuccess(context, 'Password reset successfully!');
+          CustomSnackBar.showSuccess(
+            context,
+            LocalizationHelper.isArabic
+                ? 'تم إعادة تعيين كلمة المرور بنجاح!'
+                : 'Password reset successfully!',
+          );
           Navigator.pushNamed(context, ScusseView.routeName);
         } else if (state is AuthFailure) {
           CustomSnackBar.showError(context, state.errorMessage);
@@ -95,7 +101,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                       ),
                       child: Column(
                         children: [
-                          const CustomAppBar(title: 'Reset Password'),
+                          CustomAppBar(title: 'reset_password_title'.tr()),
                           Divider(thickness: 0, color: AppColors.lightGrey),
                           const SizedBox(height: 24),
                           Container(
@@ -111,7 +117,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            'Create New Password',
+                            'reset_password_title'.tr(),
                             textAlign: TextAlign.center,
                             style: AppTextStyle.bold24.copyWith(
                               fontSize: SizeConfig.getResponsiveFontSize(
@@ -122,7 +128,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Your new password must be different from previously used passwords to keep your account secure.',
+                            'reset_password_subtitle'.tr(),
                             textAlign: TextAlign.center,
                             style: AppTextStyle.regular16.copyWith(
                               color: AppColors.grey,
@@ -134,9 +140,9 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           ),
                           const SizedBox(height: 32),
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: AlignmentDirectional.centerStart,
                             child: Text(
-                              'New Password',
+                              'new_password'.tr(),
                               style: AppTextStyle.semiBold14.copyWith(
                                 fontSize: SizeConfig.getResponsiveFontSize(
                                   context,
@@ -153,9 +159,9 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           ),
                           const SizedBox(height: 24),
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: AlignmentDirectional.centerStart,
                             child: Text(
-                              'Confirm New Password',
+                              'confirm_password'.tr(),
                               style: AppTextStyle.semiBold14.copyWith(
                                 fontSize: SizeConfig.getResponsiveFontSize(
                                   context,
@@ -174,29 +180,39 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           PasswordRequirementsBox(
                             requirements: [
                               PasswordRequirementModel(
-                                text: 'At least 8 characters long',
+                                text: 'password_req_1'.tr(),
                                 isValid: _hasMinLength,
                               ),
                               PasswordRequirementModel(
-                                text: 'Must include a symbol or number',
+                                text: 'password_req_3'.tr(),
                                 isValid: _hasSymbolOrNumber,
                               ),
                             ],
                           ),
                           const SizedBox(height: 32),
                           CustomButton(
-                            text: 'Reset Password',
+                            text: 'reset_password_title'.tr(),
                             onPressed: () {
                               final newPassword = _newPasswordController.text;
                               final confirmPassword = _confirmPasswordController.text;
 
                               if (newPassword.isEmpty || confirmPassword.isEmpty) {
-                                CustomSnackBar.showError(context, 'Please fill all fields');
+                                CustomSnackBar.showError(
+                                  context,
+                                  LocalizationHelper.isArabic
+                                      ? 'الرجاء ملء جميع الحقول'
+                                      : 'Please fill all fields',
+                                );
                                 return;
                               }
 
                               if (newPassword != confirmPassword) {
-                                CustomSnackBar.showError(context, 'Passwords do not match');
+                                CustomSnackBar.showError(
+                                  context,
+                                  LocalizationHelper.isArabic
+                                      ? 'كلمات المرور غير متطابقة'
+                                      : 'Passwords do not match',
+                                );
                                 return;
                               }
 
@@ -213,7 +229,9 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Remember your password? ',
+                                LocalizationHelper.isArabic
+                                    ? 'هل تتذكر كلمة المرور؟ '
+                                    : 'Remember your password? ',
                                 style: AppTextStyle.regular14.copyWith(
                                   color: AppColors.grey,
                                   fontSize: SizeConfig.getResponsiveFontSize(
