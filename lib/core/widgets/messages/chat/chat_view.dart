@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 import 'package:school_system/core/widgets/messages/message_model.dart';
+import 'package:school_system/core/widgets/messages/manager/messages_cubit.dart';
 import 'chat_view_body.dart';
 import 'widgets/chat_app_bar_title.dart';
 
@@ -15,6 +16,12 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     final message = conversation is MessageModel
         ? conversation as MessageModel
+        : (conversation is Map<String, dynamic>
+            ? (conversation as Map<String, dynamic>)['conversation'] as MessageModel?
+            : null);
+
+    final cubit = conversation is Map<String, dynamic>
+        ? (conversation as Map<String, dynamic>)['cubit'] as MessagesCubit?
         : null;
 
     return Scaffold(
@@ -53,7 +60,7 @@ class ChatView extends StatelessWidget {
           ),
         ),
       ),
-      body: SafeArea(child: ChatViewBody(conversation: message)),
+      body: SafeArea(child: ChatViewBody(conversation: message, messagesCubit: cubit)),
     );
   }
 }

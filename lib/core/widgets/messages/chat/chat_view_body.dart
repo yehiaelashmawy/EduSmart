@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 import 'package:school_system/core/widgets/messages/chat/data/chat_repo.dart';
 import 'package:school_system/core/widgets/messages/message_model.dart';
+import 'package:school_system/core/widgets/messages/manager/messages_cubit.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'models/chat_message_model.dart';
 import 'widgets/chat_bubble.dart';
@@ -12,8 +14,9 @@ import 'package:file_picker/file_picker.dart';
 
 class ChatViewBody extends StatefulWidget {
   final MessageModel? conversation;
+  final MessagesCubit? messagesCubit;
 
-  const ChatViewBody({super.key, this.conversation});
+  const ChatViewBody({super.key, this.conversation, this.messagesCubit});
 
   @override
   State<ChatViewBody> createState() => _ChatViewBodyState();
@@ -24,6 +27,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   final ChatRepo _chatRepo = ChatRepo();
   bool _isLoading = true;
   String? _errorMessage;
+  Timer? _pollingTimer;
 
   final List<ChatMessageModel> _messages = [];
 
@@ -31,24 +35,36 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   void initState() {
     super.initState();
     _loadThread();
+    _startPolling();
   }
 
-  Future<void> _loadThread() async {
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _loadThread(isSilent: true);
+    });
+  }
+
+  Future<void> _loadThread({bool isSilent = false}) async {
     final currentUserOid = (SharedPrefsHelper.userId ?? '').trim();
     final otherUserOid = (widget.conversation?.senderOid ?? '').trim();
 
     if (currentUserOid.isEmpty || otherUserOid.isEmpty) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Unable to open chat. Missing user data.';
-      });
+      if (!isSilent) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Unable to open chat. Missing user data.';
+        });
+      }
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+    if (!isSilent) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+    }
 
     try {
       final thread = await _chatRepo.fetchThread(
@@ -56,38 +72,63 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         otherUserOid: otherUserOid,
       );
 
+      final mappedMessages = thread.map((message) {
+        final dt = message.sentAt;
+        final hour = dt?.hour ?? 0;
+        final minute = dt?.minute ?? 0;
+        final displayHour = hour == 0
+            ? 12
+            : hour > 12
+            ? hour - 12
+            : hour;
+        final suffix = hour >= 12 ? 'PM' : 'AM';
+        final formattedTime =
+            '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $suffix';
+
+        return ChatMessageModel(
+          oid: message.oid,
+          text: message.content,
+          time: formattedTime,
+          isSender: message.senderOid == currentUserOid,
+        );
+      }).toList();
+
+      if (!mounted) return;
+
+      final wasLength = _messages.length;
+
       setState(() {
         _messages
           ..clear()
-          ..addAll(
-            thread.map((message) {
-              final dt = message.sentAt;
-              final hour = dt?.hour ?? 0;
-              final minute = dt?.minute ?? 0;
-              final displayHour = hour == 0
-                  ? 12
-                  : hour > 12
-                  ? hour - 12
-                  : hour;
-              final suffix = hour >= 12 ? 'PM' : 'AM';
-              final formattedTime =
-                  '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $suffix';
+          ..addAll(mappedMessages);
+        _isLoading = false;
+      });
 
-              return ChatMessageModel(
-                oid: message.oid,
-                text: message.content,
-                time: formattedTime,
-                isSender: message.senderOid == currentUserOid,
-              );
-            }),
-          );
-        _isLoading = false;
-      });
+      if (_messages.isNotEmpty && widget.messagesCubit != null && widget.conversation != null) {
+        widget.messagesCubit!.markConversationAsRead(
+          widget.conversation!.senderOid,
+          lastMessagePreview: _messages.last.text,
+        );
+      }
+
+      if (_messages.length > wasLength) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
-      });
+      if (!isSilent || _messages.isEmpty) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        });
+      }
     }
   }
 
@@ -151,7 +192,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             : 'Message',
         content: content,
       );
-      await _loadThread();
+      await _loadThread(isSilent: true);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -164,6 +205,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
   @override
   void dispose() {
+    _pollingTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }

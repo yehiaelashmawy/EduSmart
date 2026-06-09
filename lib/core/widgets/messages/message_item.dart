@@ -59,7 +59,13 @@ class MessageItem extends StatelessWidget {
         await Navigator.of(
           context,
           rootNavigator: true,
-        ).pushNamed(ChatView.routeName, arguments: message);
+        ).pushNamed(
+          ChatView.routeName,
+          arguments: {
+            'conversation': message,
+            'cubit': context.read<MessagesCubit>(),
+          },
+        );
 
         if (!context.mounted) return;
         context.read<MessagesCubit>().fetchMessagesConversations();

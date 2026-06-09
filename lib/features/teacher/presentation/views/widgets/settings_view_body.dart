@@ -17,7 +17,6 @@ class SettingsViewBody extends StatefulWidget {
 class _SettingsViewBodyState extends State<SettingsViewBody> {
   bool _pushNotifications = true;
   bool _emailAlerts = false;
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Locale>(
@@ -49,7 +48,6 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                   });
                 },
               ),
-
               const SizedBox(height: 32),
               _buildSectionHeader('preferences_header'.tr()),
               SettingsSwitchTile(

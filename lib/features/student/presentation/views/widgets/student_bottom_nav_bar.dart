@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/utils/app_colors.dart';
 import 'package:school_system/core/helper/localization_helper.dart';
+import 'package:school_system/core/widgets/messages/manager/messages_cubit.dart';
+import 'package:school_system/core/widgets/messages/manager/messages_state.dart';
 
 class StudentBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -38,13 +41,33 @@ class StudentBottomNavBar extends StatelessWidget {
         label: 'nav_subjects'.tr(),
       ),
       BottomNavigationBarItem(
-        icon: const Padding(
-          padding: EdgeInsets.only(bottom: 4),
-          child: Icon(Icons.chat_bubble_outline),
+        icon: Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: BlocBuilder<MessagesCubit, MessagesState>(
+            builder: (context, state) {
+              final bool hasUnread = state is MessagesSuccess &&
+                  state.messages.any((m) => m.unreadCount > 0);
+              return Badge(
+                isLabelVisible: hasUnread,
+                backgroundColor: Colors.redAccent,
+                child: const Icon(Icons.chat_bubble_outline),
+              );
+            },
+          ),
         ),
-        activeIcon: const Padding(
-          padding: EdgeInsets.only(bottom: 4),
-          child: Icon(Icons.chat_bubble),
+        activeIcon: Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: BlocBuilder<MessagesCubit, MessagesState>(
+            builder: (context, state) {
+              final bool hasUnread = state is MessagesSuccess &&
+                  state.messages.any((m) => m.unreadCount > 0);
+              return Badge(
+                isLabelVisible: hasUnread,
+                backgroundColor: Colors.redAccent,
+                child: const Icon(Icons.chat_bubble),
+              );
+            },
+          ),
         ),
         label: 'nav_messages'.tr(),
       ),

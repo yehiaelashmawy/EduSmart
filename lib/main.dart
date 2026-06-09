@@ -8,6 +8,9 @@ import 'package:school_system/core/helper/on_generate_route.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
 import 'package:school_system/features/splash/presentation/views/splash_view.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_system/core/widgets/messages/manager/messages_cubit.dart';
+import 'package:school_system/core/widgets/messages/data/messages_repo.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 
 class _DevHttpOverrides extends HttpOverrides {
@@ -38,34 +41,35 @@ class SchoolSystemApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: ThemeManager.themeNotifier,
-      builder: (_, themeMode, _) {
-        return ValueListenableBuilder<Locale>(
-          valueListenable: LocalizationHelper.localeNotifier,
-          builder: (_, locale, _) {
-            return MaterialApp(
-              key: const ValueKey('school_system_app'),
-              themeMode: themeMode,
-              theme: ThemeData.light(),
-              darkTheme: ThemeData.dark(),
-              locale: locale,
-              supportedLocales: const [
-                Locale('en'),
-                Locale('ar'),
-              ],
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              onGenerateRoute: onGenerateRoute,
-              initialRoute: SplashView.routeName,
-              debugShowCheckedModeBanner: false,
-            );
-          },
-        );
-      },
+    return BlocProvider(
+      create: (context) =>
+          MessagesCubit(MessagesRepo())..fetchMessagesConversations(),
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: ThemeManager.themeNotifier,
+        builder: (_, themeMode, _) {
+          return ValueListenableBuilder<Locale>(
+            valueListenable: LocalizationHelper.localeNotifier,
+            builder: (_, locale, _) {
+              return MaterialApp(
+                key: const ValueKey('school_system_app'),
+                themeMode: themeMode,
+                theme: ThemeData.light(),
+                darkTheme: ThemeData.dark(),
+                locale: locale,
+                supportedLocales: const [Locale('en'), Locale('ar')],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                onGenerateRoute: onGenerateRoute,
+                initialRoute: SplashView.routeName,
+                debugShowCheckedModeBanner: false,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
