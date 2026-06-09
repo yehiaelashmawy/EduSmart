@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
+import 'package:school_system/core/helper/in_app_notification_helper.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 import 'package:school_system/core/widgets/messages/chat/data/chat_repo.dart';
 import 'package:school_system/core/widgets/messages/message_model.dart';
@@ -34,6 +35,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   @override
   void initState() {
     super.initState();
+    InAppNotificationHelper.activeChatUserOid = widget.conversation?.senderOid;
     _loadThread();
     _startPolling();
   }
@@ -205,6 +207,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
   @override
   void dispose() {
+    if (InAppNotificationHelper.activeChatUserOid == widget.conversation?.senderOid) {
+      InAppNotificationHelper.activeChatUserOid = null;
+    }
     _pollingTimer?.cancel();
     _scrollController.dispose();
     super.dispose();

@@ -11,6 +11,9 @@ import 'package:school_system/features/splash/presentation/views/splash_view.dar
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/widgets/messages/manager/messages_cubit.dart';
 import 'package:school_system/core/widgets/messages/data/messages_repo.dart';
+import 'package:school_system/core/widgets/notifications/manager/notifications_cubit.dart';
+import 'package:school_system/core/widgets/notifications/data/notifications_repo.dart';
+import 'package:school_system/core/helper/navigator_key.dart';
 import 'package:school_system/core/utils/theme_manager.dart';
 
 class _DevHttpOverrides extends HttpOverrides {
@@ -41,9 +44,17 @@ class SchoolSystemApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          MessagesCubit(MessagesRepo())..fetchMessagesConversations(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MessagesCubit>(
+          create: (context) =>
+              MessagesCubit(MessagesRepo())..fetchMessagesConversations(),
+        ),
+        BlocProvider<NotificationsCubit>(
+          create: (context) =>
+              NotificationsCubit(NotificationsRepo())..fetchNotifications(),
+        ),
+      ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeManager.themeNotifier,
         builder: (_, themeMode, _) {
@@ -51,6 +62,7 @@ class SchoolSystemApp extends StatelessWidget {
             valueListenable: LocalizationHelper.localeNotifier,
             builder: (_, locale, _) {
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 key: const ValueKey('school_system_app'),
                 themeMode: themeMode,
                 theme: ThemeData.light(),

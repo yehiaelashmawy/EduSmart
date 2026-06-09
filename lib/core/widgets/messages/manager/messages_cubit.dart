@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_system/core/helper/shared_prefs_helper.dart';
+import 'package:school_system/core/helper/in_app_notification_helper.dart';
 import 'package:school_system/core/widgets/messages/data/messages_repo.dart';
 import 'package:school_system/core/widgets/messages/message_model.dart';
 import 'messages_state.dart';
@@ -35,6 +36,13 @@ class MessagesCubit extends Cubit<MessagesState> {
         }
         return message;
       }).toList();
+
+      // Check for new messages if polling silently
+      if (state is MessagesSuccess && isSilent) {
+        final previousMessages = (state as MessagesSuccess).messages;
+        _checkForNewMessages(previousMessages, mergedMessages);
+      }
+
       emit(MessagesSuccess(messages: mergedMessages));
     } catch (e) {
       if (!isSilent || state is! MessagesSuccess) {
@@ -43,6 +51,40 @@ class MessagesCubit extends Cubit<MessagesState> {
           errMessage = errMessage.replaceFirst('Exception: ', '');
         }
         emit(MessagesFailure(errMessage: errMessage));
+      }
+    }
+  }
+
+  void _checkForNewMessages(
+      List<MessageModel> oldList, List<MessageModel> newList) {
+    for (final newMsg in newList) {
+      if (newMsg.unreadCount <= 0) continue;
+
+      // Find if this conversation was in the old list
+      final oldMsg = oldList.firstWhere(
+        (m) => m.senderOid == newMsg.senderOid,
+        orElse: () => const MessageModel(name: '', role: '', preview: '', time: ''),
+      );
+
+      bool isNewMessage = false;
+      if (oldMsg.name.isEmpty) {
+        isNewMessage = true;
+      } else if (newMsg.unreadCount > oldMsg.unreadCount) {
+        isNewMessage = true;
+      } else if (newMsg.preview != oldMsg.preview && newMsg.unreadCount > 0) {
+        isNewMessage = true;
+      }
+
+      if (isNewMessage) {
+        // Prevent showing notification if we are currently chatting with this user
+        if (InAppNotificationHelper.activeChatUserOid != newMsg.senderOid) {
+          InAppNotificationHelper.showNotification(
+            title: newMsg.name,
+            body: newMsg.preview,
+            isMessage: true,
+            payload: newMsg,
+          );
+        }
       }
     }
   }
