@@ -10,7 +10,8 @@ class StudentSubjectsViewBody extends StatefulWidget {
   const StudentSubjectsViewBody({super.key});
 
   @override
-  State<StudentSubjectsViewBody> createState() => _StudentSubjectsViewBodyState();
+  State<StudentSubjectsViewBody> createState() =>
+      _StudentSubjectsViewBodyState();
 }
 
 class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
@@ -26,7 +27,10 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
 
   Future<List<StudentSubjectModel>> _loadSubjects() async {
     final result = await _repo.getStudentSubjects();
-    return result.fold((error) => throw error.errorMessage, (subjects) => subjects);
+    return result.fold(
+      (error) => throw error.errorMessage,
+      (subjects) => subjects,
+    );
   }
 
   void _reloadSubjects() {
@@ -74,8 +78,12 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
       title: Text(
         filter,
         style: TextStyle(
-          color: _selectedFilter == filter ? AppColors.primaryColor : AppColors.darkBlue,
-          fontWeight: _selectedFilter == filter ? FontWeight.bold : FontWeight.w500,
+          color: _selectedFilter == filter
+              ? AppColors.primaryColor
+              : AppColors.darkBlue,
+          fontWeight: _selectedFilter == filter
+              ? FontWeight.bold
+              : FontWeight.w500,
         ),
       ),
       trailing: _selectedFilter == filter
@@ -109,13 +117,16 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
                     .where((e) => e.trim().isNotEmpty),
               }.toList();
 
-              if (_selectedFilter != 'All' && !filters.contains(_selectedFilter)) {
+              if (_selectedFilter != 'All' &&
+                  !filters.contains(_selectedFilter)) {
                 _selectedFilter = 'All';
               }
 
               final filteredSubjects = _selectedFilter == 'All'
                   ? subjects
-                  : subjects.where((s) => s.trackName == _selectedFilter).toList();
+                  : subjects
+                        .where((s) => s.trackName == _selectedFilter)
+                        .toList();
 
               return Column(
                 children: [
@@ -125,8 +136,11 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
                   Expanded(
                     child: Builder(
                       builder: (context) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
                         if (snapshot.hasError) {
                           return Center(
@@ -163,7 +177,9 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
                           padding: const EdgeInsets.all(24.0),
                           itemCount: filteredSubjects.length,
                           itemBuilder: (context, index) {
-                            return SubjectItemCard(subject: filteredSubjects[index]);
+                            return SubjectItemCard(
+                              subject: filteredSubjects[index],
+                            );
                           },
                         );
                       },
@@ -178,4 +194,3 @@ class _StudentSubjectsViewBodyState extends State<StudentSubjectsViewBody> {
     );
   }
 }
-

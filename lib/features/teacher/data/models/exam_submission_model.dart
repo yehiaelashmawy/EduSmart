@@ -85,7 +85,8 @@ class ExamSubmissionsResponse {
       graded: data['graded'] as int? ?? 0,
       pending: data['pending'] as int? ?? 0,
       submissions: (data['submissions'] as List? ?? [])
-          .map((e) => ExamSubmissionModel.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => ExamSubmissionModel.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
     );
   }

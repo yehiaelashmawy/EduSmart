@@ -39,7 +39,10 @@ class _ExamsListBodyState extends State<ExamsListBody> {
 
   String _formatDate(String rawDate) {
     final parsed = DateTime.tryParse(rawDate);
-    if (parsed == null) return LocalizationHelper.isArabic ? 'تاريخ غير متاح' : 'Date unavailable';
+    if (parsed == null)
+      return LocalizationHelper.isArabic
+          ? 'تاريخ غير متاح'
+          : 'Date unavailable';
     const months = [
       'Jan',
       'Feb',
@@ -104,8 +107,12 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                 ? Center(
                     child: Text(
                       _isUpcomingExams
-                          ? (LocalizationHelper.isArabic ? 'لا توجد اختبارات قادمة.' : 'No upcoming exams.')
-                          : (LocalizationHelper.isArabic ? 'لا توجد اختبارات سابقة.' : 'No past exams.'),
+                          ? (LocalizationHelper.isArabic
+                                ? 'لا توجد اختبارات قادمة.'
+                                : 'No upcoming exams.')
+                          : (LocalizationHelper.isArabic
+                                ? 'لا توجد اختبارات سابقة.'
+                                : 'No past exams.'),
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
@@ -131,22 +138,32 @@ class _ExamsListBodyState extends State<ExamsListBody> {
                         examId: exam.oid,
                         title: exam.name.isNotEmpty
                             ? exam.name
-                            : (LocalizationHelper.isArabic ? 'اختبار بدون عنوان' : 'Untitled Exam'),
+                            : (LocalizationHelper.isArabic
+                                  ? 'اختبار بدون عنوان'
+                                  : 'Untitled Exam'),
                         date: _formatDate(exam.date),
                         time: _formatTime(exam.date, exam.startTime),
                         subject: exam.subjectName.isNotEmpty
                             ? '${exam.subjectName} - ${exam.className}'
-                            : (LocalizationHelper.isArabic ? 'اختبار دراسي' : 'Class Exam'),
+                            : (LocalizationHelper.isArabic
+                                  ? 'اختبار دراسي'
+                                  : 'Class Exam'),
                         grade: exam.maxScore > 0
                             ? (LocalizationHelper.isArabic
-                                ? 'أقصى درجة: ${exam.maxScore}'
-                                : 'Max Score: ${exam.maxScore}')
-                            : (LocalizationHelper.isArabic ? 'درجة معلقة' : 'Pending score'),
+                                  ? 'أقصى درجة: ${exam.maxScore}'
+                                  : 'Max Score: ${exam.maxScore}')
+                            : (LocalizationHelper.isArabic
+                                  ? 'درجة معلقة'
+                                  : 'Pending score'),
                         status: exam.status.isNotEmpty
                             ? exam.status
                             : (_isUpcomingExams
-                                ? (LocalizationHelper.isArabic ? 'مؤكد' : 'CONFIRMED')
-                                : (LocalizationHelper.isArabic ? 'مكتمل' : 'COMPLETED')),
+                                  ? (LocalizationHelper.isArabic
+                                        ? 'مؤكد'
+                                        : 'CONFIRMED')
+                                  : (LocalizationHelper.isArabic
+                                        ? 'مكتمل'
+                                        : 'COMPLETED')),
                         statusColor: _isUpcomingExams
                             ? AppColors.secondaryColor
                             : AppColors.grey,

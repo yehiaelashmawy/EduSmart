@@ -35,15 +35,18 @@ class StudentMySubjectDetail {
       examsCount: (json['examsCount'] as num?)?.toInt() ?? 0,
       averageGrade: (json['averageGrade'] as num?)?.toDouble(),
       lessons: (json['lessons'] as List?)
-              ?.map((e) => StudentMyLesson.fromJson(e as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((e) => StudentMyLesson.fromJson(Map<String, dynamic>.from(e)))
               .toList() ??
           [],
       homeworks: (json['homeworks'] as List?)
-              ?.map((e) => StudentMyHomework.fromJson(e as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((e) => StudentMyHomework.fromJson(Map<String, dynamic>.from(e)))
               .toList() ??
           [],
       exams: (json['exams'] as List?)
-              ?.map((e) => StudentMyExam.fromJson(e as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((e) => StudentMyExam.fromJson(Map<String, dynamic>.from(e)))
               .toList() ??
           [],
     );

@@ -31,9 +31,10 @@ class SessionTrackingModel {
       absentCount: json['absentCount'] as int? ?? 0,
       lateCount: json['lateCount'] as int? ?? 0,
       notRecorded: json['notRecorded'] as int? ?? 0,
-      students: (json['students'] as List<dynamic>?)
-              ?.map((e) =>
-                  SessionTrackingStudentModel.fromJson(e as Map<String, dynamic>))
+      students: (json['students'] as List?)
+              ?.whereType<Map>()
+              .map((e) =>
+                  SessionTrackingStudentModel.fromJson(Map<String, dynamic>.from(e)))
               .toList() ??
           [],
     );

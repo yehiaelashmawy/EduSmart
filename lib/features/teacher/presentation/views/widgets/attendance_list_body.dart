@@ -103,10 +103,11 @@ class AttendanceListBody extends StatelessWidget {
               : 'Present: ${summary.presentCount} • Absent: ${summary.absentCount} • Late: ${summary.lateCount}',
           studentsCount: studentCount,
           onViewReports: () {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).pushNamed(AttendanceReportView.routeName);
+            if (teacherClass == null) return;
+            Navigator.of(context, rootNavigator: true).pushNamed(
+              AttendanceReportView.routeName,
+              arguments: teacherClass,
+            );
           },
           onTakeAttendance: () {
             if (teacherClass == null) return;
@@ -119,16 +120,18 @@ class AttendanceListBody extends StatelessWidget {
                   ),
                 )
                 .then((value) {
-              if (!context.mounted) return;
-              if (value == true && onRefresh != null) {
-                onRefresh!();
-              }
-            });
+                  if (!context.mounted) return;
+                  if (value == true && onRefresh != null) {
+                    onRefresh!();
+                  }
+                });
           },
         ),
         const SizedBox(height: 24),
         Text(
-          LocalizationHelper.isArabic ? 'سجل الحضور الأخير' : 'Recent attendance',
+          LocalizationHelper.isArabic
+              ? 'سجل الحضور الأخير'
+              : 'Recent attendance',
           style: AppTextStyle.bold16.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 12),
@@ -137,7 +140,9 @@ class AttendanceListBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: Text(
-                LocalizationHelper.isArabic ? 'لا توجد سجلات حضور بعد لهذا الفصل.' : 'No attendance records yet for this class.',
+                LocalizationHelper.isArabic
+                    ? 'لا توجد سجلات حضور بعد لهذا الفصل.'
+                    : 'No attendance records yet for this class.',
                 style: AppTextStyle.regular14.copyWith(color: AppColors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -199,7 +204,11 @@ class AttendanceListBody extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    r.status.isNotEmpty ? r.status : (LocalizationHelper.isArabic ? 'بدون تسجيل' : 'WITHOUT MARK'),
+                    r.status.isNotEmpty
+                        ? r.status
+                        : (LocalizationHelper.isArabic
+                              ? 'بدون تسجيل'
+                              : 'WITHOUT MARK'),
                     style: AppTextStyle.bold12.copyWith(
                       color: _statusTextColor(r.status),
                     ),

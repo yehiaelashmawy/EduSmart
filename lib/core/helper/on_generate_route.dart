@@ -335,10 +335,13 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case AttendanceReportView.routeName:
       {
-        final args = settings.arguments as TeacherClassModel;
-        return MaterialPageRoute(
-          builder: (context) => AttendanceReportView(teacherClass: args),
-        );
+        final args = settings.arguments as TeacherClassModel?;
+        if (args != null) {
+          return MaterialPageRoute(
+            builder: (context) => AttendanceReportView(teacherClass: args),
+          );
+        }
+        return MaterialPageRoute(builder: (context) => const SplashView());
       }
 
     case PersonalInformationView.routeName:

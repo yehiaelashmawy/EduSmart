@@ -55,7 +55,9 @@ class LessonsListBody extends StatelessWidget {
             child: lessons.isEmpty
                 ? Center(
                     child: Text(
-                      LocalizationHelper.isArabic ? 'لا توجد دروس لهذا الفصل.' : 'No lessons found for this class.',
+                      LocalizationHelper.isArabic
+                          ? 'لا توجد دروس لهذا الفصل.'
+                          : 'No lessons found for this class.',
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
@@ -72,7 +74,9 @@ class LessonsListBody extends StatelessWidget {
                       return LessonListItem(
                         title: lesson.title.isNotEmpty
                             ? lesson.title
-                            : (LocalizationHelper.isArabic ? 'درس بدون عنوان' : 'Untitled Lesson'),
+                            : (LocalizationHelper.isArabic
+                                  ? 'درس بدون عنوان'
+                                  : 'Untitled Lesson'),
                         dateInfo: _formatDateInfo(lesson.date),
                         image: 'assets/images/lesson1.png',
                         lessonId: lesson.oid,

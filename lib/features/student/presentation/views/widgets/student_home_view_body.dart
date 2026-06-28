@@ -17,9 +17,9 @@ class StudentHomeViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StudentWeeklyScheduleCubit(
-        StudentWeeklyScheduleRepo(ApiService()),
-      )..fetchWeeklySchedule(),
+      create: (context) =>
+          StudentWeeklyScheduleCubit(StudentWeeklyScheduleRepo(ApiService()))
+            ..fetchWeeklySchedule(),
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),

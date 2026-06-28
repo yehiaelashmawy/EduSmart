@@ -54,9 +54,12 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
           if (mounted) {
             setState(() {
               _realSubmissionCounts[hw.oid] = list.length;
-              
+
               if (list.isNotEmpty && list.any((s) => s.totalMarks != null)) {
-                _totalMarks[hw.oid] = list.firstWhere((s) => s.totalMarks != null).totalMarks!.toInt();
+                _totalMarks[hw.oid] = list
+                    .firstWhere((s) => s.totalMarks != null)
+                    .totalMarks!
+                    .toInt();
               }
 
               final graded = list.where((s) => s.isGraded).toList();
@@ -73,7 +76,9 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
 
   String _formatDate(String rawDate) {
     if (rawDate.trim().isEmpty) {
-      return LocalizationHelper.isArabic ? 'التاريخ غير متاح' : 'Date unavailable';
+      return LocalizationHelper.isArabic
+          ? 'التاريخ غير متاح'
+          : 'Date unavailable';
     }
     final parsed = DateTime.tryParse(rawDate);
     if (parsed == null) return rawDate;
@@ -149,7 +154,10 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
     }
   }
 
-  Future<void> _openReview(BuildContext context, TeacherHomeworkModel homework) async {
+  Future<void> _openReview(
+    BuildContext context,
+    TeacherHomeworkModel homework,
+  ) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -179,7 +187,9 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
             child: TextFormField(
               style: AppTextStyle.regular14.copyWith(color: AppColors.darkBlue),
               decoration: InputDecoration(
-                hintText: LocalizationHelper.isArabic ? 'بحث عن الواجبات...' : 'Search homework tasks...',
+                hintText: LocalizationHelper.isArabic
+                    ? 'بحث عن الواجبات...'
+                    : 'Search homework tasks...',
                 hintStyle: AppTextStyle.regular14.copyWith(
                   color: AppColors.grey.withValues(alpha: 0.7),
                 ),
@@ -216,7 +226,9 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
             child: _homeworks.isEmpty
                 ? Center(
                     child: Text(
-                      LocalizationHelper.isArabic ? 'لا توجد واجبات لهذا الفصل.' : 'No homework found for this class.',
+                      LocalizationHelper.isArabic
+                          ? 'لا توجد واجبات لهذا الفصل.'
+                          : 'No homework found for this class.',
                       style: AppTextStyle.semiBold16.copyWith(
                         color: AppColors.grey,
                       ),
@@ -229,27 +241,43 @@ class _HomeworkListBodyState extends State<HomeworkListBody> {
                     itemBuilder: (context, index) {
                       final homework = _homeworks[index];
                       final ui = _mapStatus(homework.status, homework.dueDate);
-                      final realCount = _realSubmissionCounts[homework.oid] ?? homework.submittedCount ?? 0;
+                      final realCount =
+                          _realSubmissionCounts[homework.oid] ??
+                          homework.submittedCount ??
+                          0;
                       final avg = _avgGrades[homework.oid];
-                      
+
                       return HomeworkItemCard(
                         title: homework.title.isNotEmpty
                             ? homework.title
-                            : (LocalizationHelper.isArabic ? 'واجب بدون عنوان' : 'Untitled Homework'),
+                            : (LocalizationHelper.isArabic
+                                  ? 'واجب بدون عنوان'
+                                  : 'Untitled Homework'),
                         subtitle: 'Class ${homework.status}',
                         statusText: ui.label,
                         badgeColor: ui.badgeColor,
                         badgeTextColor: ui.badgeTextColor,
                         dueDate: _formatDate(homework.dueDate),
-                        submissions: '$realCount/${homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)}',
+                        submissions:
+                            '$realCount/${homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)}',
                         avgGrade: avg?.toStringAsFixed(0),
-                        progress: (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 0)) > 0
-                            ? realCount / (homework.totalStudents ?? (widget.classStudents.isNotEmpty ? widget.classStudents.length : 1))
+                        progress:
+                            (homework.totalStudents ??
+                                    (widget.classStudents.isNotEmpty
+                                        ? widget.classStudents.length
+                                        : 0)) >
+                                0
+                            ? realCount /
+                                  (homework.totalStudents ??
+                                      (widget.classStudents.isNotEmpty
+                                          ? widget.classStudents.length
+                                          : 1))
                             : 0.0,
                         isOverdue: ui.isOverdue,
                         onDetailsTap: () => _openDetails(context, homework),
                         onReviewTap: () => _openReview(context, homework),
-                        totalMarks: _totalMarks[homework.oid] ?? homework.totalMarks,
+                        totalMarks:
+                            _totalMarks[homework.oid] ?? homework.totalMarks,
                       );
                     },
                   ),

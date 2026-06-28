@@ -72,7 +72,9 @@ class StudentsListBody extends StatelessWidget {
                   )
                 : Center(
                     child: Text(
-                      LocalizationHelper.isArabic ? 'لا يوجد طلاب لهذا الفصل.' : 'No students found for this class.',
+                      LocalizationHelper.isArabic
+                          ? 'لا يوجد طلاب لهذا الفصل.'
+                          : 'No students found for this class.',
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,

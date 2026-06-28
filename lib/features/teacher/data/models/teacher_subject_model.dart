@@ -11,9 +11,9 @@ class SubjectTeacherModel {
 
   factory SubjectTeacherModel.fromJson(Map<String, dynamic> json) {
     return SubjectTeacherModel(
-      oid: json['oid'] as String,
-      fullName: json['fullName'] as String,
-      email: json['email'] as String,
+      oid: (json['oid'] ?? '').toString(),
+      fullName: (json['fullName'] ?? '').toString(),
+      email: (json['email'] ?? '').toString(),
     );
   }
 }
@@ -37,15 +37,16 @@ class TeacherSubjectModel {
 
   factory TeacherSubjectModel.fromJson(Map<String, dynamic> json) {
     return TeacherSubjectModel(
-      oid: json['oid'] as String,
-      name: json['name'] as String,
-      code: json['code'] as String,
-      teachersCount: json['teachersCount'] as int,
-      activeClassesCount: json['activeClassesCount'] as int,
+      oid: (json['oid'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      code: (json['code'] ?? '').toString(),
+      teachersCount: (json['teachersCount'] as num?)?.toInt() ?? 0,
+      activeClassesCount: (json['activeClassesCount'] as num?)?.toInt() ?? 0,
       teachers:
           (json['teachers'] as List?)
-              ?.map(
-                (e) => SubjectTeacherModel.fromJson(e as Map<String, dynamic>),
+              ?.whereType<Map>()
+              .map(
+                (e) => SubjectTeacherModel.fromJson(Map<String, dynamic>.from(e)),
               )
               .toList() ??
           [],

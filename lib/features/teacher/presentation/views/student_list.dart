@@ -148,7 +148,9 @@ class _StudentListState extends State<StudentList>
 
   String get _attendanceStatusText {
     final pct = _classAttendance.attendancePercentage.toStringAsFixed(1);
-    return LocalizationHelper.isArabic ? 'متوسط الحضور: $pct%' : 'AVG ATTENDANCE: $pct%';
+    return LocalizationHelper.isArabic
+        ? 'متوسط الحضور: $pct%'
+        : 'AVG ATTENDANCE: $pct%';
   }
 
   /// Merges [details.attendance.recentRecords] from every student (same API payload).

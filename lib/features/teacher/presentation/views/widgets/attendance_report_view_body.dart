@@ -30,9 +30,18 @@ class _AttendanceReportViewBodyState extends State<AttendanceReportViewBody> {
           return Center(child: Text(state.error.errorMessage));
         } else if (state is AttendanceReportSuccess) {
           final stats = state.stats;
-          final totalPresent = stats.studentSummaries.fold(0, (sum, s) => sum + s.presentCount);
-          final totalAbsent = stats.studentSummaries.fold(0, (sum, s) => sum + s.absentCount);
-          final totalLate = stats.studentSummaries.fold(0, (sum, s) => sum + s.lateCount);
+          final totalPresent = stats.studentSummaries.fold(
+            0,
+            (sum, s) => sum + s.presentCount,
+          );
+          final totalAbsent = stats.studentSummaries.fold(
+            0,
+            (sum, s) => sum + s.absentCount,
+          );
+          final totalLate = stats.studentSummaries.fold(
+            0,
+            (sum, s) => sum + s.lateCount,
+          );
 
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -58,7 +67,9 @@ class _AttendanceReportViewBodyState extends State<AttendanceReportViewBody> {
               const SizedBox(height: 32),
 
               Text(
-                LocalizationHelper.isArabic ? 'تفصيل الطلاب' : 'Student Breakdown',
+                LocalizationHelper.isArabic
+                    ? 'تفصيل الطلاب'
+                    : 'Student Breakdown',
                 style: AppTextStyle.bold18.copyWith(color: AppColors.black),
               ),
               const SizedBox(height: 16),
@@ -66,9 +77,12 @@ class _AttendanceReportViewBodyState extends State<AttendanceReportViewBody> {
               ...stats.studentSummaries.map(
                 (s) => StudentReportCard(
                   name: s.studentName,
-                  rollNumber: s.studentOid.substring(0, 8), // Using short OID as roll number
+                  rollNumber: s.studentOid.substring(
+                    0,
+                    8,
+                  ), // Using short OID as roll number
                   attendancePercentage: s.attendancePercentage.toInt(),
-                  avatarPath: '', 
+                  avatarPath: '',
                 ),
               ),
             ],
